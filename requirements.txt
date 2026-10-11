@@ -5,3 +5,4 @@ pandas
 python-docx
 pypdf
 openai
+python-dotenv
