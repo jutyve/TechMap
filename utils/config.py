@@ -1,6 +1,13 @@
 import os
 
+from dotenv import load_dotenv
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Load local development settings from the .env file in the project root.
+# Existing system/platform environment variables take precedence.
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
 CSV_PATH = os.path.join(BASE_DIR, "DataBase", "morocco_tech_companies_clean.csv")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
@@ -19,14 +26,6 @@ SMTP_USER = os.environ.get("SMTP_USER", "")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
 SMTP_FROM = os.environ.get("SMTP_FROM", "") or SMTP_USER
 SMTP_USE_TLS = os.environ.get("SMTP_USE_TLS", "true").strip().lower() != "false"
-
-# --- Google OAuth (send applications through the user's own Gmail) ---
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
-GOOGLE_REDIRECT_URI = os.environ.get("GOOGLE_REDIRECT_URI", "http://127.0.0.1:8000/api/auth/google/callback")
-APP_BASE_URL = os.environ.get("APP_BASE_URL", "http://127.0.0.1:8000")
-SESSION_SECRET = os.environ.get("SESSION_SECRET", "dev-insecure-secret-change-me")
-GOOGLE_TOKENS_PATH = os.path.join(BASE_DIR, "DataBase", "google_tokens.json")
 
 COLUMNS = [
     "company_name",
