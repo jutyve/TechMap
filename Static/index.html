@@ -4,76 +4,82 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>TechMap Maroc - Companies Directory</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="style.css?v=8" />
+<meta name="description" content="Find your next chapter in Morocco’s tech ecosystem. Explore companies, build your resume, and prepare your next career move with TechMap." />
+<link rel="icon" href="mark.svg" type="image/svg+xml" />
+<script src="theme.js?v=10"></script>
+<link rel="stylesheet" href="style.css?v=10" />
+<link rel="stylesheet" href="workspace.css?v=12" />
+<link rel="stylesheet" href="studio.css?v=12" />
 </head>
 <body>
 
-<div class="bg-blobs" aria-hidden="true">
-  <div class="blob blob1"></div>
-  <div class="blob blob2"></div>
-  <div class="blob blob3"></div>
-</div>
-
-<nav class="navbar">
-  <div class="nav-brand">
-    <span class="brand-icon">⬢</span>
-    <span class="brand-text">TechMap <span class="brand-accent">Maroc</span></span>
-  </div>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="navbar" aria-label="Main navigation">
+  <a class="nav-brand" href="/"><img src="mark.svg" alt="" width="34" height="34" /><span class="brand-text">techmap<span class="brand-accent">MAROC</span></span></a>
   <div class="nav-tabs">
-    <button class="nav-tab active" data-tab="companies"><span class="tab-icon">🏢</span> Companies</button>
-    <button class="nav-tab" data-tab="dashboard"><span class="tab-icon">📊</span> Dashboard</button>
+    <p class="nav-label">YOUR WORKSPACE</p>
+    <button class="nav-tab active" data-tab="companies"><span class="tab-icon">▦</span> Discover companies</button>
+    <button class="nav-tab" data-tab="dashboard"><span class="tab-icon">▥</span> Ecosystem insights</button>
+    <p class="nav-label tools-label">YOUR NEXT CHAPTER</p>
     <div class="nav-dropdown" id="toolsDropdown">
-      <button type="button" class="nav-tab" id="toolsToggle"><span class="tab-icon">🛠️</span> Tools <span class="caret">▾</span></button>
-      <div class="nav-dropdown-menu hidden" id="toolsMenu">
-        <button type="button" class="dropdown-item" data-tab="analyzer">🧠 Job Analyzer</button>
-        <button type="button" class="dropdown-item" data-tab="resume">🧾 Resume Studio</button>
-        <button type="button" class="dropdown-item" data-tab="assistant">🤖 AI Assistant</button>
-      </div>
+      <button type="button" id="toolsToggle" hidden>Career tools</button>
+      <div id="toolsMenu" class="hidden"></div>
+      <button class="nav-tab" data-tab="analyzer"><span class="tab-icon">◎</span> Resume analyzer</button>
+      <button class="nav-tab" data-tab="resume"><span class="tab-icon">▧</span> Resume studio</button>
+      <button class="nav-tab" data-tab="assistant"><span class="tab-icon">✧</span> Career assistant <span class="ai-pill">AI</span></button>
     </div>
-    <button class="nav-tab" data-tab="applications"><span class="tab-icon">📋</span> Applications</button>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="sidebar-note"><span>✧ A little direction. A big next step.</span><p>Your next opportunity could be closer than you think.</p><button data-tab="assistant">Find my direction <span>↗</span></button></div>
+    <div class="local-profile"><span class="avatar">Y</span><div>Your workspace<small>Local &amp; private by default</small></div><span class="online-dot"></span></div>
   </div>
 </nav>
+<header class="workspace-header"><div><span class="breadcrumb">Workspace</span><span class="crumb-separator">/</span><span id="currentPage">Discover companies</span></div><div class="header-right"><span class="morocco-badge">◈ Made for Morocco</span><button id="openLauncher" class="launcher-trigger" aria-label="Open quick actions (Control or Command K)"><span aria-hidden="true">⌕</span><span>Quick actions</span><kbd>⌘ K</kbd></button><button id="themeToggle" class="theme-toggle" aria-label="Switch color theme"><span id="themeIcon" aria-hidden="true">☾</span><span id="themeLabel">Dark mode</span></button><button id="helpBtn" class="icon-button" aria-label="Workspace help">?</button><span class="avatar small">Y</span></div></header>
+<main class="main-content" id="main" tabindex="-1">
 
-<main class="main-content">
 
   <div id="banner" class="banner hidden" role="alert"></div>
 
   <!-- COMPANIES TAB -->
   <section id="companies" class="tab-panel active">
-    <div class="panel-header">
-      <h1>Explore Tech Companies</h1>
-      <p>Discover companies across Morocco, then contact them directly</p>
+    <div class="page-intro"><div><div class="eyebrow">THE MOROCCAN TECH ECOSYSTEM, CONNECTED</div><h1>Big ambitions. Local opportunities.</h1><p>Find the companies, people, and possibilities for your next chapter.</p></div></div>
+    <div class="discovery-hero">
+      <div class="hero-copy"><span class="hero-kicker"><span class="online-dot"></span> YOUR NEXT MOVE STARTS HERE</span><h2>Great work starts<br>with the <em>right place.</em></h2><p>From ambitious startups to established teams.<br>Discover your place in Morocco’s tech community.</p><button class="hero-cta" id="exploreBtn">Explore companies <span>↗</span></button><span class="hero-footnote">Real companies. Your possibilities.</span></div>
+      <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="art-grid"></div><span class="art-spark spark-one">✳</span><span class="art-spark spark-two">✦</span><div class="map-center"><img src="mark.svg" alt="" /><span>YOUR NEXT<br>CHAPTER</span></div><div class="city-node node-casa"><i></i>Casablanca <span>↗</span></div><div class="city-node node-rabat"><i></i>Rabat</div><div class="city-node node-marrakech"><i></i>Marrakech</div><div class="city-node node-tangier"><i></i>Tangier</div><span class="art-coordinate">35° N &nbsp; / &nbsp; 06° W<br>A WORLD OF POSSIBILITY</span></div>
     </div>
-
+    <div class="ecosystem-strip"><div><span class="metric-icon">▦</span><strong id="heroCompanies">—</strong><span>companies to discover</span></div><div><span class="metric-icon">⌖</span><strong id="heroCities">—</strong><span>cities across Morocco</span></div><div><span class="metric-icon">◇</span><strong id="heroSpecialties">—</strong><span>tech specialties</span></div><div class="strip-note"><span class="online-dot"></span> Built for your next step</div></div>
+    <div class="directory-heading"><div><h2>Discover your next team</h2><p>A new connection could change everything.</p></div><div class="layout-toggle" aria-label="Directory layout"><button id="gridView" class="active" aria-label="Grid view" aria-pressed="true">▦</button><button id="listView" aria-label="List view" aria-pressed="false">☰</button></div></div>
     <div class="view-toggle">
-      <button type="button" class="view-toggle-btn active" data-view="all">🏢 All Companies</button>
-      <button type="button" class="view-toggle-btn" data-view="favorites">⭐ Favorites (<span id="favCount">0</span>)</button>
+      <button type="button" class="view-toggle-btn active" data-view="all">All companies</button>
+      <button type="button" class="view-toggle-btn" data-view="favorites">Saved companies (<span id="favCount">0</span>)</button>
     </div>
 
     <div class="filters-bar">
       <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search company, city, keyword..." aria-label="Search companies" />
+        <span class="search-icon">⌕</span>
+        <input type="text" id="searchInput" placeholder="Search companies, skills, or keywords..." aria-label="Search companies" />
       </div>
       <select id="cityFilter" aria-label="Filter by city"><option value="all">All Cities</option></select>
+      <select id="contactFilter" aria-label="Contact availability"><option value="all">Any contact method</option><option value="email">Has an email</option><option value="careers">Has a careers page</option><option value="website">Has a website</option></select>
+      <select id="sortFilter" aria-label="Sort companies"><option value="recommended">Most complete profiles</option><option value="name">Name: A–Z</option><option value="name_desc">Name: Z–A</option><option value="city">City: A–Z</option></select>
       <div class="results-count" id="resultsCount" aria-live="polite">0 companies</div>
     </div>
 
     <div class="specialty-picker">
       <div class="picker-head">
-        <span class="picker-title">Pick the specialties you care about</span>
+        <span class="picker-title">Explore by specialty</span>
         <label class="switch" title="Only show companies that have every selected specialty">
           <input type="checkbox" id="matchAll" />
           <span class="switch-track"></span>
-          <span class="switch-text">Must have all selected</span>
+          <span class="switch-text">Match all</span>
         </label>
         <button type="button" id="clearSpecialties" class="link-btn hidden">Clear selection</button>
       </div>
       <div id="specialtyChips" class="chip-row"></div>
     </div>
 
+<div id="filterSummary" class="filter-summary hidden"><span id="filterSummaryText"></span><button id="resetFilters" class="link-btn">Reset all filters</button></div>
+    <div id="directoryStatus" class="directory-status" role="status" aria-live="polite"></div>
     <div id="companiesGrid" class="companies-grid"></div>
 
     <div id="emptyState" class="empty-state hidden">
@@ -174,14 +180,16 @@
   <!-- RESUME STUDIO TAB -->
   <section id="resume" class="tab-panel">
     <div class="panel-header">
-      <h1>AI Resume Studio</h1>
-      <p>Fill in what you have, the rest is optional. Pick a template and let the AI tidy it up.</p>
+      <h1>Resume Studio</h1>
+      <p>Your story, beautifully presented. Choose a style, add an optional photo, and make it yours.</p>
     </div>
 
     <div class="studio-layout">
       <form id="resumeForm" class="resume-form">
         <div class="form-section">
-          <h3>Basics</h3>
+          <div class="studio-step"><span>01</span><div><h3>Make an introduction</h3><p>A few details. A lasting first impression.</p></div></div>
+          <div class="portrait-control"><div class="portrait-preview" id="portraitPreview"><span aria-hidden="true">◎</span></div><div><label class="portrait-upload" for="resumePhotoInput">Add a photo <span>optional</span></label><input id="resumePhotoInput" type="file" accept="image/jpeg,image/png,image/webp"><p>JPG, PNG or WebP · up to 5 MB</p><button id="removeResumePhoto" type="button" class="link-btn hidden">Remove photo</button></div></div>
+          <p id="photoStatus" class="photo-status" role="status">Your photo stays in this browser and is never sent to AI. A photo-free resume is often preferable for ATS applications.</p>
           <label>Full name *<input type="text" id="rFullName" required placeholder="Yasmine El Amrani" /></label>
           <div class="form-row">
             <label>Email<input type="email" id="rEmail" placeholder="you@email.com" /></label>
@@ -227,19 +235,22 @@
           </div>
         </div>
 
-        <button type="submit" id="generateResumeBtn" class="analyze-btn"><span>✨ Generate my resume</span></button>
+        <div class="studio-create-actions"><button type="button" id="previewDetailsBtn" class="mini-btn primary">Preview my details <span>↗</span></button><button type="submit" id="generateResumeBtn" class="analyze-btn"><span>✧ Polish with AI</span></button></div><p class="studio-fine-print">Preview works without AI. Polishing uses your configured provider.</p>
       </form>
 
       <div class="resume-preview-pane">
         <div class="template-picker">
-          <span class="picker-title">Template</span>
+          <div class="studio-step"><span>02</span><div><h3>Find your signature style</h3><p>Four ways to tell your story.</p></div></div>
           <div class="template-options">
             <button type="button" class="template-opt active" data-template="classic"><span class="tpl-swatch tpl-classic"></span>Classic</button>
             <button type="button" class="template-opt" data-template="modern"><span class="tpl-swatch tpl-modern"></span>Modern</button>
             <button type="button" class="template-opt" data-template="bold"><span class="tpl-swatch tpl-bold"></span>Bold</button>
+            <button type="button" class="template-opt" data-template="editorial"><span class="tpl-swatch tpl-editorial"></span>Editorial <span class="new-template">NEW</span></button>
           </div>
         </div>
 
+        <div class="studio-style-bar"><div class="accent-options" role="group" aria-label="Resume accent color"><span>Accent</span><button type="button" data-resume-accent="forest" class="accent-choice active" style="--swatch:#315c49" aria-label="Forest accent" aria-pressed="true"></button><button type="button" data-resume-accent="navy" class="accent-choice" style="--swatch:#294665" aria-label="Navy accent" aria-pressed="false"></button><button type="button" data-resume-accent="terracotta" class="accent-choice" style="--swatch:#974f3b" aria-label="Terracotta accent" aria-pressed="false"></button><button type="button" data-resume-accent="charcoal" class="accent-choice" style="--swatch:#3b3e43" aria-label="Charcoal accent" aria-pressed="false"></button></div><span id="studioSaveStatus" role="status">Designed around you</span></div>
+        <p id="templateDescription" class="template-description">Classic · A timeless, centered layout with understated detail.</p>
         <div id="resumeStatus" class="analysis-status hidden"></div>
 
         <div id="resumePreviewWrap" class="resume-preview-wrap hidden">
@@ -250,10 +261,7 @@
           <div id="resumePreview" class="resume-preview template-classic"></div>
         </div>
 
-        <div id="resumeEmptyState" class="empty-state small">
-          <div class="empty-icon">🧾</div>
-          <p>Fill in the form and generate to see a live preview here.</p>
-        </div>
+        <div id="resumeEmptyState" class="studio-empty"><div class="paper-illustration" aria-hidden="true"><div class="paper-avatar"></div><i></i><i></i><hr><i></i><i></i><i></i><hr><i></i><i></i></div><h3>A little more you.</h3><p>Start with your name and a few details.<br>Preview instantly, or let AI help with the wording.</p><span>No photo required. No experience invented.</span></div>
       </div>
     </div>
   </section>
@@ -276,20 +284,7 @@
     </div>
   </section>
 
-  <!-- APPLICATIONS TAB -->
-  <section id="applications" class="tab-panel">
-    <div class="panel-header">
-      <h1>My Applications</h1>
-      <p>Everything you've prepared through TechMap, tracked locally on this device</p>
-    </div>
-
-    <div id="applicationsList" class="applications-list"></div>
-    <div id="applicationsEmpty" class="empty-state">
-      <div class="empty-icon">📭</div>
-      <p>No applications yet. Apply to a company or write a cover letter to see it here.</p>
-    </div>
-  </section>
-
+<footer class="workspace-footer"><span>techmap maroc <span class="footer-dot">·</span> Built for what’s next.</span><span>Company details may change. Verify before applying.</span></footer>
 </main>
 
 <!-- COMPANY DETAIL -->
@@ -392,10 +387,16 @@
   </div>
 </div>
 
+<div id="compareTray" class="compare-tray hidden" aria-label="Selected companies"><div><strong id="compareCount">0 companies selected</strong><span>Make a more informed next move.</span></div><div id="compareNames" class="compare-names"></div><button id="openCompare" class="mini-btn primary" disabled>Compare</button><button id="clearCompare" class="mini-btn">Clear</button></div>
+<dialog id="compareDialog" class="compare-dialog" aria-labelledby="compareTitle"><button id="closeCompare" class="dialog-close" aria-label="Close comparison">✕</button><div class="eyebrow">YOUR NEXT TEAM, SIDE BY SIDE</div><h2 id="compareTitle">Find your best fit.</h2><p class="muted">Directory details, not live job listings. Verify information before applying.</p><div id="compareContent"></div></dialog>
+<dialog id="launcherDialog" class="launcher-dialog" aria-label="Quick actions"><div class="launcher-search"><span aria-hidden="true">⌕</span><input id="launcherInput" placeholder="Where would you like to go?" aria-label="Search quick actions" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="launcherResults" autocomplete="off"><button id="closeLauncher" aria-label="Close quick actions">Esc</button></div><div id="launcherResults" role="listbox" aria-label="Available actions"></div><div class="launcher-footer"><span>↑ ↓ to navigate &nbsp; ↵ to open</span><span>Your workspace, one shortcut away.</span></div></dialog>
 <div id="toast" class="toast" role="status"></div>
-<div class="build-tag">TechMap build 8</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-<script src="app.js?v=8"></script>
+
+
+<script src="app.js?v=12"></script>
+<script src="workspace.js?v=12"></script>
+<script src="quick-actions.js?v=12"></script>
+<script src="studio.js?v=12"></script>
 </body>
 </html>

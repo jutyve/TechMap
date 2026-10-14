@@ -1,5 +1,5 @@
 const API_BASE = "/api";
-const PAGE_SIZE = 60;
+const PAGE_SIZE = 12;
 const MAX_UPLOAD_MB = 10;
 const ALLOWED_EXT = [".pdf", ".docx", ".txt", ".md", ".odt"];
 
@@ -18,6 +18,8 @@ const state = {
   matchAll: false,
   city: "all",
   search: "",
+  sort: "recommended",
+  contact: "all",
   offset: 0,
   total: 0,
   reqId: 0,
@@ -50,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initModals();
   initResumeStudio();
   initAssistant();
-  renderApplications();
   updateFavCount();
   animateBlobs();
 });
@@ -179,6 +180,7 @@ function syncFavButtons(id) {
   const on = isFavorite(id);
   $$(`.fav-btn[data-id="${id}"]`).forEach((btn) => {
     btn.classList.toggle("active", on);
+    btn.setAttribute("aria-pressed", String(on));
     btn.textContent = on ? "★" : "☆";
   });
   const detailBtn = $(`.fav-btn-detail[data-fav-id="${id}"]`);
@@ -195,6 +197,11 @@ function initViewToggle() {
       $$(".view-toggle-btn").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       state.view = btn.dataset.view;
+      ++state.reqId;
+      $("#directoryStatus").textContent = "";
+      $("#companiesGrid").setAttribute("aria-busy", "false");
+      $("#loadMore").disabled = false;
+      window.updateFilterSummary?.();
 
       $(".filters-bar").classList.toggle("hidden", state.view === "favorites");
       $(".specialty-picker").classList.toggle("hidden", state.view === "favorites");
@@ -211,6 +218,7 @@ function initViewToggle() {
 }
 
 async function loadFavoritesView() {
+  const myReq = ++state.reqId;
   const grid = $("#companiesGrid");
   const empty = $("#emptyState");
 
@@ -224,6 +232,7 @@ async function loadFavoritesView() {
   try {
     const ids = [...state.favorites].join(",");
     const data = await apiJson(`/companies/by-ids?ids=${ids}`);
+    if (myReq !== state.reqId || state.view !== "favorites") return;
     const items = (data.items || []).map(normalizeCompany);
 
     $("#resultsCount").textContent = `${items.length} favorite${items.length === 1 ? "" : "s"}`;
@@ -268,6 +277,9 @@ function initTabs() {
   const toolTabs = ["analyzer", "resume", "assistant"];
 
   function activate(target) {
+    const label = document.querySelector(`.nav-tabs [data-tab="${target}"]`);
+    if (label) document.getElementById("currentPage").textContent = label.textContent.replace(/^[^a-zA-Z]+/, "").replace(/ AI$/, "").trim();
+    window.scrollTo({ top: 0, behavior: "instant" });
     tabButtons.forEach((t) => t.classList.toggle("active", t.dataset.tab === target));
     toolsToggle.classList.toggle("active", toolTabs.includes(target));
 
@@ -278,7 +290,6 @@ function initTabs() {
           anime({ targets: p, opacity: [0, 1], translateY: [20, 0], duration: 500, easing: "easeOutQuad" });
         }
         if (target === "dashboard") loadStats();
-        if (target === "applications") renderApplications();
       } else {
         p.classList.remove("active");
       }
@@ -406,9 +417,14 @@ async function loadCompanies(reset) {
   if (state.view !== "all") return;
 
   const myReq = ++state.reqId;
+  const status = $("#directoryStatus");
+  status.textContent = "Finding your next team…";
+  $("#companiesGrid").setAttribute("aria-busy", "true");
+  $("#loadMore").disabled = true;
+  window.updateFilterSummary?.();
   if (reset) state.offset = 0;
 
-  const params = new URLSearchParams({ limit: PAGE_SIZE, offset: state.offset });
+  const params = new URLSearchParams({ limit: PAGE_SIZE, offset: state.offset, sort: state.sort, contact: state.contact });
   if (state.search) params.set("search", state.search);
   if (state.city !== "all") params.set("city", state.city);
   if (state.specs.size) {
@@ -429,7 +445,13 @@ async function loadCompanies(reset) {
   } catch (e) {
     if (myReq !== state.reqId) return;
     console.error(e);
-    showBanner(`Could not load companies (${escapeHtml(e.message)}). Is the backend running, and is your CSV at <code>DataBase/morocco_tech_companies_clean.csv</code>?`);
+    status.textContent = "Could not load companies. Check your connection and try again.";
+  } finally {
+    if (myReq === state.reqId) {
+      $("#companiesGrid").setAttribute("aria-busy", "false");
+      $("#loadMore").disabled = false;
+      if (status.textContent === "Finding your next team…") status.textContent = "";
+    }
   }
 }
 
@@ -464,7 +486,7 @@ function createCard(c) {
   card.setAttribute("role", "button");
   card.setAttribute("aria-label", `Open details for ${c.company_name}`);
 
-  const initial = (c.company_name || "?").charAt(0).toUpperCase();
+  const initial = (c.company_name || "?").split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const site = safeUrl(c.website) || safeUrl(c.apply_link);
   const shown = c.specialties.slice(0, 3);
   const extra = c.specialties.length - shown.length;
@@ -479,30 +501,32 @@ function createCard(c) {
 
   card.innerHTML = `
     <div class="card-top">
-      <div class="company-logo">${escapeHtml(initial)}</div>
+      <div class="company-logo" style="--logo-hue:${(c.id * 47) % 360}">${escapeHtml(initial)}</div>
       <div class="card-top-right">
-        <div class="contact-hints">${hints}</div>
-        <button type="button" class="fav-btn ${fav ? "active" : ""}" data-id="${c.id}" aria-label="Toggle favorite">${fav ? "★" : "☆"}</button>
+        <div class="contact-hints">${c.careers_url ? '<span class="careers-indicator">Careers page</span>' : '<span class="directory-indicator">In the directory</span>'}</div>
+        <button type="button" class="fav-btn ${fav ? "active" : ""}" data-id="${c.id}" aria-label="Save ${escapeHtml(c.company_name)}" aria-pressed="${fav}">${fav ? "★" : "☆"}</button>
       </div>
     </div>
     <h3 class="company-name">${escapeHtml(c.company_name)}</h3>
-    <div class="company-city">📍 ${escapeHtml(c.city || "Morocco")}</div>
+    <div class="company-city"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</div>
     <div class="specialty-tags">
       ${shown.map((s) => `<span class="tag">${escapeHtml(s)}</span>`).join("")}
       ${extra > 0 ? `<span class="tag tag-more">+${extra}</span>` : ""}
     </div>
-    <p class="company-desc">${escapeHtml(truncate(c.description, 120))}</p>
+    <p class="company-desc">${escapeHtml(truncate(c.description, 150) || "Explore this company’s specialties and contact details to see where your skills could fit.")}</p>
     <div class="card-footer">
       ${
         site
-          ? `<button type="button" class="btn-website" data-url="${escapeHtml(site)}">🌐 Website</button>`
+          ? `<button type="button" class="btn-website" data-url="${escapeHtml(site)}">Website ↗</button>`
           : `<button type="button" class="btn-website disabled" disabled>No website</button>`
       }
-      <button type="button" class="btn-email">✉️ Details</button>
+      <button type="button" class="btn-email">View company →</button>
     </div>
+    <button type="button" class="compare-pick" data-compare-id="${c.id}" aria-pressed="${window.isCompared?.(c.id) || false}">${window.isCompared?.(c.id) ? "✓ Selected for comparison" : "+ Add to comparison"}</button>
   `;
 
   card.addEventListener("click", (e) => {
+    if (e.target.closest(".compare-pick")) { window.toggleCompare?.(c); return; }
     const favBtn = e.target.closest(".fav-btn");
     if (favBtn) {
       e.stopPropagation();
@@ -625,7 +649,7 @@ function detailHtml(c) {
       <div class="company-logo big">${escapeHtml((c.company_name || "?").charAt(0).toUpperCase())}</div>
       <div class="detail-head-info">
         <h2 id="detailName">${escapeHtml(c.company_name)}</h2>
-        <div class="company-city">📍 ${escapeHtml(c.city || "Morocco")}</div>
+        <div class="company-city"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</div>
       </div>
       <button type="button" class="fav-btn-detail ${fav ? "active" : ""}" data-fav-id="${c.id}">${fav ? "★ Saved" : "☆ Save"}</button>
     </header>
@@ -672,6 +696,7 @@ function openDetail(company, cardEl) {
   const box = $(".detail-box", overlay);
 
   $("#detailContent").innerHTML = detailHtml(company);
+  window.addCompanyNotes?.(company);
   overlay.classList.remove("hidden");
   document.body.classList.add("no-scroll");
   box.scrollTop = 0;
@@ -872,7 +897,6 @@ async function submitLetterForm(e) {
     $("#letterStatus").classList.add("hidden");
     $("#letterText").value = result.letter;
     $("#letterResult").classList.remove("hidden");
-    recordApplication({ company: state.currentCompany.company_name, type: "letter", status: "Drafted" });
   } catch (err) {
     $("#letterStatus").className = "analysis-status error";
     $("#letterStatus").textContent = err.message || "Could not generate the letter.";
@@ -930,7 +954,8 @@ async function submitApplyForm(e) {
     $("#applyToEmail").textContent = result.to;
 
     state.preparedTo = result.to;
-    state.preparedResumeHtml = result.resume_html || null;
+    state.preparedResumeHtml = resumeSource === "studio" && state.resumeData && window.studioStandaloneHtml
+      ? await window.studioStandaloneHtml() : result.resume_html || null;
     state.preparedResumeFilename = result.resume_filename || `${slug(fullName)}-resume.html`;
 
     const hasResumeStep = !!result.resume_html;
@@ -943,7 +968,6 @@ async function submitApplyForm(e) {
     $("#applyResult").classList.remove("hidden");
     $("#applyForm").classList.add("hidden");
 
-    recordApplication({ company: company.company_name, type: "application", status: "Ready", to: result.to, subject: result.subject });
     showToast("Your application is ready — open it in Gmail or your email app to send it.");
   } catch (err) {
     $("#applyStatus").className = "analysis-status error";
@@ -951,47 +975,6 @@ async function submitApplyForm(e) {
   } finally {
     btn.disabled = false;
   }
-}
-
-/* ---------- Applications tracker (localStorage) ---------- */
-function recordApplication(entry) {
-  const list = loadApplications();
-  list.unshift({ ...entry, date: new Date().toISOString() });
-  try {
-    localStorage.setItem("techmap_applications", JSON.stringify(list.slice(0, 100)));
-  } catch { /* ignore */ }
-  renderApplications();
-}
-
-function loadApplications() {
-  try {
-    return JSON.parse(localStorage.getItem("techmap_applications") || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function renderApplications() {
-  const list = loadApplications();
-  const wrap = $("#applicationsList");
-  const empty = $("#applicationsEmpty");
-
-  empty.classList.toggle("hidden", list.length !== 0);
-  wrap.innerHTML = list
-    .map(
-      (a) => `
-    <div class="application-row">
-      <div class="application-main">
-        <strong>${escapeHtml(a.company)}</strong>
-        <span class="application-type">${a.type === "application" ? "🚀 Application" : "📝 Cover letter"}</span>
-      </div>
-      <div class="application-meta">
-        <span class="status-pill status-${escapeHtml((a.status || "").toLowerCase())}">${escapeHtml(a.status || "")}</span>
-        <span class="muted small-note">${new Date(a.date).toLocaleString()}</span>
-      </div>
-    </div>`
-    )
-    .join("");
 }
 
 /* ---------- Dashboard ---------- */
@@ -1424,7 +1407,7 @@ function renderChatCompanies(companies) {
       (c) => `
     <div class="chat-company-card" data-id="${c.id}">
       <strong>${escapeHtml(c.company_name)}</strong>
-      <span class="muted small-note">📍 ${escapeHtml(c.city || "Morocco")}</span>
+      <span class="muted small-note"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</span>
       <div class="specialty-tags">${c.specialties.slice(0, 3).map((s) => `<span class="tag">${escapeHtml(s)}</span>`).join("")}</div>
     </div>`
     )
@@ -1473,7 +1456,8 @@ function initResumeStudio() {
   });
 
   try {
-    const savedTpl = localStorage.getItem("techmap_resume_template") || "classic";
+    const candidate = localStorage.getItem("techmap_resume_template");
+    const savedTpl = ["classic", "modern", "bold", "editorial"].includes(candidate) ? candidate : "classic";
     state.resumeTemplate = savedTpl;
     $$(".template-opt").forEach((b) => b.classList.toggle("active", b.dataset.template === savedTpl));
 
@@ -1537,6 +1521,7 @@ async function submitResumeForm(e) {
   saveProfile({ ...loadProfile(), full_name: payload.full_name, email: payload.email, phone: payload.phone, target_role: payload.target_role });
 
   const btn = $("#generateResumeBtn");
+  $("#previewDetailsBtn").disabled = true;
   btn.disabled = true;
   btn.classList.add("loading");
   $("#resumeStatus").className = "analysis-status working";
@@ -1551,6 +1536,7 @@ async function submitResumeForm(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
+    window.setStudioOrigin?.("ai");
     state.resumeData = resume;
     try { localStorage.setItem("techmap_resume_data", JSON.stringify(resume)); } catch { /* ignore */ }
     $("#resumeStatus").classList.add("hidden");
@@ -1559,10 +1545,12 @@ async function submitResumeForm(e) {
   } catch (err) {
     $("#resumeStatus").className = "analysis-status error";
     $("#resumeStatus").textContent = err.message || "Could not generate the resume.";
-    $("#resumeEmptyState").classList.remove("hidden");
+    $("#resumeEmptyState").classList.toggle("hidden", !!state.resumeData);
+    $("#resumePreviewWrap").classList.toggle("hidden", !state.resumeData);
   } finally {
     btn.disabled = false;
     btn.classList.remove("loading");
+    $("#previewDetailsBtn").disabled = false;
   }
 }
 
@@ -1570,12 +1558,13 @@ function renderResumePreview(resume, template) {
   const el = $("#resumePreview");
   el.className = "resume-preview";
   el.innerHTML = buildResumeHtml(resume, template);
+  window.decorateResume?.(el);
   if (canAnimate()) {
     anime({ targets: el, opacity: [0, 1], translateY: [10, 0], duration: 400, easing: "easeOutQuad" });
   }
 }
 
-/* ---------- Resume document builders (3 real templates) ---------- */
+/* ---------- Resume document builders (4 real templates) ---------- */
 function initialsOf(name) {
   const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
   if (!parts.length) return "?";
@@ -1629,7 +1618,7 @@ function rdocProjectsHtml(r) {
   return items.map((p) => `
     <div class="rdoc-entry">
       <h3>${escapeHtml(p.name)}</h3>
-      <ul class="rdoc-bullets"><li>${escapeHtml(p.description)}</li></ul>
+      ${p.description ? `<ul class="rdoc-bullets"><li>${escapeHtml(p.description)}</li></ul>` : ""}
     </div>`).join("");
 }
 
@@ -1642,6 +1631,7 @@ function rdocInlineList(items) {
 }
 
 function buildResumeHtml(r, template) {
+  if (template === "editorial" && window.buildEditorialResume) return window.buildEditorialResume(r);
   if (template === "modern") return buildModernResume(r);
   if (template === "bold") return buildBoldResume(r);
   return buildClassicResume(r);
