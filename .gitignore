@@ -1,0 +1,31 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+
+# --- Secrets and local settings ---
+.env
+.env.*
+!.env.example
+
+# --- Generated / local artifacts ---
+*.log
+*.zip
+*.tmp
+database/data/*.tmp
+database/scripts/seed_websites.txt
+static/uploads/
+
+# --- Editors / OS ---
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

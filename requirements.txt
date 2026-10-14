@@ -1,3 +1,4 @@
+# Web application runtime
 fastapi
 uvicorn[standard]
 python-multipart
@@ -6,3 +7,8 @@ python-docx
 pypdf
 openai
 python-dotenv
+
+# Optional: only needed to re-run database/scripts/CompanyCollector.py
+# requests
+# beautifulsoup4
+# duckdb
