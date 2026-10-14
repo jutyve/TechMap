@@ -1,145 +1,122 @@
-# 🗺️ TechMap Maroc
+# TechMap Maroc
 
-A directory of tech companies across Morocco, built to help students and job seekers discover real companies, analyze their resumes, generate tailored application materials, and get AI-powered career guidance — all in one place.
+A redesigned, self-hostable workspace for discovering Morocco’s tech companies and preparing your next career move. Built with FastAPI, a real included company dataset, and plain HTML/CSS/JavaScript. **No Node.js, frontend build, CDN, or paid service is needed to browse the directory.**
 
-> 🚧 Not deployed yet — currently runs locally. Live demo link will go here once it's shipped.
+## Take the files and run them
 
-![build](https://img.shields.io/badge/status-in%20development-yellow)
-![python](https://img.shields.io/badge/python-3.10%2B-blue)
-![FastAPI](https://img.shields.io/badge/backend-FastAPI-009688)
+Use your local checkout, or generate `TechMap-source.zip` with the packaging script below, extract it, and open a terminal **inside the extracted `TechMap` folder**. You can also copy this repository folder directly. Keep `main.py`, `utils/`, `Static/`, and `DataBase/` together. The capital S in `Static` matters on Linux.
 
----
+Install Python **3.10 or newer** from python.org if needed.
 
-## ✨ Features
+### Windows (PowerShell)
 
-### 🏢 Company Directory
-- Browse and search tech companies across Morocco
-- Filter by city and by specialty (with "match any" / "match all" modes)
-- Detailed company profiles: contact info, website, careers page, specialties, and more
-- ⭐ Save companies to a personal **Favorites** list (stored locally)
+```powershell
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe run.py
+```
 
-### 📊 Dashboard
-- Live stats on the company database (total companies, contact coverage, etc.)
-- Animated "bar race" charts for top specialties and top cities
-- Breakdown of how companies prefer to be contacted
+If Windows uses `py` rather than `python`, use `py -m venv .venv` for the first command. These commands do not need script activation or a PowerShell execution-policy change.
 
-### 🧠 Job Application Analyzer
-- Upload a resume (PDF, DOCX, TXT, MD, or ODT)
-- Get an AI-generated score (0–100) based on clarity, relevant skills, measurable impact, and ATS-friendliness
-- Strengths, actionable improvements, and keyword gap analysis
-- Auto-detects your best-fit specialties and links straight to matching companies
-
-### 🧾 AI Resume Studio
-- Fill in a simple form (most fields optional) and generate a polished, ATS-friendly resume
-- Three switchable visual templates: Classic, Modern, Bold
-- Print-to-PDF, or copy as plain text
-- Never fabricates experience — only rewrites and organizes what you actually provide
-
-### ✉️ Apply with AI
-- Generate a tailored cover letter for any company in the directory
-- Or let AI draft a full application email (subject + body) using your resume
-- Opens pre-filled in Gmail or your default mail app — sent from **your own** email address, nothing is sent server-side
-
-### 🤖 AI Career Assistant
-- Chat naturally about what kind of role/field/city you're interested in
-- Recommends real companies from the live database — never hallucinated ones
-- Politely declines to recommend companies when you're just asking general questions (so asking "what's the speed of sound" won't randomly suggest a startup)
-
-### 📋 Applications Tracker
-- Local history of every cover letter and application you've drafted, with status tags
-
----
-
-## 🛠️ Tech Stack
-
-**Backend:** FastAPI (Python), Pandas for the company dataset, `pypdf` / `python-docx` for resume text extraction, OpenAI-compatible client for all AI features (model-agnostic — works with OpenAI, Groq, OpenRouter, or any compatible gateway).
-
-**Frontend:** Vanilla HTML/CSS/JS (no framework, no build step), [anime.js](https://animejs.com/) for motion.
-
-**Data:** A CSV of Moroccan tech companies (`DataBase/morocco_tech_companies_clean.csv`), loaded and cached in-memory, auto-reloaded when the file changes.
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone and install
+### macOS / Linux
 
 ```bash
-git clone https://github.com/yourusername/techmap-maroc.git
-cd techmap-maroc
-pip install -r requirements.txt
-npm install -g omniroute
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python run.py
 ```
 
-### 2. Add your dataset
+On Debian/Ubuntu, install `python3-venv` if Python reports that venv is unavailable.
 
-Make sure your CSV lives at:
+Open **http://127.0.0.1:8000**. Keep the terminal open while using the app; press Ctrl+C to stop. Do **not** double-click `Static/index.html`: the frontend needs the Python API.
+
+Installing dependencies needs an internet connection. After installation, the directory, insights, and browser-saved features work locally without internet. External company links and configured remote AI services need network access.
+
+## What’s included
+
+- A responsive sage-and-ivory workspace, forest dark theme, and remembered light/dark preference.
+- Searchable company directory with city/specialty/contact filters, sorting, favorites, comparison, and private company notes.
+- **Resume Studio** with Classic, Modern, Bold, and the new Editorial template, plus four accent colors.
+- **Preview my details**: a local, non-AI preview that uses only the words you enter. Put each experience, education, or project entry on a new line. AI polishing is optional.
+- Optional JPG, PNG, or WebP profile photo, up to 5 MB and 25 megapixels. Images are center-cropped into a 512 px square JPEG in the browser. Upload a pre-cropped portrait if you want different framing. Replace/remove it at any time.
+- Photos appear in all four templates, printed/PDF resumes, and the Studio HTML attachment prepared through Apply. Photo-free resumes remain fully supported and are often preferable for ATS submissions.
+- Automatic local form saving, remembered style/photo, and live updates to a locally previewed resume. AI-generated resumes update only when you explicitly preview your own details or polish again.
+- Resume analysis, AI-assisted cover letters, application-email drafts, and a career assistant using the existing provider APIs.
+- Searchable **Ctrl/Cmd + K** quick actions and `/` directory search.
+- Brief entrance, template, and favorite-button animations. Reduced-motion preferences disable the effects.
+
+The manual application pipeline, company CSV export, workspace backup/restore controls, and website source-download links have been removed. Existing browser application records are left untouched, not erased. Resume printing and text copying remain available. Legacy pipeline source/model files are retained but no longer loaded by the website.
+
+## Optional AI setup
+
+**AI tools need a provider. They are not simulated, and no provider credentials are shipped.** All non-AI directory features work without this step.
+
+Copy `.env.example` to `.env` in the project root and configure an OpenAI-compatible service:
+
+```dotenv
+OMNIROUTE_BASE_URL=https://your-provider.example/v1
+OMNIROUTE_API_KEY=your-own-api-key
+OMNIROUTE_MODEL=your-provider-model-id
 ```
+
+Use your provider’s actual base URL and supported model ID. The variable names retain `OMNIROUTE_` for compatibility, but any compatible gateway can be used. A local OmniRoute gateway can use `http://localhost:20128/v1`. Restart the Python server after changes. Keys remain on the backend; `.env` is ignored by Git and excluded from source downloads. Provider usage may incur charges.
+
+Without a configured/reachable gateway, AI requests show an error. Scanned/image-only resumes require OCR first. Supported uploads: PDF, DOCX, TXT, MD, ODT, up to 10 MB.
+
+## Your data and privacy
+
+Favorites, company notes, resume details, style preferences, and the processed photo are stored in **this browser’s localStorage**, not a cloud account. Other devices, browser profiles, ports, and hosts have separate storage. Clearing site data removes these saved details. There is no backup/restore interface.
+
+**Studio photo processing is local.** Neither the original image nor the processed photo is included in the AI request or uploaded to the backend by Studio. Only resume text fields are sent when you choose **Polish with AI**. The photo is embedded in your printed/PDF resume and the locally prepared Studio HTML attachment, so anyone you send those documents to can see it. Do not add a photo if the employer requests a photo-free resume. Copy-as-text naturally excludes images.
+
+For other AI actions, resume text and submitted prompts are sent to your configured provider; review its privacy terms. Applications are **never sent by the server**: review drafts and choose whether to send them through your own mail client. Review all AI output for accuracy.
+
+The CSV is the repository’s existing dataset, not a live vacancies feed or an endorsement. A “Careers page” badge only means a link is present. Verify company and contact details before applying. Company IDs currently follow CSV row order; preserve that order if you depend on existing favorites.
+
+## Development
+
+```bash
+# After creating a venv; Windows can use .venv\Scripts\python.exe instead
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m pytest -q
+.venv/bin/python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+The frontend calls relative `/api` URLs, so there is no browser-facing localhost dependency. `0.0.0.0` is suitable for an accessible preview. The default `run.py` binds to loopback for local use; set `HOST`/`PORT` if needed. This is a personal workspace, not a hardened public multi-user service; add authentication, rate limiting, and provider usage controls before public hosting.
+
+### Make your own downloadable source
+
+```bash
+.venv/bin/python scripts/package.py
+# or choose a destination:
+.venv/bin/python scripts/package.py /path/to/TechMap-source.zip
+```
+
+The generated archive has a single `TechMap/` folder, includes the cleaned company dataset, and runs independently of the checkout. Explicit packaging rules omit `.git`, `.venv`, `.env`, caches, logs, generated ZIPs, and private uploads. There is no website source-download endpoint. Generated delivery archives are intentionally not committed.
+
+## Structure
+
+```text
+main.py                         FastAPI routes + static serving
+run.py                          Cross-platform local launcher
+Static/index.html               Workspace and existing tool forms
+Static/style.css                Tool and resume-template foundation
+Static/workspace.css            Responsive redesign and design tokens
+Static/app.js                   Company, AI, resume, application behavior
+Static/workspace.js             Themes, filters, comparison, notes
+Static/theme.js                 Early system/saved theme initialization
+Static/studio.js                Local preview, photo processing, styling, motion
+Static/studio.css               Studio interface and printable resume styles
+Static/quick-actions.js         Searchable keyboard launcher
+Static/mark.svg                 Local brand asset
 DataBase/morocco_tech_companies_clean.csv
-```
-with at least these columns: `company_name, city, specialties, description, website, apply_email, phone, apply_link, apply_via, careers_url, contact_url, all_emails, source`.
-
-### 3. Run it
-```bash
-omniroute
-```
-and in an other instance run:
-
-```bash
-uvicorn main:app --reload
+utils/                          Data loading, AI, extraction, packaging
+scripts/package.py              Reproducible source packaging workflow
+tests/                          API and delivery smoke tests
 ```
 
-Open **http://127.0.0.1:8000** — the backend serves the frontend directly, no separate dev server needed.
+The API documentation is available at `/docs` when the server is running. Main routes: `/api/companies`, `/api/companies/by-ids`, `/api/cities`, `/api/specialties`, `/api/stats`, `/api/analyze`, `/api/resume/generate`, `/api/companies/{id}/cover-letter`, `/api/companies/{id}/prepare-application`, `/api/chat`.
 
----
+## License
 
-## 📁 Project Structure
-
-```
-.
-├── main.py                  # FastAPI app & all API routes
-├── requirements.txt
-├── DataBase/
-│   └── morocco_tech_companies_clean.csv
-├── static/
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
-└── utils/
-    ├── config.py             # env vars, paths, constants
-    ├── data.py                # CSV loading, filtering, stats
-    ├── ai_client.py           # OpenAI-compatible client wrapper
-    ├── ai_analysis.py         # resume scoring logic
-    ├── resume_ai.py           # AI resume generation
-    ├── resume_render.py       # server-side resume HTML renderer
-    ├── letters_ai.py          # cover letters & application emails
-    ├── chat_ai.py             # AI career assistant / chatbot
-    └── text_extraction.py     # PDF/DOCX/ODT/TXT text extraction
-```
-
----
-
-## 🔌 API Overview
-
-| Endpoint | Method | Purpose |
-|---|---|---|
-| `/api/companies` | GET | Paginated, filterable company list |
-| `/api/companies/by-ids` | GET | Fetch specific companies (used for Favorites) |
-| `/api/specialties` | GET | List of specialties with counts |
-| `/api/cities` | GET | List of cities |
-| `/api/stats` | GET | Dashboard statistics |
-| `/api/analyze` | POST | Upload & score a resume |
-| `/api/resume/generate` | POST | Generate a resume from form data |
-| `/api/companies/{id}/cover-letter` | POST | Generate a tailored cover letter |
-| `/api/companies/{id}/prepare-application` | POST | Draft an application email + resume |
-| `/api/chat` | POST | AI career assistant turn |
-
----
-
-## ⚠️ Notes & Limitations
-
-- Applications are **never sent server-side** — the app only drafts content and hands off to your own Gmail/mail client, so nothing is sent without your explicit click.
-- The AI never invents company data or fabricates resume experience — prompts are written to strictly ground output in real, user-supplied, or database-sourced facts.
-- Resume text extraction skips images/scans — if a resume is a scanned image with no selectable text, it won't be readable. Export with real text or OCR it first.
-
----
+MIT. See [LICENSE](LICENSE).
