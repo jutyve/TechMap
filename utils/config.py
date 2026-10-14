@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 CSV_PATH = os.path.join(BASE_DIR, "DataBase", "morocco_tech_companies_clean.csv")
-STATIC_DIR = os.path.join(BASE_DIR, "static")
+STATIC_DIR = os.path.join(BASE_DIR, "Static")
 
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 ALLOWED_RESUME_EXT = {".pdf", ".docx", ".txt", ".md", ".odt"}
