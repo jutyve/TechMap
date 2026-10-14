@@ -4,7 +4,7 @@ A redesigned, self-hostable workspace for discovering Morocco’s tech companies
 
 ## Take the files and run them
 
-Use your local checkout, or generate `TechMap-source.zip` with the packaging script below, extract it, and open a terminal **inside the extracted `TechMap` folder**. You can also copy this repository folder directly. Keep `main.py`, `utils/`, `Static/`, and `DataBase/` together. The capital S in `Static` matters on Linux.
+Use your local checkout, or generate `TechMap-source.zip` with `scripts/package.py` (see below), extract it, and open a terminal **inside the extracted `TechMap` folder**. You can also copy this repository folder directly. Keep `run.py`, `app/`, `static/`, and `database/` together — they are one application.
 
 Install Python **3.10 or newer** from python.org if needed.
 
@@ -28,7 +28,7 @@ python3 -m venv .venv
 
 On Debian/Ubuntu, install `python3-venv` if Python reports that venv is unavailable.
 
-Open **http://127.0.0.1:8000**. Keep the terminal open while using the app; press Ctrl+C to stop. Do **not** double-click `Static/index.html`: the frontend needs the Python API.
+Open **http://127.0.0.1:8000**. Keep the terminal open while using the app; press Ctrl+C to stop. Do **not** double-click `static/index.html`: the frontend needs the Python API.
 
 Installing dependencies needs an internet connection. After installation, the directory, insights, and browser-saved features work locally without internet. External company links and configured remote AI services need network access.
 
@@ -45,7 +45,7 @@ Installing dependencies needs an internet connection. After installation, the di
 - Searchable **Ctrl/Cmd + K** quick actions and `/` directory search.
 - Brief entrance, template, and favorite-button animations. Reduced-motion preferences disable the effects.
 
-The manual application pipeline, company CSV export, workspace backup/restore controls, and website source-download links have been removed. Existing browser application records are left untouched, not erased. Resume printing and text copying remain available. Legacy pipeline source/model files are retained but no longer loaded by the website.
+The manual application pipeline, company CSV export, workspace backup/restore controls, and website source-download links have been removed. Existing browser application records are left untouched, not erased. Resume printing and text copying remain available. The legacy pipeline model is retained at `static/js/legacy/pipeline-model.js` but is no longer loaded by the website.
 
 ## Optional AI setup
 
@@ -79,8 +79,11 @@ The CSV is the repository’s existing dataset, not a live vacancies feed or an 
 # After creating a venv; Windows can use .venv\Scripts\python.exe instead
 .venv/bin/python -m pip install -r requirements-dev.txt
 .venv/bin/python -m pytest -q
-.venv/bin/python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+.venv/bin/python run.py                 # http://127.0.0.1:8000
+RELOAD=1 HOST=0.0.0.0 .venv/bin/python run.py   # auto-reload, shared on the LAN
 ```
+
+`run.py` is a thin launcher around `app.main:app`; the equivalent raw command is `.venv/bin/python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`. `python -m app` works too.
 
 The frontend calls relative `/api` URLs, so there is no browser-facing localhost dependency. `0.0.0.0` is suitable for an accessible preview. The default `run.py` binds to loopback for local use; set `HOST`/`PORT` if needed. This is a personal workspace, not a hardened public multi-user service; add authentication, rate limiting, and provider usage controls before public hosting.
 
@@ -92,27 +95,63 @@ The frontend calls relative `/api` URLs, so there is no browser-facing localhost
 .venv/bin/python scripts/package.py /path/to/TechMap-source.zip
 ```
 
-The generated archive has a single `TechMap/` folder, includes the cleaned company dataset, and runs independently of the checkout. Explicit packaging rules omit `.git`, `.venv`, `.env`, caches, logs, generated ZIPs, and private uploads. There is no website source-download endpoint. Generated delivery archives are intentionally not committed.
+The generated archive has a single `TechMap/` folder, includes the cleaned company dataset, and runs independently of the checkout — extract it and run `python run.py`. Packaging rules omit `.git`, `.venv`, `.env`, caches, logs, generated ZIPs, and private uploads. There is no website source-download endpoint. Generated archives are git-ignored and intentionally not committed.
 
 ## Structure
 
 ```text
-main.py                         FastAPI routes + static serving
-run.py                          Cross-platform local launcher
-Static/index.html               Workspace and existing tool forms
-Static/style.css                Tool and resume-template foundation
-Static/workspace.css            Responsive redesign and design tokens
-Static/app.js                   Company, AI, resume, application behavior
-Static/workspace.js             Themes, filters, comparison, notes
-Static/theme.js                 Early system/saved theme initialization
-Static/studio.js                Local preview, photo processing, styling, motion
-Static/studio.css               Studio interface and printable resume styles
-Static/quick-actions.js         Searchable keyboard launcher
-Static/mark.svg                 Local brand asset
-DataBase/morocco_tech_companies_clean.csv
-utils/                          Data loading, AI, extraction, packaging
-scripts/package.py              Reproducible source packaging workflow
-tests/                          API and delivery smoke tests
+run.py                              Local launcher (python run.py, python -m app)
+requirements.txt                    Runtime dependencies
+requirements-dev.txt                Adds pytest + httpx for the test suite
+.env.example                        Template for the optional AI provider settings
+LICENSE
+
+app/                                Application package
+├── main.py                         FastAPI app: middleware, routers, static mount
+├── __main__.py                     `python -m app` entry point
+├── api/                            HTTP layer
+│   ├── deps.py                     Shared route helpers
+│   └── routes/                     One router per feature
+│       ├── companies.py            Directory, cities, specialties, stats
+│       ├── resume.py               Resume analyzer + Studio generation
+│       ├── letters.py              Cover letters + Apply drafts
+│       └── chat.py                 Career assistant
+└── services/                       Data access, AI providers, rendering
+    ├── config.py                   Paths, limits, environment settings
+    ├── data.py                     CSV loading, filtering, serialization
+    ├── text_extraction.py          PDF / DOCX / TXT / MD / ODT extraction
+    ├── ai_client.py                OpenAI-compatible provider wrapper
+    ├── ai_analysis.py              Resume scoring and feedback
+    ├── resume_ai.py                Resume generation
+    ├── resume_render.py            Resume HTML rendering
+    ├── letters_ai.py               Cover letters and application emails
+    └── chat_ai.py                  Career-assistant conversation handling
+
+static/                            Everything the browser loads
+├── index.html                     Workspace and existing tool forms
+├── css/
+│   ├── style.css                   Tool and resume-template foundation
+│   ├── workspace.css               Responsive redesign and design tokens
+│   └── studio.css                  Studio interface and printable resume styles
+├── js/
+│   ├── theme.js                    Early system/saved theme initialization
+│   ├── app.js                      Company, AI, resume, application behavior
+│   ├── workspace.js                Themes, filters, comparison, notes
+│   ├── studio.js                   Local preview, photo processing, styling, motion
+│   ├── quick-actions.js            Searchable keyboard launcher
+│   └── legacy/pipeline-model.js    Retained, no longer loaded
+└── assets/
+    └── mark.svg                    Local brand asset
+
+database/
+├── data/
+│   ├── morocco_tech_companies.csv        Raw collector output
+│   └── morocco_tech_companies_clean.csv  Dataset served by the API
+└── scripts/
+    └── CompanyCollector.py         Optional dataset collector
+
+scripts/package.py                  Reproducible source packaging workflow
+tests/                              API, layout and packaging smoke tests
 ```
 
 The API documentation is available at `/docs` when the server is running. Main routes: `/api/companies`, `/api/companies/by-ids`, `/api/cities`, `/api/specialties`, `/api/stats`, `/api/analyze`, `/api/resume/generate`, `/api/companies/{id}/cover-letter`, `/api/companies/{id}/prepare-application`, `/api/chat`.
