@@ -71,6 +71,8 @@ def get_companies(
     match: str = Query("any", pattern="^(any|all)$"),
     city: Optional[str] = None,
     search: Optional[str] = None,
+    sort: str = Query("recommended", pattern="^(recommended|name|name_desc|city)$"),
+    contact: str = Query("all", pattern="^(all|email|careers|website)$"),
     limit: int = Query(60, ge=1, le=200),
     offset: int = Query(0, ge=0),
 ):
@@ -78,7 +80,19 @@ def get_companies(
     wanted = [s.strip().lower() for s in specialties.split("|") if s.strip()]
 
     df = filter_companies(df, wanted, match, city, search)
-    df = df.sort_values(by=["_score", "_name"], ascending=[False, True])
+    contact_columns = {"email": "apply_email", "careers": "careers_url", "website": "website"}
+    if contact != "all":
+        column = contact_columns[contact]
+        if contact == "email":
+            df = df[df[column].str.strip() != ""]
+        else:
+            df = df[df[column].str.match(r"(?i)^https?://", na=False)]
+    if sort == "recommended":
+        df = df.sort_values(by=["_score", "_name", "_id"], ascending=[False, True, True])
+    elif sort == "city":
+        df = df.sort_values(by=["city", "_name", "_id"])
+    else:
+        df = df.sort_values(by=["_name", "_id"], ascending=[sort == "name", True])
     page = df.iloc[offset:offset + limit]
 
     return {
