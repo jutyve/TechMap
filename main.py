@@ -7,6 +7,8 @@ from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import Response
+from utils.source_archive import build_source_archive
 from pydantic import BaseModel
 
 from utils.ai_analysis import run_ai_analysis
@@ -355,6 +357,13 @@ async def chat_turn(req: ChatRequest):
         companies = [public_company(row) for row in attempt.head(5).to_dict(orient="records")]
 
     return {**result, "companies": companies}
+
+
+@app.get("/api/download/source")
+def download_source():
+    return Response(build_source_archive(), media_type="application/zip",
+                    headers={"Content-Disposition": 'attachment; filename="TechMap-source.zip"',
+                             "Cache-Control": "no-store"})
 
 
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

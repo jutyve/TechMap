@@ -1,5 +1,5 @@
 const API_BASE = "/api";
-const PAGE_SIZE = 60;
+const PAGE_SIZE = 12;
 const MAX_UPLOAD_MB = 10;
 const ALLOWED_EXT = [".pdf", ".docx", ".txt", ".md", ".odt"];
 
@@ -195,6 +195,7 @@ function initViewToggle() {
       $$(".view-toggle-btn").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       state.view = btn.dataset.view;
+      ++state.reqId;
 
       $(".filters-bar").classList.toggle("hidden", state.view === "favorites");
       $(".specialty-picker").classList.toggle("hidden", state.view === "favorites");
@@ -211,6 +212,7 @@ function initViewToggle() {
 }
 
 async function loadFavoritesView() {
+  const myReq = ++state.reqId;
   const grid = $("#companiesGrid");
   const empty = $("#emptyState");
 
@@ -224,6 +226,7 @@ async function loadFavoritesView() {
   try {
     const ids = [...state.favorites].join(",");
     const data = await apiJson(`/companies/by-ids?ids=${ids}`);
+    if (myReq !== state.reqId || state.view !== "favorites") return;
     const items = (data.items || []).map(normalizeCompany);
 
     $("#resultsCount").textContent = `${items.length} favorite${items.length === 1 ? "" : "s"}`;
@@ -268,6 +271,9 @@ function initTabs() {
   const toolTabs = ["analyzer", "resume", "assistant"];
 
   function activate(target) {
+    const label = document.querySelector(`.nav-tabs [data-tab="${target}"]`);
+    if (label) document.getElementById("currentPage").textContent = label.textContent.replace(/^[^a-zA-Z]+/, "").replace(/ AI$/, "").trim();
+    window.scrollTo({ top: 0, behavior: "instant" });
     tabButtons.forEach((t) => t.classList.toggle("active", t.dataset.tab === target));
     toolsToggle.classList.toggle("active", toolTabs.includes(target));
 
@@ -464,7 +470,7 @@ function createCard(c) {
   card.setAttribute("role", "button");
   card.setAttribute("aria-label", `Open details for ${c.company_name}`);
 
-  const initial = (c.company_name || "?").charAt(0).toUpperCase();
+  const initial = (c.company_name || "?").split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const site = safeUrl(c.website) || safeUrl(c.apply_link);
   const shown = c.specialties.slice(0, 3);
   const extra = c.specialties.length - shown.length;
@@ -479,26 +485,26 @@ function createCard(c) {
 
   card.innerHTML = `
     <div class="card-top">
-      <div class="company-logo">${escapeHtml(initial)}</div>
+      <div class="company-logo" style="--logo-hue:${(c.id * 47) % 360}">${escapeHtml(initial)}</div>
       <div class="card-top-right">
-        <div class="contact-hints">${hints}</div>
+        <div class="contact-hints">${c.careers_url ? '<span class="careers-indicator">Careers page</span>' : '<span class="directory-indicator">In the directory</span>'}</div>
         <button type="button" class="fav-btn ${fav ? "active" : ""}" data-id="${c.id}" aria-label="Toggle favorite">${fav ? "★" : "☆"}</button>
       </div>
     </div>
     <h3 class="company-name">${escapeHtml(c.company_name)}</h3>
-    <div class="company-city">📍 ${escapeHtml(c.city || "Morocco")}</div>
+    <div class="company-city"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</div>
     <div class="specialty-tags">
       ${shown.map((s) => `<span class="tag">${escapeHtml(s)}</span>`).join("")}
       ${extra > 0 ? `<span class="tag tag-more">+${extra}</span>` : ""}
     </div>
-    <p class="company-desc">${escapeHtml(truncate(c.description, 120))}</p>
+    <p class="company-desc">${escapeHtml(truncate(c.description, 150) || "Explore this company’s specialties and contact details to see where your skills could fit.")}</p>
     <div class="card-footer">
       ${
         site
-          ? `<button type="button" class="btn-website" data-url="${escapeHtml(site)}">🌐 Website</button>`
+          ? `<button type="button" class="btn-website" data-url="${escapeHtml(site)}">Website ↗</button>`
           : `<button type="button" class="btn-website disabled" disabled>No website</button>`
       }
-      <button type="button" class="btn-email">✉️ Details</button>
+      <button type="button" class="btn-email">View company →</button>
     </div>
   `;
 
@@ -625,7 +631,7 @@ function detailHtml(c) {
       <div class="company-logo big">${escapeHtml((c.company_name || "?").charAt(0).toUpperCase())}</div>
       <div class="detail-head-info">
         <h2 id="detailName">${escapeHtml(c.company_name)}</h2>
-        <div class="company-city">📍 ${escapeHtml(c.city || "Morocco")}</div>
+        <div class="company-city"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</div>
       </div>
       <button type="button" class="fav-btn-detail ${fav ? "active" : ""}" data-fav-id="${c.id}">${fav ? "★ Saved" : "☆ Save"}</button>
     </header>
@@ -1424,7 +1430,7 @@ function renderChatCompanies(companies) {
       (c) => `
     <div class="chat-company-card" data-id="${c.id}">
       <strong>${escapeHtml(c.company_name)}</strong>
-      <span class="muted small-note">📍 ${escapeHtml(c.city || "Morocco")}</span>
+      <span class="muted small-note"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</span>
       <div class="specialty-tags">${c.specialties.slice(0, 3).map((s) => `<span class="tag">${escapeHtml(s)}</span>`).join("")}</div>
     </div>`
     )

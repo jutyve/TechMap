@@ -4,58 +4,60 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>TechMap Maroc - Companies Directory</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="style.css?v=8" />
+<meta name="description" content="Find your next chapter in Morocco’s tech ecosystem. Explore companies, build your resume, and organize your applications with TechMap." />
+<link rel="icon" href="mark.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="style.css?v=9" />
+<link rel="stylesheet" href="workspace.css?v=9" />
 </head>
 <body>
 
-<div class="bg-blobs" aria-hidden="true">
-  <div class="blob blob1"></div>
-  <div class="blob blob2"></div>
-  <div class="blob blob3"></div>
-</div>
-
-<nav class="navbar">
-  <div class="nav-brand">
-    <span class="brand-icon">⬢</span>
-    <span class="brand-text">TechMap <span class="brand-accent">Maroc</span></span>
-  </div>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="navbar" aria-label="Main navigation">
+  <a class="nav-brand" href="/"><img src="mark.svg" alt="" width="34" height="34" /><span class="brand-text">techmap<span class="brand-accent">MAROC</span></span></a>
   <div class="nav-tabs">
-    <button class="nav-tab active" data-tab="companies"><span class="tab-icon">🏢</span> Companies</button>
-    <button class="nav-tab" data-tab="dashboard"><span class="tab-icon">📊</span> Dashboard</button>
+    <p class="nav-label">YOUR WORKSPACE</p>
+    <button class="nav-tab active" data-tab="companies"><span class="tab-icon">▦</span> Discover companies</button>
+    <button class="nav-tab" data-tab="dashboard"><span class="tab-icon">▥</span> Ecosystem insights</button>
+    <button class="nav-tab" data-tab="applications"><span class="tab-icon">▤</span> My applications</button>
+    <p class="nav-label tools-label">YOUR NEXT CHAPTER</p>
     <div class="nav-dropdown" id="toolsDropdown">
-      <button type="button" class="nav-tab" id="toolsToggle"><span class="tab-icon">🛠️</span> Tools <span class="caret">▾</span></button>
-      <div class="nav-dropdown-menu hidden" id="toolsMenu">
-        <button type="button" class="dropdown-item" data-tab="analyzer">🧠 Job Analyzer</button>
-        <button type="button" class="dropdown-item" data-tab="resume">🧾 Resume Studio</button>
-        <button type="button" class="dropdown-item" data-tab="assistant">🤖 AI Assistant</button>
-      </div>
+      <button type="button" id="toolsToggle" hidden>Career tools</button>
+      <div id="toolsMenu" class="hidden"></div>
+      <button class="nav-tab" data-tab="analyzer"><span class="tab-icon">◎</span> Resume analyzer</button>
+      <button class="nav-tab" data-tab="resume"><span class="tab-icon">▧</span> Resume studio</button>
+      <button class="nav-tab" data-tab="assistant"><span class="tab-icon">✧</span> Career assistant <span class="ai-pill">AI</span></button>
     </div>
-    <button class="nav-tab" data-tab="applications"><span class="tab-icon">📋</span> Applications</button>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="sidebar-note"><span>✧ A little direction. A big next step.</span><p>Your next opportunity could be closer than you think.</p><button data-tab="assistant">Find my direction <span>↗</span></button></div>
+    <a class="source-link" href="/api/download/source">↓ Download source <span>ZIP</span></a>
+    <div class="local-profile"><span class="avatar">Y</span><div>Your workspace<small>Local &amp; private by default</small></div><span class="online-dot"></span></div>
   </div>
 </nav>
+<header class="workspace-header"><div><span class="breadcrumb">Workspace</span><span class="crumb-separator">/</span><span id="currentPage">Discover companies</span></div><div class="header-right"><span class="morocco-badge">◈ Made for Morocco</span><button id="helpBtn" class="icon-button" aria-label="Local setup and help">?</button><span class="avatar small">Y</span></div></header>
+<main class="main-content" id="main" tabindex="-1">
 
-<main class="main-content">
 
   <div id="banner" class="banner hidden" role="alert"></div>
 
   <!-- COMPANIES TAB -->
   <section id="companies" class="tab-panel active">
-    <div class="panel-header">
-      <h1>Explore Tech Companies</h1>
-      <p>Discover companies across Morocco, then contact them directly</p>
+    <div class="page-intro"><div><div class="eyebrow">THE MOROCCAN TECH ECOSYSTEM, CONNECTED</div><h1>Big ambitions. Local opportunities.</h1><p>Find the companies, people, and possibilities for your next chapter.</p></div><button class="outline-button" id="exportCompanies">↓ Export directory</button></div>
+    <div class="discovery-hero">
+      <div class="hero-copy"><span class="hero-kicker"><span class="online-dot"></span> YOUR NEXT MOVE STARTS HERE</span><h2>Great work starts<br>with the <em>right place.</em></h2><p>From ambitious startups to established teams.<br>Discover your place in Morocco’s tech community.</p><button class="hero-cta" id="exploreBtn">Explore companies <span>↗</span></button><span class="hero-footnote">Real companies. Your possibilities.</span></div>
+      <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="art-grid"></div><span class="art-spark spark-one">✳</span><span class="art-spark spark-two">✦</span><div class="map-center"><img src="mark.svg" alt="" /><span>YOUR NEXT<br>CHAPTER</span></div><div class="city-node node-casa"><i></i>Casablanca <span>↗</span></div><div class="city-node node-rabat"><i></i>Rabat</div><div class="city-node node-marrakech"><i></i>Marrakech</div><div class="city-node node-tangier"><i></i>Tangier</div><span class="art-coordinate">35° N &nbsp; / &nbsp; 06° W<br>A WORLD OF POSSIBILITY</span></div>
     </div>
-
+    <div class="ecosystem-strip"><div><span class="metric-icon">▦</span><strong id="heroCompanies">—</strong><span>companies to discover</span></div><div><span class="metric-icon">⌖</span><strong id="heroCities">—</strong><span>cities across Morocco</span></div><div><span class="metric-icon">◇</span><strong id="heroSpecialties">—</strong><span>tech specialties</span></div><div class="strip-note"><span class="online-dot"></span> Built for your next step</div></div>
+    <div class="directory-heading"><div><h2>Discover your next team</h2><p>A new connection could change everything.</p></div><div class="layout-toggle" aria-label="Directory layout"><button id="gridView" class="active" aria-label="Grid view" aria-pressed="true">▦</button><button id="listView" aria-label="List view" aria-pressed="false">☰</button></div></div>
     <div class="view-toggle">
-      <button type="button" class="view-toggle-btn active" data-view="all">🏢 All Companies</button>
-      <button type="button" class="view-toggle-btn" data-view="favorites">⭐ Favorites (<span id="favCount">0</span>)</button>
+      <button type="button" class="view-toggle-btn active" data-view="all">All companies</button>
+      <button type="button" class="view-toggle-btn" data-view="favorites">Saved companies (<span id="favCount">0</span>)</button>
     </div>
 
     <div class="filters-bar">
       <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search company, city, keyword..." aria-label="Search companies" />
+        <span class="search-icon">⌕</span>
+        <input type="text" id="searchInput" placeholder="Search companies, skills, or keywords..." aria-label="Search companies" />
       </div>
       <select id="cityFilter" aria-label="Filter by city"><option value="all">All Cities</option></select>
       <div class="results-count" id="resultsCount" aria-live="polite">0 companies</div>
@@ -63,11 +65,11 @@
 
     <div class="specialty-picker">
       <div class="picker-head">
-        <span class="picker-title">Pick the specialties you care about</span>
+        <span class="picker-title">Explore by specialty</span>
         <label class="switch" title="Only show companies that have every selected specialty">
           <input type="checkbox" id="matchAll" />
           <span class="switch-track"></span>
-          <span class="switch-text">Must have all selected</span>
+          <span class="switch-text">Match all</span>
         </label>
         <button type="button" id="clearSpecialties" class="link-btn hidden">Clear selection</button>
       </div>
@@ -290,6 +292,7 @@
     </div>
   </section>
 
+<footer class="workspace-footer"><span>techmap maroc <span class="footer-dot">·</span> Built for what’s next.</span><span>Company details may change. Verify before applying.</span></footer>
 </main>
 
 <!-- COMPANY DETAIL -->
@@ -393,9 +396,10 @@
 </div>
 
 <div id="toast" class="toast" role="status"></div>
-<div class="build-tag">TechMap build 8</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-<script src="app.js?v=8"></script>
+
+
+<script src="app.js?v=9"></script>
+<script src="workspace.js?v=9"></script>
 </body>
 </html>
