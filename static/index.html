@@ -3,38 +3,41 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TechMap Maroc - Companies Directory</title>
-<meta name="description" content="Find your next chapter in Morocco’s tech ecosystem. Explore companies, build your resume, and prepare your next career move with TechMap." />
+<title>TechMap Maroc — Discover Morocco's tech companies</title>
+<meta name="description" content="Find your next chapter in Morocco's tech ecosystem. Explore companies, build your resume, and prepare your next career move with TechMap." />
+<meta name="theme-color" content="#13352a" />
 <link rel="icon" href="assets/icons/mark.svg" type="image/svg+xml" />
-<script src="js/core/theme.js?v=14"></script>
-<link rel="stylesheet" href="css/base.css?v=14" />
-<link rel="stylesheet" href="css/workspace.css?v=14" />
-<link rel="stylesheet" href="css/studio.css?v=14" />
+<link rel="preload" href="assets/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<script src="js/core/theme.js?v=15"></script>
+<link rel="stylesheet" href="css/base.css?v=15" />
+<link rel="stylesheet" href="css/workspace.css?v=15" />
+<link rel="stylesheet" href="css/studio.css?v=15" />
 </head>
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
 <nav class="navbar" aria-label="Main navigation">
-  <a class="nav-brand" href="/"><img src="assets/icons/mark.svg" alt="" width="34" height="34" /><span class="brand-text">techmap<span class="brand-accent">MAROC</span></span></a>
+  <a class="nav-brand" href="/"><img src="assets/icons/mark.svg" alt="" width="36" height="36" /><span class="brand-text">techmap<span class="brand-accent">Maroc</span></span></a>
   <div class="nav-tabs">
-    <p class="nav-label">YOUR WORKSPACE</p>
-    <button class="nav-tab active" data-tab="companies"><span class="tab-icon">▦</span> Discover companies</button>
-    <button class="nav-tab" data-tab="dashboard"><span class="tab-icon">▥</span> Ecosystem insights</button>
-    <p class="nav-label tools-label">YOUR NEXT CHAPTER</p>
+    <p class="nav-label">Your workspace</p>
+    <button class="nav-tab active" data-tab="companies"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.6" height="7.6" rx="2.2"/><rect x="13.4" y="3" width="7.6" height="7.6" rx="2.2"/><rect x="3" y="13.4" width="7.6" height="7.6" rx="2.2"/><rect x="13.4" y="13.4" width="7.6" height="7.6" rx="2.2"/></svg></span> Discover companies</button>
+    <button class="nav-tab" data-tab="dashboard"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5h17"/><path d="M6.5 20.5v-6.2M11.4 20.5V7.8M16.3 20.5v-9.1M21 20.5V4.5"/></svg></span> Ecosystem insights</button>
+    <p class="nav-label tools-label">Your next chapter</p>
     <div class="nav-dropdown" id="toolsDropdown">
       <button type="button" id="toolsToggle" hidden>Career tools</button>
       <div id="toolsMenu" class="hidden"></div>
-      <button class="nav-tab" data-tab="analyzer"><span class="tab-icon">◎</span> Resume analyzer</button>
-      <button class="nav-tab" data-tab="resume"><span class="tab-icon">▧</span> Resume studio</button>
-      <button class="nav-tab" data-tab="assistant"><span class="tab-icon">✧</span> Career assistant <span class="ai-pill">AI</span></button>
+      <button class="nav-tab" data-tab="analyzer"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1.6v2.4M12 20v2.4M1.6 12h2.4M20 12h2.4"/></svg></span> Resume analyzer</button>
+      <button class="nav-tab" data-tab="resume"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2.8h6.4L19 8.4v12a1.4 1.4 0 0 1-1.4 1.4H7a1.4 1.4 0 0 1-1.4-1.4V4.2A1.4 1.4 0 0 1 7 2.8Z"/><path d="M13.2 2.9v5.6H19"/><path d="M9 13.4h6M9 17h3.6"/></svg></span> Resume studio</button>
+      <button class="nav-tab" data-tab="assistant"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.2v3.4M16.9 4.9h3.4M6.6 16.4v2.4M5.4 17.6h2.4"/></svg></span> Career assistant <span class="ai-pill">AI</span></button>
     </div>
   </div>
   <div class="sidebar-bottom">
-    <div class="sidebar-note"><span>✧ A little direction. A big next step.</span><p>Your next opportunity could be closer than you think.</p><button data-tab="assistant">Find my direction <span>↗</span></button></div>
+    <div class="sidebar-note"><span>A little direction</span><p>Your next opportunity could be closer than you think.</p><button data-tab="assistant">Find my direction <span>↗</span></button></div>
     <div class="local-profile"><span class="avatar">Y</span><div>Your workspace<small>Local &amp; private by default</small></div><span class="online-dot"></span></div>
   </div>
 </nav>
-<header class="workspace-header"><div><span class="breadcrumb">Workspace</span><span class="crumb-separator">/</span><span id="currentPage">Discover companies</span></div><div class="header-right"><span class="morocco-badge">◈ Made for Morocco</span><button id="openLauncher" class="launcher-trigger" aria-label="Open quick actions (Control or Command K)"><span aria-hidden="true">⌕</span><span>Quick actions</span><kbd>⌘ K</kbd></button><button id="themeToggle" class="theme-toggle" aria-label="Switch color theme"><span id="themeIcon" aria-hidden="true">☾</span><span id="themeLabel">Dark mode</span></button><button id="helpBtn" class="icon-button" aria-label="Workspace help">?</button><span class="avatar small">Y</span></div></header>
+<header class="workspace-header"><div><span class="breadcrumb">Workspace</span><span class="crumb-separator">/</span><span id="currentPage">Discover companies</span></div><div class="header-right"><span class="morocco-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6 14 9l6.4 2-6.4 2-2 6.4L10 13l-6.4-2L10 9z"/></svg> Made for Morocco</span><button id="openLauncher" class="launcher-trigger" aria-label="Open quick actions (Control or Command K)"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.6"/><path d="m16 16 4.6 4.6"/></svg></span><span>Quick actions</span><kbd>⌘ K</kbd></button><button id="themeToggle" class="theme-toggle" aria-label="Switch color theme"><span id="themeIcon" aria-hidden="true"></span><span id="themeLabel">Dark mode</span></button><button id="helpBtn" class="icon-button" aria-label="Workspace help">?</button><span class="avatar small">Y</span></div></header>
 <main class="main-content" id="main" tabindex="-1">
 
 
@@ -42,13 +45,33 @@
 
   <!-- COMPANIES TAB -->
   <section id="companies" class="tab-panel active">
-    <div class="page-intro"><div><div class="eyebrow">THE MOROCCAN TECH ECOSYSTEM, CONNECTED</div><h1>Big ambitions. Local opportunities.</h1><p>Find the companies, people, and possibilities for your next chapter.</p></div></div>
+    <div class="page-intro"><div><div class="eyebrow">The Moroccan tech ecosystem, connected</div><h1>Big ambitions. Local opportunities.</h1><p>Find the companies, people, and possibilities for your next chapter.</p></div></div>
     <div class="discovery-hero">
-      <div class="hero-copy"><span class="hero-kicker"><span class="online-dot"></span> YOUR NEXT MOVE STARTS HERE</span><h2>Great work starts<br>with the <em>right place.</em></h2><p>From ambitious startups to established teams.<br>Discover your place in Morocco’s tech community.</p><button class="hero-cta" id="exploreBtn">Explore companies <span>↗</span></button><span class="hero-footnote">Real companies. Your possibilities.</span></div>
-      <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="art-grid"></div><span class="art-spark spark-one">✳</span><span class="art-spark spark-two">✦</span><div class="map-center"><img src="assets/icons/mark.svg" alt="" /><span>YOUR NEXT<br>CHAPTER</span></div><div class="city-node node-casa"><i></i>Casablanca <span>↗</span></div><div class="city-node node-rabat"><i></i>Rabat</div><div class="city-node node-marrakech"><i></i>Marrakech</div><div class="city-node node-tangier"><i></i>Tangier</div><span class="art-coordinate">35° N &nbsp; / &nbsp; 06° W<br>A WORLD OF POSSIBILITY</span></div>
+      <div class="hero-copy"><span class="hero-kicker"><span class="online-dot"></span> Your next move starts here</span><h2>Great work starts<br>with the <em>right place.</em></h2><p>From ambitious startups to established teams — discover where your skills, your curiosity, and Morocco's tech community meet.</p><button class="hero-cta" id="exploreBtn">Explore companies <span>↗</span></button><span class="hero-footnote">Real companies · real possibilities</span></div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-grid"></div>
+        <div class="art-star"><svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.7"><rect x="44" y="44" width="112" height="112"/><rect x="44" y="44" width="112" height="112" transform="rotate(45 100 100)"/><circle cx="100" cy="100" r="8"/><circle cx="100" cy="26" r="2"/><circle cx="100" cy="174" r="2"/><circle cx="26" cy="100" r="2"/><circle cx="174" cy="100" r="2"/><circle cx="48" cy="48" r="1.6"/><circle cx="152" cy="48" r="1.6"/><circle cx="48" cy="152" r="1.6"/><circle cx="152" cy="152" r="1.6"/></svg></div>
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+        <span class="art-spark spark-one"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5 13.6 9l7.5 1.6-7.5 1.6L12 19.7l-1.6-7.5L2.9 10.6 10.4 9z"/></svg></span><span class="art-spark spark-two"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5 13.6 9l7.5 1.6-7.5 1.6L12 19.7l-1.6-7.5L2.9 10.6 10.4 9z"/></svg></span>
+        <div class="map-center"><img src="assets/icons/mark.svg" alt="" /><span>YOUR NEXT<br>CHAPTER</span></div>
+        <div class="city-node node-casa"><i></i>Casablanca <span class="node-count" data-city-count="casablanca">—</span></div>
+        <div class="city-node node-rabat"><i></i>Rabat <span class="node-count" data-city-count="rabat">—</span></div>
+        <div class="city-node node-marrakech"><i></i>Marrakech <span class="node-count" data-city-count="marrakech">—</span></div>
+        <div class="city-node node-tangier"><i></i>Tangier <span class="node-count" data-city-count="tanger">—</span></div>
+        <div class="city-node node-agadir"><i></i>Agadir <span class="node-count" data-city-count="agadir">—</span></div>
+        <div class="city-node node-fes"><i></i>Fès <span class="node-count" data-city-count="fes">—</span></div>
+        <div class="city-node node-oujda"><i></i>Oujda <span class="node-count" data-city-count="oujda">—</span></div>
+        <div class="city-node node-tetouan"><i></i>Tétouan <span class="node-count" data-city-count="tetouan">—</span></div>
+        <span class="art-coordinate">35° N &nbsp;/&nbsp; 06° W<br>A world of possibility</span>
+      </div>
     </div>
-    <div class="ecosystem-strip"><div><span class="metric-icon">▦</span><strong id="heroCompanies">—</strong><span>companies to discover</span></div><div><span class="metric-icon">⌖</span><strong id="heroCities">—</strong><span>cities across Morocco</span></div><div><span class="metric-icon">◇</span><strong id="heroSpecialties">—</strong><span>tech specialties</span></div><div class="strip-note"><span class="online-dot"></span> Built for your next step</div></div>
-    <div class="directory-heading"><div><h2>Discover your next team</h2><p>A new connection could change everything.</p></div><div class="layout-toggle" aria-label="Directory layout"><button id="gridView" class="active" aria-label="Grid view" aria-pressed="true">▦</button><button id="listView" aria-label="List view" aria-pressed="false">☰</button></div></div>
+    <div class="ecosystem-strip">
+      <div><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 20.5V5.6A1.6 1.6 0 0 1 6.1 4h6.3a1.6 1.6 0 0 1 1.6 1.6v14.9"/><path d="M14 10.4h3.4a1.6 1.6 0 0 1 1.6 1.6v8.5"/><path d="M2.8 20.5h18.4"/><path d="M7.4 8h3.6M7.4 12h3.6M7.4 16h3.6M17 14.5v3"/></svg></span><strong id="heroCompanies">—</strong><span>companies to discover</span></div>
+      <div><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 10.2c0 5.4-7 11.3-7 11.3S5 15.6 5 10.2a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.6"/></svg></span><strong id="heroCities">—</strong><span>cities across Morocco</span></div>
+      <div><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 15 9l6.2 3-6.2 3-3 6.2-3-6.2L2.8 12 9 9z"/></svg></span><strong id="heroSpecialties">—</strong><span>tech specialties</span></div>
+      <div class="strip-note"><span class="online-dot"></span> Built for your next step</div>
+    </div>
+    <div class="directory-heading"><div><h2>Discover your next team</h2><p>A new connection could change everything.</p></div><div class="layout-toggle" aria-label="Directory layout"><button id="gridView" class="active" aria-label="Grid view" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></button><button id="listView" aria-label="List view" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h16M4 12h16M4 17.5h11"/></svg></button></div></div>
     <div class="view-toggle">
       <button type="button" class="view-toggle-btn active" data-view="all">All companies</button>
       <button type="button" class="view-toggle-btn" data-view="favorites">Saved companies (<span id="favCount">0</span>)</button>
@@ -56,10 +79,11 @@
 
     <div class="filters-bar">
       <div class="search-box">
-        <span class="search-icon">⌕</span>
-        <input type="text" id="searchInput" placeholder="Search companies, skills, or keywords..." aria-label="Search companies" />
+        <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.6"/><path d="m16 16 4.6 4.6"/></svg></span>
+        <input type="text" id="searchInput" placeholder="Search companies, skills, or keywords…" aria-label="Search companies" />
+        <kbd class="search-hint" aria-hidden="true">/</kbd>
       </div>
-      <select id="cityFilter" aria-label="Filter by city"><option value="all">All Cities</option></select>
+      <select id="cityFilter" aria-label="Filter by city"><option value="all">All cities</option></select>
       <select id="contactFilter" aria-label="Contact availability"><option value="all">Any contact method</option><option value="email">Has an email</option><option value="careers">Has a careers page</option><option value="website">Has a website</option></select>
       <select id="sortFilter" aria-label="Sort companies"><option value="recommended">Most complete profiles</option><option value="name">Name: A–Z</option><option value="name_desc">Name: Z–A</option><option value="city">City: A–Z</option></select>
       <div class="results-count" id="resultsCount" aria-live="polite">0 companies</div>
@@ -83,62 +107,64 @@
     <div id="companiesGrid" class="companies-grid"></div>
 
     <div id="emptyState" class="empty-state hidden">
-      <div class="empty-icon">🌵</div>
+      <div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.6"/><path d="m16 16 4.6 4.6M8.2 11h5.6"/></svg></div>
       <p>No companies match these filters. Try removing a specialty or clearing the search.</p>
     </div>
 
     <div class="load-more-wrap">
-      <button type="button" id="loadMore" class="load-more hidden">Show more companies</button>
+      <button type="button" id="loadMore" class="load-more hidden">Show more companies <span aria-hidden="true">↓</span></button>
     </div>
   </section>
 
   <!-- DASHBOARD TAB -->
   <section id="dashboard" class="tab-panel">
     <div class="panel-header">
-      <h1>Dashboard &amp; Statistics</h1>
-      <p>Insights from the companies directory</p>
+      <div class="eyebrow">Ecosystem insights</div>
+      <h1>Dashboard &amp; statistics</h1>
+      <p>What the directory says about Morocco's tech landscape.</p>
     </div>
 
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon">🏢</div><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Companies</div></div>
-      <div class="stat-card"><div class="stat-icon">🌐</div><div class="stat-value" id="statWebsite">0</div><div class="stat-label">With Website</div></div>
-      <div class="stat-card"><div class="stat-icon">✉️</div><div class="stat-value" id="statEmail">0</div><div class="stat-label">With Email</div></div>
-      <div class="stat-card"><div class="stat-icon">📞</div><div class="stat-value" id="statPhone">0</div><div class="stat-label">With Phone</div></div>
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 20.5V5.6A1.6 1.6 0 0 1 6.1 4h6.3a1.6 1.6 0 0 1 1.6 1.6v14.9"/><path d="M14 10.4h3.4a1.6 1.6 0 0 1 1.6 1.6v8.5"/><path d="M2.8 20.5h18.4"/><path d="M7.4 8h3.6M7.4 12h3.6M7.4 16h3.6M17 14.5v3"/></svg></div><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total companies</div></div>
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8"/><path d="M12 3.6c2.2 2.4 3.4 5.3 3.4 8.4s-1.2 6-3.4 8.4c-2.2-2.4-3.4-5.3-3.4-8.4S9.8 6 12 3.6Z"/></svg></div><div class="stat-value" id="statWebsite">0</div><div class="stat-label">With website</div></div>
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="5.4" width="18.4" height="13.2" rx="2.6"/><path d="m4.6 8 7.4 4.6L19.4 8"/></svg></div><div class="stat-value" id="statEmail">0</div><div class="stat-label">With email</div></div>
+      <div class="stat-card"><div class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7.2 3.6h2.9l1.5 3.9-2 1.5a11.4 11.4 0 0 0 5.4 5.4l1.5-2 3.9 1.5v2.9a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 5.2 5.8a2 2 0 0 1 2-2.2Z"/></svg></div><div class="stat-value" id="statPhone">0</div><div class="stat-label">With phone</div></div>
     </div>
 
     <div class="charts-row">
-      <div class="chart-card"><h3>Top Specialties</h3><div id="specialtyChart" class="bar-chart"></div></div>
-      <div class="chart-card"><h3>Top Cities</h3><div id="cityChart" class="bar-chart"></div></div>
+      <div class="chart-card"><h3>Top specialties</h3><div id="specialtyChart" class="bar-chart"></div></div>
+      <div class="chart-card"><h3>Top cities</h3><div id="cityChart" class="bar-chart"></div></div>
     </div>
 
     <div class="charts-row single">
-      <div class="chart-card"><h3>How to apply</h3><div id="applyViaChart" class="bar-chart"></div></div>
+      <div class="chart-card"><h3>How companies prefer to be reached</h3><div id="applyViaChart" class="bar-chart"></div></div>
     </div>
   </section>
 
   <!-- ANALYZER TAB -->
   <section id="analyzer" class="tab-panel">
     <div class="panel-header">
-      <h1>Job Application Analyzer</h1>
-      <p>Upload your resume and the analyzer will do the rest</p>
+      <div class="eyebrow">Resume analyzer</div>
+      <h1>Job application analyzer</h1>
+      <p>Upload your resume and the analyzer will do the rest.</p>
     </div>
 
     <div class="analyzer-upload">
       <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload your resume: click or drop a file">
         <input type="file" id="resumeFile" accept=".pdf,.docx,.txt,.md,.odt" hidden />
-        <div class="dz-icon">📄</div>
+        <div class="dz-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7.4 3h5.8l4.4 4.4V20a1.4 1.4 0 0 1-1.4 1.4H7.4A1.4 1.4 0 0 1 6 20V4.4A1.4 1.4 0 0 1 7.4 3Z"/><path d="M13 3.2v4.6h4.6"/><path d="M12 12v5.4M9.6 14.6 12 12l2.4 2.6"/></svg></div>
         <p class="dz-title">Drop your resume here or click to browse</p>
         <p class="dz-sub">PDF, Word (.docx), TXT or ODT, up to 10 MB</p>
       </div>
 
       <div id="fileChip" class="file-chip hidden">
-        <span class="file-icon">📎</span>
+        <span class="file-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7.4 3h5.8l4.4 4.4V20a1.4 1.4 0 0 1-1.4 1.4H7.4A1.4 1.4 0 0 1 6 20V4.4A1.4 1.4 0 0 1 7.4 3Z"/><path d="M13 3.2v4.6h4.6"/></svg></span>
         <span class="file-name" id="fileName"></span>
         <span class="file-size" id="fileSize"></span>
         <button type="button" id="removeFile" class="file-remove" aria-label="Remove file">✕</button>
       </div>
 
-      <button id="analyzeBtn" class="analyze-btn" disabled><span>Analyze Resume</span></button>
+      <button id="analyzeBtn" class="analyze-btn" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.4v3.2M17 5h3.2"/></svg><span>Analyze resume</span></button>
     </div>
 
     <div id="analyzerResults" class="analyzer-results hidden" aria-live="polite">
@@ -180,8 +206,9 @@
   <!-- RESUME STUDIO TAB -->
   <section id="resume" class="tab-panel">
     <div class="panel-header">
-      <h1>Resume Studio</h1>
-      <p>Your story, beautifully presented. Choose a style, add an optional photo, and make it yours.</p>
+      <div class="eyebrow">Resume studio</div>
+      <h1>Your story, beautifully set</h1>
+      <p>Choose a style, add an optional photo, and make it yours.</p>
     </div>
 
     <div class="studio-layout">
@@ -200,15 +227,15 @@
             <label>Target role<input type="text" id="rTargetRole" placeholder="Frontend Developer Intern" /></label>
           </div>
           <div class="form-row">
-            <label>LinkedIn<input type="text" id="rLinkedin" placeholder="linkedin.com/in/..." /></label>
-            <label>GitHub<input type="text" id="rGithub" placeholder="github.com/..." /></label>
+            <label>LinkedIn<input type="text" id="rLinkedin" placeholder="linkedin.com/in/…" /></label>
+            <label>GitHub<input type="text" id="rGithub" placeholder="github.com/…" /></label>
           </div>
         </div>
 
         <div class="form-section">
           <h3>About you <span class="optional-tag">optional</span></h3>
-          <label>Years of experience<input type="text" id="rYears" placeholder="e.g. fresh graduate, 1 year..." /></label>
-          <label>Anything you'd like the summary to mention<textarea id="rSummaryHint" rows="2" placeholder="e.g. passionate about frontend, did a 3-month internship at..."></textarea></label>
+          <label>Years of experience<input type="text" id="rYears" placeholder="e.g. fresh graduate, 1 year…" /></label>
+          <label>Anything you'd like the summary to mention<textarea id="rSummaryHint" rows="2" placeholder="e.g. passionate about frontend, did a 3-month internship at…"></textarea></label>
         </div>
 
         <div class="form-section">
@@ -235,33 +262,33 @@
           </div>
         </div>
 
-        <div class="studio-create-actions"><button type="button" id="previewDetailsBtn" class="mini-btn primary">Preview my details <span>↗</span></button><button type="submit" id="generateResumeBtn" class="analyze-btn"><span>✧ Polish with AI</span></button></div><p class="studio-fine-print">Preview works without AI. Polishing uses your configured provider.</p>
+        <div class="studio-create-actions"><button type="button" id="previewDetailsBtn" class="mini-btn primary">Preview my details <span>↗</span></button><button type="submit" id="generateResumeBtn" class="analyze-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.4v3.2M17 5h3.2"/></svg><span>Polish with AI</span></button></div><p class="studio-fine-print">Preview works without AI. Polishing uses your configured provider.</p>
       </form>
 
       <div class="resume-preview-pane">
         <div class="template-picker">
           <div class="studio-step"><span>02</span><div><h3>Find your signature style</h3><p>Four ways to tell your story.</p></div></div>
           <div class="template-options">
-            <button type="button" class="template-opt active" data-template="classic"><span class="tpl-swatch tpl-classic"></span>Classic</button>
-            <button type="button" class="template-opt" data-template="modern"><span class="tpl-swatch tpl-modern"></span>Modern</button>
-            <button type="button" class="template-opt" data-template="bold"><span class="tpl-swatch tpl-bold"></span>Bold</button>
-            <button type="button" class="template-opt" data-template="editorial"><span class="tpl-swatch tpl-editorial"></span>Editorial <span class="new-template">NEW</span></button>
+            <button type="button" class="template-opt active" data-template="classic"><span class="tpl-swatch tpl-classic" aria-hidden="true"><i class="name"></i><i class="sub"></i><i class="rule"></i><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i></span><span class="tpl-meta"><strong>Classic</strong><small>Centred &amp; timeless</small></span></button>
+            <button type="button" class="template-opt" data-template="modern"><span class="tpl-swatch tpl-modern" aria-hidden="true"><i class="side"></i><i class="dot"></i><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i><i class="b5"></i><i class="b6"></i></span><span class="tpl-meta"><strong>Modern</strong><small>Two columns, side panel</small></span></button>
+            <button type="button" class="template-opt" data-template="bold"><span class="tpl-swatch tpl-bold" aria-hidden="true"><i class="banner"></i><i class="dot"></i><i class="spine"></i><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="pill"></i></span><span class="tpl-meta"><strong>Bold</strong><small>Confident gradient header</small></span></button>
+            <button type="button" class="template-opt" data-template="editorial"><span class="tpl-swatch tpl-editorial" aria-hidden="true"><i class="kicker"></i><i class="name"></i><i class="rule"></i><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i></span><span class="tpl-meta"><strong>Editorial</strong><small>Refined reading order</small> <span class="new-template">New</span></span></button>
           </div>
         </div>
 
-        <div class="studio-style-bar"><div class="accent-options" role="group" aria-label="Resume accent color"><span>Accent</span><button type="button" data-resume-accent="forest" class="accent-choice active" style="--swatch:#315c49" aria-label="Forest accent" aria-pressed="true"></button><button type="button" data-resume-accent="navy" class="accent-choice" style="--swatch:#294665" aria-label="Navy accent" aria-pressed="false"></button><button type="button" data-resume-accent="terracotta" class="accent-choice" style="--swatch:#974f3b" aria-label="Terracotta accent" aria-pressed="false"></button><button type="button" data-resume-accent="charcoal" class="accent-choice" style="--swatch:#3b3e43" aria-label="Charcoal accent" aria-pressed="false"></button></div><span id="studioSaveStatus" role="status">Designed around you</span></div>
+        <div class="studio-style-bar"><div class="accent-options" role="group" aria-label="Resume accent color"><span>Accent</span><button type="button" data-resume-accent="forest" class="accent-choice active" style="--swatch:#1d5b45" aria-label="Forest accent" aria-pressed="true"></button><button type="button" data-resume-accent="navy" class="accent-choice" style="--swatch:#2f4a7c" aria-label="Navy accent" aria-pressed="false"></button><button type="button" data-resume-accent="terracotta" class="accent-choice" style="--swatch:#ac4f2d" aria-label="Terracotta accent" aria-pressed="false"></button><button type="button" data-resume-accent="charcoal" class="accent-choice" style="--swatch:#3b3e43" aria-label="Charcoal accent" aria-pressed="false"></button></div><span id="studioSaveStatus" role="status">Designed around you</span></div>
         <p id="templateDescription" class="template-description">Classic · A timeless, centered layout with understated detail.</p>
         <div id="resumeStatus" class="analysis-status hidden"></div>
 
         <div id="resumePreviewWrap" class="resume-preview-wrap hidden">
           <div class="resume-actions">
-            <button type="button" id="printResumeBtn" class="mini-btn primary">🖨️ Print / Save as PDF</button>
-            <button type="button" id="copyResumeBtn" class="mini-btn">Copy as text</button>
+            <button type="button" id="printResumeBtn" class="mini-btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V3.6h10V9"/><rect x="3.5" y="9" width="17" height="7.4" rx="2"/><path d="M7 14.6h10V20H7z"/></svg> Print / Save as PDF</button>
+            <button type="button" id="copyResumeBtn" class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11.4" height="11.4" rx="2.4"/><path d="M15 6.2V5.4A1.4 1.4 0 0 0 13.6 4H5.4A1.4 1.4 0 0 0 4 5.4v8.2A1.4 1.4 0 0 0 5.4 15h.8"/></svg> Copy as text</button>
           </div>
           <div id="resumePreview" class="resume-preview template-classic"></div>
         </div>
 
-        <div id="resumeEmptyState" class="studio-empty"><div class="paper-illustration" aria-hidden="true"><div class="paper-avatar"></div><i></i><i></i><hr><i></i><i></i><i></i><hr><i></i><i></i></div><h3>A little more you.</h3><p>Start with your name and a few details.<br>Preview instantly, or let AI help with the wording.</p><span>No photo required. No experience invented.</span></div>
+        <div id="resumeEmptyState" class="studio-empty"><div class="paper-illustration" aria-hidden="true"><div class="paper-avatar"></div><i></i><i></i><hr><i></i><i></i><i></i><hr><i></i><i></i></div><h3>A little more you.</h3><p>Start with your name and a few details.<br>Preview instantly, or let AI help with the wording.</p><span>No photo required · no experience invented</span></div>
       </div>
     </div>
   </section>
@@ -269,14 +296,16 @@
   <!-- AI ASSISTANT TAB -->
   <section id="assistant" class="tab-panel">
     <div class="panel-header">
-      <h1>AI Career Assistant</h1>
-      <p>Tell it what you're looking for, it'll point you to real companies in the directory</p>
+      <div class="eyebrow">Career assistant</div>
+      <h1>Tell me where you want to go</h1>
+      <p>Describe the role you're after and I'll point you to real companies in the directory.</p>
     </div>
 
     <div class="chat-shell">
       <div id="chatMessages" class="chat-messages">
-        <div class="chat-bubble assistant">Hi! Tell me what kind of role or field you're into — for example "I want to do frontend dev" or "I'm into cybersecurity and based in Rabat" — and I'll point you to real companies here.</div>
+        <div class="chat-bubble assistant">Hi! Tell me what kind of role or field you're into — for example “I want to do frontend dev” or “I'm into cybersecurity and based in Rabat” — and I'll point you to real companies here.</div>
       </div>
+      <div class="chat-suggestions"><button type="button" class="chat-suggestion">A frontend internship in Rabat</button><button type="button" class="chat-suggestion">Cybersecurity teams in Casablanca</button><button type="button" class="chat-suggestion">Data &amp; AI roles for a fresh graduate</button></div>
       <form id="chatForm" class="chat-input-row">
         <input type="text" id="chatInput" placeholder="e.g. I want a frontend internship in Rabat" autocomplete="off" />
         <button type="submit" class="mini-btn primary">Send</button>
@@ -284,7 +313,7 @@
     </div>
   </section>
 
-<footer class="workspace-footer"><span>techmap maroc <span class="footer-dot">·</span> Built for what’s next.</span><span>Company details may change. Verify before applying.</span></footer>
+<footer class="workspace-footer"><span>techmap maroc <span class="footer-dot">·</span> Built for what's next</span><span>Company details may change. Verify before applying.</span></footer>
 </main>
 
 <!-- COMPANY DETAIL -->
@@ -299,6 +328,7 @@
 <div id="letterOverlay" class="detail-overlay hidden">
   <div class="detail-box modal-box" role="dialog" aria-modal="true" aria-labelledby="letterTitle">
     <button type="button" class="detail-close" id="letterClose" aria-label="Close">✕</button>
+    <div class="eyebrow">Cover letter</div>
     <h2 id="letterTitle">Cover letter for <span id="letterCompanyName"></span></h2>
 
     <form id="letterForm" class="modal-form">
@@ -306,7 +336,7 @@
         <label>Full name *<input type="text" id="lFullName" required /></label>
         <label>Target role<input type="text" id="lTargetRole" placeholder="Software Engineer Intern" /></label>
       </div>
-      <label>Things to highlight <span class="optional-tag">optional</span><textarea id="lHighlights" rows="2" placeholder="e.g. 2 years React experience, won a hackathon..."></textarea></label>
+      <label>Things to highlight <span class="optional-tag">optional</span><textarea id="lHighlights" rows="2" placeholder="e.g. 2 years React experience, won a hackathon…"></textarea></label>
       <label>Tone
         <select id="lTone">
           <option value="professional and motivated">Professional &amp; motivated</option>
@@ -314,7 +344,7 @@
           <option value="concise and formal">Concise &amp; formal</option>
         </select>
       </label>
-      <button type="submit" class="analyze-btn" id="letterSubmitBtn"><span>Generate letter</span></button>
+      <button type="submit" class="analyze-btn" id="letterSubmitBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.4v3.2M17 5h3.2"/></svg><span>Generate letter</span></button>
     </form>
 
     <div id="letterStatus" class="analysis-status hidden"></div>
@@ -322,8 +352,8 @@
     <div id="letterResult" class="letter-result hidden">
       <textarea id="letterText" class="letter-textarea" rows="12"></textarea>
       <div class="resume-actions">
-        <button type="button" id="copyLetterBtn" class="mini-btn">Copy</button>
-        <button type="button" id="downloadLetterBtn" class="mini-btn">Download .txt</button>
+        <button type="button" id="copyLetterBtn" class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11.4" height="11.4" rx="2.4"/><path d="M15 6.2V5.4A1.4 1.4 0 0 0 13.6 4H5.4A1.4 1.4 0 0 0 4 5.4v8.2A1.4 1.4 0 0 0 5.4 15h.8"/></svg> Copy</button>
+        <button type="button" id="downloadLetterBtn" class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6v11M8 10.6l4 4 4-4"/><path d="M4.6 19.4h14.8"/></svg> Download .txt</button>
       </div>
     </div>
   </div>
@@ -333,6 +363,7 @@
 <div id="applyOverlay" class="detail-overlay hidden">
   <div class="detail-box modal-box" role="dialog" aria-modal="true" aria-labelledby="applyTitle">
     <button type="button" class="detail-close" id="applyClose" aria-label="Close">✕</button>
+    <div class="eyebrow">Prepare an application</div>
     <h2 id="applyTitle">Apply to <span id="applyCompanyName"></span></h2>
     <p class="muted apply-sub">We'll draft everything for you, then open <strong>your own</strong> email app so you send it from your own address.</p>
 
@@ -356,7 +387,7 @@
         <span id="aFileLabel" class="muted small-note"></span>
       </div>
 
-      <button type="submit" class="analyze-btn" id="applySubmitBtn"><span>✨ Prepare my application</span></button>
+      <button type="submit" class="analyze-btn" id="applySubmitBtn"><span>Prepare my application</span></button>
     </form>
 
     <div id="applyStatus" class="analysis-status hidden"></div>
@@ -365,21 +396,21 @@
       <div class="apply-to-line">Sending to: <strong id="applyToEmail"></strong></div>
 
       <div id="applyResumeStep" class="apply-step hidden">
-        <h4>1. Get your resume ready</h4>
+        <h4>1 · Get your resume ready</h4>
         <p class="muted small-note">We wrote a resume from your info. Open it to save as PDF, or download it as-is — then attach it in your email app.</p>
         <div class="resume-actions">
-          <button type="button" id="viewPreparedResumeBtn" class="mini-btn primary">👁️ View &amp; save as PDF</button>
-          <button type="button" id="downloadPreparedResumeBtn" class="mini-btn">Download .html</button>
+          <button type="button" id="viewPreparedResumeBtn" class="mini-btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 12S6.4 5.6 12 5.6 21.4 12 21.4 12 17.6 18.4 12 18.4 2.6 12 2.6 12Z"/><circle cx="12" cy="12" r="2.6"/></svg> View &amp; save as PDF</button>
+          <button type="button" id="downloadPreparedResumeBtn" class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6v11M8 10.6l4 4 4-4"/><path d="M4.6 19.4h14.8"/></svg> Download .html</button>
         </div>
       </div>
 
       <div class="apply-step">
-        <h4 id="applyStepTitle">1. Review &amp; send</h4>
+        <h4 id="applyStepTitle">1 · Review &amp; send</h4>
         <label>Subject<input type="text" id="applySubjectInput" /></label>
         <label>Message<textarea id="applyBodyInput" rows="8"></textarea></label>
         <div class="resume-actions">
-          <button type="button" id="openGmailBtn" class="mini-btn primary">📨 Open in Gmail</button>
-          <button type="button" id="openMailAppBtn" class="mini-btn">✉️ Open in my email app</button>
+          <button type="button" id="openGmailBtn" class="mini-btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="5.4" width="18.4" height="13.2" rx="2.6"/><path d="m4.6 8 7.4 4.6L19.4 8"/></svg> Open in Gmail</button>
+          <button type="button" id="openMailAppBtn" class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 6.4h17v11h-17z"/><path d="m3.6 6.6 8.4 6 8.4-6"/></svg> Open in my email app</button>
         </div>
         <p class="muted small-note">This opens a compose window already addressed to the company with the subject and message filled in. Attach your resume there, then hit send yourself — it'll be sent from your own account.</p>
       </div>
@@ -388,15 +419,15 @@
 </div>
 
 <div id="compareTray" class="compare-tray hidden" aria-label="Selected companies"><div><strong id="compareCount">0 companies selected</strong><span>Make a more informed next move.</span></div><div id="compareNames" class="compare-names"></div><button id="openCompare" class="mini-btn primary" disabled>Compare</button><button id="clearCompare" class="mini-btn">Clear</button></div>
-<dialog id="compareDialog" class="compare-dialog" aria-labelledby="compareTitle"><button id="closeCompare" class="dialog-close" aria-label="Close comparison">✕</button><div class="eyebrow">YOUR NEXT TEAM, SIDE BY SIDE</div><h2 id="compareTitle">Find your best fit.</h2><p class="muted">Directory details, not live job listings. Verify information before applying.</p><div id="compareContent"></div></dialog>
-<dialog id="launcherDialog" class="launcher-dialog" aria-label="Quick actions"><div class="launcher-search"><span aria-hidden="true">⌕</span><input id="launcherInput" placeholder="Where would you like to go?" aria-label="Search quick actions" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="launcherResults" autocomplete="off"><button id="closeLauncher" aria-label="Close quick actions">Esc</button></div><div id="launcherResults" role="listbox" aria-label="Available actions"></div><div class="launcher-footer"><span>↑ ↓ to navigate &nbsp; ↵ to open</span><span>Your workspace, one shortcut away.</span></div></dialog>
+<dialog id="compareDialog" class="compare-dialog" aria-labelledby="compareTitle"><button id="closeCompare" class="dialog-close" aria-label="Close comparison">✕</button><div class="eyebrow">Your next team, side by side</div><h2 id="compareTitle">Find your best fit.</h2><p class="muted">Directory details, not live job listings. Verify information before applying.</p><div id="compareContent"></div></dialog>
+<dialog id="launcherDialog" class="launcher-dialog" aria-label="Quick actions"><div class="launcher-search"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.6"/><path d="m16 16 4.6 4.6"/></svg></span><input id="launcherInput" placeholder="Where would you like to go?" aria-label="Search quick actions" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="launcherResults" autocomplete="off"><button id="closeLauncher" aria-label="Close quick actions">Esc</button></div><div id="launcherResults" role="listbox" aria-label="Available actions"></div><div class="launcher-footer"><span>↑ ↓ to navigate &nbsp; ↵ to open</span><span>Your workspace, one shortcut away.</span></div></dialog>
 <div id="toast" class="toast" role="status"></div>
 
 
 
-<script src="js/features/app.js?v=14"></script>
-<script src="js/features/workspace.js?v=14"></script>
-<script src="js/features/quick-actions.js?v=14"></script>
-<script src="js/features/studio.js?v=14"></script>
+<script src="js/features/app.js?v=15"></script>
+<script src="js/features/workspace.js?v=15"></script>
+<script src="js/features/quick-actions.js?v=15"></script>
+<script src="js/features/studio.js?v=15"></script>
 </body>
 </html>

@@ -38,16 +38,36 @@ for (const mode of ["grid", "list"])
       b.setAttribute("aria-pressed", String(m === mode));
     }
   };
+/* The dataset spells a few cities more than one way, so counters are merged
+   case- and accent-insensitively and each hero node shows its own total. */
+const cityKey = (name) =>
+  String(name || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+
 apiJson("/stats")
   .then((stats) => {
+    const cities = new Map();
+    for (const [name, count] of Object.entries(stats.city_distribution || {})) {
+      const key = cityKey(name);
+      if (key) cities.set(key, (cities.get(key) || 0) + count);
+    }
+    const specialties = new Set(
+      Object.keys(stats.specialty_distribution || {}).map(cityKey),
+    );
+
     document.getElementById("heroCompanies").textContent =
       stats.total_companies.toLocaleString();
-    document.getElementById("heroCities").textContent = Object.keys(
-      stats.city_distribution,
-    ).length;
-    document.getElementById("heroSpecialties").textContent = Object.keys(
-      stats.specialty_distribution,
-    ).length;
+    document.getElementById("heroCities").textContent = cities.size;
+    document.getElementById("heroSpecialties").textContent = specialties.size;
+
+    document.querySelectorAll("[data-city-count]").forEach((node) => {
+      const count = cities.get(cityKey(node.dataset.cityCount));
+      node.textContent = count ? count.toLocaleString() : "—";
+      if (!count) node.closest(".city-node")?.classList.add("hidden");
+    });
   })
   .catch(() => {});
 for (const id of ["analyzer", "resume", "assistant"]) {
@@ -55,14 +75,20 @@ for (const id of ["analyzer", "resume", "assistant"]) {
   note.className = "ai-notice";
   note.textContent =
     id === "resume"
-      ? "✧ Make it yours · Preview locally for free. AI polishing is optional and requires your configured provider."
-      : "✧ AI-powered · Requires a configured AI provider. Your input is sent to that provider; review generated content before using it.";
+      ? "Make it yours · Preview locally for free. AI polishing is optional and needs a configured provider."
+      : "AI-powered · Needs a configured AI provider. Your input is sent to that provider — review generated content before using it.";
   document.querySelector(`#${id} .panel-header`).after(note);
 }
 /* Appearance: an explicit choice overrides the OS preference. */
+const THEME_ICONS = {
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 14.7A8.7 8.7 0 0 1 9.3 3.6a8.7 8.7 0 1 0 11.1 11.1Z"/></svg>',
+};
 function paintThemeToggle() {
   const dark = document.documentElement.dataset.theme === "dark";
-  document.getElementById("themeIcon").textContent = dark ? "☀" : "☾";
+  document.getElementById("themeIcon").innerHTML = dark
+    ? THEME_ICONS.sun
+    : THEME_ICONS.moon;
   document.getElementById("themeLabel").textContent = dark
     ? "Light mode"
     : "Dark mode";
