@@ -1,6 +1,7 @@
 import os
 import re
-from collections import Counter
+import unicodedata
+from collections import Counter, defaultdict
 from typing import Optional
 
 import pandas as pd
@@ -23,6 +24,38 @@ def split_emails(value) -> list[str]:
     return [p.strip() for p in str(value or "").split(";") if p.strip()]
 
 
+def city_key(value) -> str:
+    """Case- and accent-insensitive key used to compare city names.
+
+    The collected dataset writes some cities more than one way ("Marrakech"
+    and "marrakech", "Kenitra" and "kénitra"), so grouping by this key keeps
+    counts, filters and listings consistent.
+    """
+    ascii_form = (
+        unicodedata.normalize("NFKD", str(value or ""))
+        .encode("ascii", "ignore")
+        .decode()
+    )
+    return re.sub(r"[^a-z0-9]+", " ", ascii_form.lower()).strip()
+
+
+def city_display_names(values) -> dict[str, str]:
+    """Pick one display spelling per city key: the most common variant."""
+    forms: dict[str, Counter] = defaultdict(Counter)
+    for value in values:
+        raw = str(value or "").strip()
+        if raw:
+            forms[city_key(raw)][raw] += 1
+
+    names: dict[str, str] = {}
+    for key, counter in forms.items():
+        best = counter.most_common(1)[0][0]
+        if len(counter) == 1 and best.islower():
+            best = " ".join(word[:1].upper() + word[1:] for word in best.split())
+        names[key] = best
+    return names
+
+
 def safe_url(value) -> str:
     value = str(value or "").strip()
     return value if value.lower().startswith(("http://", "https://")) else ""
@@ -34,6 +67,16 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
             df[col] = ""
 
     df = df.fillna("").copy()
+
+    # One canonical spelling per city, then the cleaned value drives every
+    # listing, filter and statistic that follows.
+    city_names = city_display_names(df["city"])
+    df["_city_key"] = df["city"].apply(city_key)
+    df["city"] = [
+        city_names.get(key) or raw
+        for key, raw in zip(df["_city_key"], df["city"])
+    ]
+
     df["_id"] = range(len(df))
     df["_name"] = df["company_name"].str.lower()
     df["_specs"] = df["specialties"].apply(split_specialties)
@@ -131,7 +174,7 @@ def filter_companies(
         df = df[mask]
 
     if city and city != "all":
-        df = df[df["city"].str.lower() == city.strip().lower()]
+        df = df[df["_city_key"] == city_key(city)]
 
     if search and search.strip():
         df = df[

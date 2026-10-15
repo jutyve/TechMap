@@ -3,6 +3,15 @@ const PAGE_SIZE = 12;
 const MAX_UPLOAD_MB = 10;
 const ALLOWED_EXT = [".pdf", ".docx", ".txt", ".md", ".odt"];
 
+/* Inline icons for markup built in JavaScript. Drawn locally so the UI never
+   depends on an emoji font. */
+const iconSvg = (paths, extra = "") =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"${extra}>${paths}</svg>`;
+const ICONS = {
+  spark: iconSvg('<path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.4v3.2M17 5h3.2"/>'),
+  letter: iconSvg('<path d="M6.6 3.4h7.2l4.6 4.6v12.6H6.6z"/><path d="M13.4 3.4v4.8h4.8"/><path d="M9.2 13h5.6M9.2 16.6h3.6"/>'),
+  rocket: iconSvg('<path d="M13.6 3.6c3.4 1 5.2 3 6.2 6.4-2.6 3.8-6 6.2-10.4 7.2l-3.2-3.2c1-4.4 3.4-7.8 7.4-10.4Z"/><circle cx="14.4" cy="9.6" r="1.8"/><path d="M7.8 16.4c-1.2.6-2 1.6-2.4 3 1.4-.4 2.4-1.2 3-2.4"/>'),
+};
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const canAnimate = () => typeof window.anime === "function" && !reduceMotion;
 
@@ -492,13 +501,6 @@ function createCard(c) {
   const extra = c.specialties.length - shown.length;
   const fav = isFavorite(c.id);
 
-  const hints = [
-    c.website || c.apply_link ? `<span title="Has a website">🌐</span>` : "",
-    c.emails.length ? `<span title="Has an email">✉️</span>` : "",
-    c.phone ? `<span title="Has a phone number">📞</span>` : "",
-    c.careers_url ? `<span title="Has a careers page">💼</span>` : "",
-  ].join("");
-
   card.innerHTML = `
     <div class="card-top">
       <div class="company-logo" style="--logo-hue:${(c.id * 47) % 360}">${escapeHtml(initial)}</div>
@@ -682,8 +684,8 @@ function detailHtml(c) {
         <h4>Apply to ${escapeHtml(c.company_name)}</h4>
         <p class="detail-desc">Let AI help you stand out: write a tailored cover letter, or prepare a full application email with your resume, ready to send from your own inbox.</p>
         <div class="apply-actions">
-          <button type="button" class="mini-btn" data-action="letter">📝 Write cover letter</button>
-          <button type="button" class="mini-btn primary" data-action="apply">🚀 Apply with AI</button>
+          <button type="button" class="mini-btn" data-action="letter">${ICONS.letter} Write cover letter</button>
+          <button type="button" class="mini-btn primary" data-action="apply">${ICONS.rocket} Apply with AI</button>
         </div>
       </section>
     </div>`;
@@ -1216,7 +1218,7 @@ async function analyzeFile() {
   const btn = $("#analyzeBtn");
   btn.disabled = true;
   btn.classList.add("loading");
-  btn.innerHTML = "<span>Analyzing...</span>";
+  btn.innerHTML = `${ICONS.spark}<span>Analyzing…</span>`;
 
   showAnalysisStatus("Reading your resume and scoring it. This can take up to a minute.", "working");
 
@@ -1230,7 +1232,7 @@ async function analyzeFile() {
     showAnalysisStatus(e.message || "Analysis failed.", "error");
   } finally {
     btn.classList.remove("loading");
-    btn.innerHTML = "<span>Analyze Resume</span>";
+    btn.innerHTML = `${ICONS.spark}<span>Analyze resume</span>`;
     btn.disabled = !state.file;
   }
 }
@@ -1349,6 +1351,13 @@ function useDetectedSpecialties() {
 const chatState = { history: [] };
 
 function initAssistant() {
+  $$(".chat-suggestion").forEach((chip) =>
+    chip.addEventListener("click", () => {
+      $("#chatInput").value = chip.textContent.trim();
+      $("#chatForm").requestSubmit();
+    }),
+  );
+
   $("#chatForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const input = $("#chatInput");
@@ -1573,15 +1582,17 @@ function initialsOf(name) {
   return (first + last).toUpperCase();
 }
 
+/* Contact lines are plain text: photographs, fonts and emoji never travel with
+   a printed resume, but text always does. */
 function contactEntries(r) {
   const c = r.contact || {};
   const entries = [];
-  if (c.email) entries.push({ icon: "✉", text: c.email });
-  if (c.phone) entries.push({ icon: "☎", text: c.phone });
-  if (c.city) entries.push({ icon: "📍", text: c.city });
-  if (c.linkedin) entries.push({ icon: "🔗", text: c.linkedin });
-  if (c.github) entries.push({ icon: "🔗", text: c.github });
-  if (c.portfolio) entries.push({ icon: "🔗", text: c.portfolio });
+  if (c.email) entries.push({ label: "Email", text: c.email });
+  if (c.phone) entries.push({ label: "Phone", text: c.phone });
+  if (c.city) entries.push({ label: "City", text: c.city });
+  if (c.linkedin) entries.push({ label: "LinkedIn", text: c.linkedin });
+  if (c.github) entries.push({ label: "GitHub", text: c.github });
+  if (c.portfolio) entries.push({ label: "Portfolio", text: c.portfolio });
   return entries;
 }
 
@@ -1638,7 +1649,7 @@ function buildResumeHtml(r, template) {
 }
 
 function buildClassicResume(r) {
-  const contact = contactEntries(r).map((c) => `<span>${c.icon} ${escapeHtml(c.text)}</span>`).join("");
+  const contact = contactEntries(r).map((c) => `<span>${escapeHtml(c.text)}</span>`).join("");
   const skills = rdocInlineList(r.skills);
   const languages = rdocInlineList(r.languages);
   const certs = rdocInlineList(r.certifications);
@@ -1680,7 +1691,7 @@ function buildClassicResume(r) {
 function buildModernResume(r) {
   const initials = initialsOf(r.full_name);
   const contactList = contactEntries(r)
-    .map((c) => `<span><span class="ico">${c.icon}</span>${escapeHtml(c.text)}</span>`)
+    .map((c) => `<span>${escapeHtml(c.text)}<em>${escapeHtml(c.label)}</em></span>`)
     .join("");
   const skills = rdocPillList(r.skills);
   const languages = rdocPillList(r.languages);
@@ -1728,7 +1739,7 @@ function buildModernResume(r) {
 
 function buildBoldResume(r) {
   const initials = initialsOf(r.full_name);
-  const contact = contactEntries(r).map((c) => `<span>${c.icon} ${escapeHtml(c.text)}</span>`).join("");
+  const contact = contactEntries(r).map((c) => `<span>${escapeHtml(c.text)}</span>`).join("");
   const skills = rdocPillList(r.skills);
   const projects = rdocProjectsHtml(r);
 

@@ -34,7 +34,8 @@ Installing dependencies needs an internet connection. After installation, the di
 
 ## What's included
 
-- A responsive sage-and-ivory workspace, forest dark theme, and remembered light/dark preference.
+- A warm ivory-and-zellige-green workspace with a midnight-cedar dark theme and a remembered light/dark preference.
+- Typography is self-hosted: **Fraunces** for display, **Inter** for the interface, and **IBM Plex Mono** for labels and figures (all SIL Open Font License, bundled in `static/assets/fonts/`). No webfont download is needed, so the app looks the same offline.
 - Searchable company directory with city/specialty/contact filters, sorting, grid/list views, favorites, comparison of up to three companies, and private company notes.
 - **Ecosystem insights** dashboard: company/website/email/phone totals plus top specialties, top cities, and how-to-apply breakdowns, all from the included dataset.
 - **Resume Studio** with Classic, Modern, Bold, and Editorial templates, plus four accent colors (forest, navy, terracotta, charcoal).
@@ -46,6 +47,7 @@ Installing dependencies needs an internet connection. After installation, the di
 - Application drafts open in Gmail or your mail app for you to review and send yourself; the server never sends mail.
 - Searchable **Ctrl/Cmd + K** quick actions, `/` directory search, and a built-in help dialog.
 - Brief entrance, template, and favorite-button animations. Reduced-motion preferences disable the effects.
+- Interface icons are drawn inline as SVG, so the workspace does not depend on an emoji font being installed.
 
 Resume printing and copy-as-text remain available. The legacy pipeline model is retained at `static/js/legacy/pipeline-model.js` for reference but is no longer loaded by the website. Existing browser application records are left untouched, not erased.
 
@@ -74,6 +76,8 @@ Favorites, company notes, resume details, style/theme/layout preferences, and th
 For other AI actions, resume text and submitted prompts are sent to your configured provider; review its privacy terms. Applications are **never sent by the server**: review drafts and choose whether to send them through your own mail client. Review all AI output for accuracy.
 
 The CSV is the repository's existing dataset, not a live vacancies feed or an endorsement. A "Careers page" badge only means a link is present. Verify company and contact details before applying. Company IDs currently follow CSV row order; preserve that order if you depend on existing favorites.
+
+Spelling variants in the dataset are normalised when it is loaded, not in the file: cities that appear as `Marrakech`, `marrakech` and `kénitra`/`Kenitra` are grouped case- and accent-insensitively, and the most common spelling is used for display, filters and statistics. Edit `app/services/data.py` if you would rather keep raw values.
 
 ## Development
 
@@ -135,12 +139,17 @@ static/                             Everything the browser loads — see static/
 ├── index.html                      Page markup and asset tags — only root-level page
 ├── README.md                       Frontend layout, cascade, and load-order guide
 ├── assets/
+│   ├── fonts/                      Self-hosted woff2 subsets + OFL licences
+│   │   ├── fraunces-*.woff2        Display serif (variable)
+│   │   ├── inter-*.woff2           Interface sans (variable)
+│   │   ├── ibm-plex-mono-*.woff2   Labels and figures
+│   │   └── LICENSE-*.txt           Fraunces / Inter / IBM Plex Mono (OFL)
 │   └── icons/
 │       └── mark.svg                Brand mark (favicon, nav, hero)
 ├── css/                            Cascade order: base → workspace → studio
-│   ├── base.css                    Foundation, components, resume templates, print
-│   ├── workspace.css               Redesign tokens, light/dark themes, responsive shell
-│   └── studio.css                  Resume Studio UI and printable resume styles
+│   ├── base.css                    Fonts, tokens, components, shared surfaces
+│   ├── workspace.css               Shell, directory, insights, responsive rules
+│   └── studio.css                  Resume Studio UI + resume documents + print
 └── js/
     ├── core/
     │   └── theme.js                Pre-paint saved/system theme initialization
