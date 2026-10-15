@@ -49,7 +49,7 @@ Installing dependencies needs an internet connection. After installation, the di
 - Brief entrance, template, and favorite-button animations. Reduced-motion preferences disable the effects.
 - Interface icons are drawn inline as SVG, so the workspace does not depend on an emoji font being installed.
 
-Resume printing and copy-as-text remain available. The legacy pipeline model is retained at `static/js/legacy/pipeline-model.js` for reference but is no longer loaded by the website. Existing browser application records are left untouched, not erased.
+Resume printing and copy-as-text remain available. Existing browser application records are left untouched, not erased.
 
 ## Optional AI setup
 
@@ -79,12 +79,10 @@ The CSV is the repository's existing dataset, not a live vacancies feed or an en
 
 Spelling variants in the dataset are normalised when it is loaded, not in the file: cities that appear as `Marrakech`, `marrakech` and `kénitra`/`Kenitra` are grouped case- and accent-insensitively, and the most common spelling is used for display, filters and statistics. Edit `app/services/data.py` if you would rather keep raw values.
 
-## Development
+## Running the server
 
 ```bash
 # After creating a venv; Windows can use .venv\Scripts\python.exe instead
-.venv/bin/python -m pip install -r requirements-dev.txt
-.venv/bin/python -m pytest -q
 .venv/bin/python run.py                 # http://127.0.0.1:8000
 RELOAD=1 HOST=0.0.0.0 .venv/bin/python run.py   # auto-reload, shared on the LAN
 ```
@@ -101,14 +99,13 @@ The frontend calls relative `/api` URLs, so there is no browser-facing localhost
 .venv/bin/python scripts/package.py /path/to/TechMap-source.zip
 ```
 
-The generated archive has a single `TechMap/` folder — application, frontend, docs, tests, both company datasets, and the `.env.example` template — and runs independently of the checkout: extract it and run `python run.py`. Packaging omits `.git`, virtual environments, real `.env` files, caches, logs, and generated ZIPs. Generated archives are git-ignored and intentionally not committed.
+The generated archive has a single `TechMap/` folder — application, frontend, docs, both company datasets, and the `.env.example` template — and runs independently of the checkout: extract it and run `python run.py`. Packaging omits `.git`, virtual environments, real `.env` files, caches, logs, and generated ZIPs. Generated archives are git-ignored and intentionally not committed.
 
 ## Structure
 
 ```text
 run.py                              Local launcher (python run.py, python -m app)
 requirements.txt                    Runtime dependencies
-requirements-dev.txt                Adds pytest + httpx for the test suite
 .env.example                        Template for the optional AI provider settings
 .gitignore
 LICENSE
@@ -153,13 +150,11 @@ static/                             Everything the browser loads — see static/
 └── js/
     ├── core/
     │   └── theme.js                Pre-paint saved/system theme initialization
-    ├── features/                   Loaded in order at the end of <body>
-    │   ├── app.js                  Directory, favorites, analyzer, letters/Apply, chat
-    │   ├── workspace.js            Theme toggle, help, views, comparison, notes
-    │   ├── quick-actions.js        Searchable Ctrl/Cmd + K launcher
-    │   └── studio.js               Local preview, photo processing, styling, motion
-    └── legacy/
-        └── pipeline-model.js       Retained for reference, no longer loaded
+    └── features/                   Loaded in order at the end of <body>
+        ├── app.js                  Directory, favorites, analyzer, letters/Apply, chat
+        ├── workspace.js            Theme toggle, help, views, comparison, notes
+        ├── quick-actions.js        Searchable Ctrl/Cmd + K launcher
+        └── studio.js               Local preview, photo processing, styling, motion
 
 database/
 ├── data/
@@ -170,10 +165,6 @@ database/
                                     in its docstring and commented in requirements.txt)
 
 scripts/package.py                  Reproducible source packaging workflow
-tests/
-├── conftest.py                     Makes the project root importable for pytest
-├── test_api.py                     API and static-layout smoke tests
-└── test_package.py                 Source-archive packaging tests
 ```
 
 `__init__.py` package markers exist under `app/`, `app/api/`, `app/api/routes/`, and `app/services/` but are omitted from the tree above for brevity.
