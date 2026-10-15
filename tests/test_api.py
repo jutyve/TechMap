@@ -63,13 +63,31 @@ def test_index_html_is_served_with_new_asset_paths():
     response = client.get("/")
     assert response.status_code == 200
     body = response.text
-    for asset in ("css/style.css", "css/workspace.css", "css/studio.css", "js/app.js", "assets/mark.svg"):
+    for asset in (
+        "css/base.css",
+        "css/workspace.css",
+        "css/studio.css",
+        "js/core/theme.js",
+        "js/features/app.js",
+        "js/features/studio.js",
+        "assets/icons/mark.svg",
+    ):
         assert asset in body, f"index.html does not reference {asset}"
 
 
 @pytest.mark.parametrize(
     "asset",
-    ["css/style.css", "css/workspace.css", "css/studio.css", "js/app.js", "js/theme.js", "assets/mark.svg"],
+    [
+        "css/base.css",
+        "css/workspace.css",
+        "css/studio.css",
+        "js/core/theme.js",
+        "js/features/app.js",
+        "js/features/workspace.js",
+        "js/features/quick-actions.js",
+        "js/features/studio.js",
+        "assets/icons/mark.svg",
+    ],
 )
 def test_static_assets_are_served(asset):
     assert client.get(f"/{asset}").status_code == 200
@@ -77,6 +95,12 @@ def test_static_assets_are_served(asset):
 
 def test_static_directory_is_organized():
     root = pathlib.Path(STATIC_DIR)
-    assert sorted(p.name for p in root.iterdir()) == ["assets", "css", "index.html", "js"]
+    # Only the page, this docs file, and one folder per asset kind at the root.
+    assert sorted(p.name for p in root.iterdir()) == ["README.md", "assets", "css", "index.html", "js"]
+    # Stylesheets stay flat and CSS-only; scripts are grouped by role
+    # (core = pre-paint, features = page behaviour, legacy = unloaded).
     assert {p.suffix for p in (root / "css").iterdir()} == {".css"}
-    assert {p.suffix for p in (root / "js").iterdir() if p.is_file()} == {".js"}
+    assert sorted(p.name for p in (root / "js").iterdir()) == ["core", "features", "legacy"]
+    for group in ("core", "features", "legacy"):
+        assert {p.suffix for p in (root / "js" / group).iterdir()} == {".js"}
+    assert (root / "assets" / "icons" / "mark.svg").is_file()

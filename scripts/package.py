@@ -27,6 +27,11 @@ EXCLUDED_PATTERNS = (
 
 
 def is_excluded(relative: pathlib.Path) -> bool:
+    # The provider template contains no secrets and the AI setup instructions
+    # in the README rely on it, so it ships with the archive; real `.env`
+    # files (and variants such as `.env.local`) never do.
+    if relative.as_posix() == ".env.example":
+        return False
     if any(part in EXCLUDED_DIRS for part in relative.parts):
         return True
     return any(fnmatch.fnmatch(relative.name, pattern) for pattern in EXCLUDED_PATTERNS)
