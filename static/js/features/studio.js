@@ -318,7 +318,7 @@
   // Preserve the selected design and photo in the Studio attachment used by Apply.
   window.studioStandaloneHtml = async () => {
     const styles = await Promise.all(
-      ["css/style.css", "css/studio.css"].map(async (path) => {
+      ["css/base.css", "css/studio.css"].map(async (path) => {
         const response = await fetch(path);
         if (!response.ok) throw Error("Could not load resume styles.");
         return response.text();

@@ -22,7 +22,6 @@ env/
 *.tmp
 database/data/*.tmp
 database/scripts/seed_websites.txt
-static/uploads/
 
 # --- Editors / OS ---
 .idea/
