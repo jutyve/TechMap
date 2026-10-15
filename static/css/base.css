@@ -1642,6 +1642,7 @@ label {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  margin: 0;
   padding: 34px 36px;
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
@@ -1668,7 +1669,17 @@ label {
 .compare-dialog[open],
 .launcher-dialog[open],
 .opportunity-dialog[open] {
-  animation: dialog-in 0.3s var(--ease) both;
+  animation: dialog-in-centered 0.3s var(--ease) both;
+}
+@keyframes dialog-in-centered {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 14px)) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 .help-dialog > button:first-child {
   position: absolute;
