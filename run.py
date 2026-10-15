@@ -1,18 +1,45 @@
-"""Cross-platform local launcher.
+"""
+TechMap Maroc - Server Launcher
 
-    python run.py
-
-Set HOST / PORT (and optionally RELOAD=1) to override the defaults.
+Compatible with:
+- bot-hosting.cloud
+- Local development
+- Other hosting providers
 """
 
 import os
-
 import uvicorn
 
-HOST = os.environ.get("HOST", "127.0.0.1")
-PORT = int(os.environ.get("PORT", "8000") or "8000")
-RELOAD = os.environ.get("RELOAD", "").strip().lower() in {"1", "true", "yes"}
+# Hosting provider port takes priority
+PORT = int(
+    os.environ.get("SERVER_PORT")
+    or os.environ.get("PORT")
+    or "8000"
+)
+
+# Listen on all network interfaces
+HOST = "0.0.0.0"
+
+# Enable reload only when explicitly requested
+RELOAD = os.environ.get("RELOAD", "").lower() in {
+    "1",
+    "true",
+    "yes"
+}
 
 if __name__ == "__main__":
-    print(f"TechMap Maroc running on http://{HOST}:{PORT} - press Ctrl+C to stop.")
-    uvicorn.run("app.main:app", host=HOST, port=PORT, reload=RELOAD)
+
+    print("=" * 50)
+    print("🚀 TechMap Maroc - Starting Server")
+    print(f"🌐 Host: {HOST}")
+    print(f"🔌 Port: {PORT}")
+    print(f"🌍 Public URL: http://de1.bot-hosting.cloud:{PORT}")
+    print("=" * 50)
+
+    uvicorn.run(
+        "app.main:app",
+        host=HOST,
+        port=PORT,
+        reload=RELOAD,
+        log_level="info"
+    )
