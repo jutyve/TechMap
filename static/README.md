@@ -29,16 +29,14 @@ static/
 │   ├── core/
 │   │   └── theme.js        Runs in <head> before first paint; sets the
 │   │                       saved/system light–dark theme on <html>
-│   ├── features/           Loaded at the end of <body>, in this order
-│   │   ├── app.js          Directory data, favorites, detail panel,
-│   │   │                   analyzer, cover-letter/Apply flows, dashboard, chat
-│   │   ├── workspace.js    Shell behaviour: theme toggle, help, filters,
-│   │   │                   grid/list views, comparison, private notes
-│   │   ├── quick-actions.js  Ctrl/Cmd + K launcher
-│   │   └── studio.js       Resume Studio: local preview, photo processing,
-│   │                       accents/templates, entrance/favourite motion
-│   └── legacy/
-│       └── pipeline-model.js  Retained for reference — NOT loaded by the site
+│   └── features/           Loaded at the end of <body>, in this order
+│       ├── app.js          Directory data, favorites, detail panel,
+│       │                   analyzer, cover-letter/Apply flows, dashboard, chat
+│       ├── workspace.js    Shell behaviour: theme toggle, help, filters,
+│       │                   grid/list views, comparison, private notes
+│       ├── quick-actions.js  Ctrl/Cmd + K launcher
+│       └── studio.js       Resume Studio: local preview, photo processing,
+│                           accents/templates, entrance/favourite motion
 └── (nothing else)          Add new files to the folders above, not the root
 ```
 
@@ -76,5 +74,3 @@ is what a recruiter sees in the printed or exported file on any machine.
 - **Renaming/moving a stylesheet?** `js/features/studio.js` fetches
   `css/base.css` + `css/studio.css` by path to build the standalone resume
   HTML used by Apply — update those paths too.
-- **Legacy code** stays in `js/legacy/`, unloaded. Delete it there rather
-  than reviving it from a feature script.
