@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign in — TechMap Maroc</title>
+<meta name="description" content="Sign in to TechMap Maroc to save your favorite companies, notes and resume to your account." />
+<meta name="theme-color" content="#13352a" />
+<link rel="icon" href="assets/icons/mark.svg" type="image/svg+xml" />
+<link rel="preload" href="assets/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<script src="js/core/theme.js?v=17"></script>
+<link rel="stylesheet" href="css/base.css?v=17" />
+<link rel="stylesheet" href="css/auth.css?v=17" />
+</head>
+<body class="auth-page">
+
+<div class="auth-shell">
+  <aside class="auth-brand">
+    <a class="brand-row" href="/"><img src="assets/icons/mark.svg" alt="" width="38" height="38" /><span>techmap<span class="brand-accent">Maroc</span></span></a>
+    <h1>Your next chapter,<br /><em>saved.</em></h1>
+    <p class="brand-sub">Create a free account and everything you build here is kept safe — on every device you sign in from, not just this browser.</p>
+    <ul class="auth-sync-list">
+      <li>Your saved (favorite) companies</li>
+      <li>Private notes on company profiles</li>
+      <li>Your Resume Studio details, resume, photo &amp; style</li>
+      <li>Your profile, theme and layout preferences</li>
+    </ul>
+    <p class="brand-foot">No account? No problem — you can <a href="/">keep browsing as a guest</a>. Your work then stays on this device only.</p>
+  </aside>
+
+  <main class="auth-main">
+    <a class="auth-back" href="/">← Back to the workspace</a>
+
+    <div id="authAlert" class="auth-alert hidden" role="alert"></div>
+
+    <!-- SIGN IN / CREATE ACCOUNT -->
+    <section id="viewAuth" class="auth-card" aria-labelledby="authTitle">
+      <div class="auth-eyebrow">Your account</div>
+      <h2 id="authTitle">Welcome back</h2>
+      <p class="auth-sub" id="authSubtitle">Sign in to pick up right where you left off.</p>
+
+      <div class="auth-tabs" role="tablist" aria-label="Sign in or create an account">
+        <button type="button" id="tabSignin" class="active" role="tab" aria-selected="true">Sign in</button>
+        <button type="button" id="tabRegister" role="tab" aria-selected="false">Create account</button>
+      </div>
+
+      <form id="signinForm" class="auth-form" autocomplete="on">
+        <label>Email
+          <input type="email" id="siEmail" required autocomplete="email" placeholder="you@email.com" />
+        </label>
+        <label>Password
+          <span class="pw-row">
+            <input type="password" id="siPassword" required autocomplete="current-password" placeholder="Your password" />
+            <button type="button" class="pw-toggle" data-target="siPassword" aria-label="Show password">Show</button>
+          </span>
+        </label>
+        <button type="submit" class="auth-submit" id="signinSubmit">Sign in</button>
+        <div class="auth-row">
+          <button type="button" class="link-btn" id="forgotLink">Forgot your password?</button>
+        </div>
+        <div id="unverifiedBox" class="auth-notice hidden">
+          <strong>Email not verified yet.</strong> We emailed you a verification link when you registered — or get a fresh one:
+          <div class="auth-actions"><button type="button" class="mini-btn primary" id="resendFromSignin">Resend verification email</button></div>
+          <div id="unverifiedDev" class="auth-devlink hidden"></div>
+        </div>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden" autocomplete="on">
+        <label>Your name
+          <input type="text" id="rgName" autocomplete="name" placeholder="Yasmine El Amrani" />
+        </label>
+        <label>Email *
+          <input type="email" id="rgEmail" required autocomplete="email" placeholder="you@email.com" />
+        </label>
+        <label>Password *
+          <span class="pw-row">
+            <input type="password" id="rgPassword" required autocomplete="new-password" placeholder="At least 8 characters" />
+            <button type="button" class="pw-toggle" data-target="rgPassword" aria-label="Show password">Show</button>
+          </span>
+        </label>
+        <label>Confirm password *
+          <input type="password" id="rgPassword2" required autocomplete="new-password" placeholder="Same password again" />
+        </label>
+        <button type="submit" class="auth-submit" id="registerSubmit">Create my account</button>
+        <p class="auth-fine-print">We'll email you a verification link to confirm it's really your address. Your favorites, notes and resume are then saved to your account automatically.</p>
+      </form>
+    </section>
+
+    <!-- CHECK YOUR INBOX -->
+    <section id="viewCheckEmail" class="auth-card hidden" aria-labelledby="checkTitle">
+      <div class="auth-mail-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="5.4" width="18.4" height="13.2" rx="2.6"/><path d="m4.6 8 7.4 4.6L19.4 8"/></svg></div>
+      <h2 id="checkTitle">Check your inbox</h2>
+      <p class="auth-sub">We sent a verification link to <strong id="checkEmailAddress">your email</strong>. Click it to activate your account — you'll be signed in automatically. The link expires in 24 hours; check your spam folder if it doesn't arrive.</p>
+      <div id="checkDev" class="auth-devlink hidden"></div>
+      <div class="auth-actions">
+        <button type="button" class="mini-btn" id="resendFromCheck">Resend the email</button>
+        <button type="button" class="mini-btn primary" id="backToSignin">Back to sign in</button>
+      </div>
+    </section>
+
+    <!-- FORGOT PASSWORD -->
+    <section id="viewForgot" class="auth-card hidden" aria-labelledby="forgotTitle">
+      <div class="auth-eyebrow">Password help</div>
+      <h2 id="forgotTitle">Forgot your password?</h2>
+      <p class="auth-sub">Enter your account email and we'll send you a link to choose a new password.</p>
+      <form id="forgotForm" class="auth-form">
+        <label>Email
+          <input type="email" id="fpEmail" required autocomplete="email" placeholder="you@email.com" />
+        </label>
+        <button type="submit" class="auth-submit" id="forgotSubmit">Email me a reset link</button>
+        <div class="auth-row"><button type="button" class="link-btn" data-back-to-auth>Back to sign in</button></div>
+      </form>
+    </section>
+
+    <!-- RESET LINK SENT -->
+    <section id="viewForgotSent" class="auth-card hidden" aria-labelledby="forgotSentTitle">
+      <div class="auth-mail-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="5.4" width="18.4" height="13.2" rx="2.6"/><path d="m4.6 8 7.4 4.6L19.4 8"/></svg></div>
+      <h2 id="forgotSentTitle">Check your inbox</h2>
+      <p class="auth-sub">If an account exists for that email, a password-reset link is on its way. It expires in 1 hour.</p>
+      <div id="forgotDev" class="auth-devlink hidden"></div>
+      <div class="auth-actions"><button type="button" class="mini-btn primary" data-back-to-auth>Back to sign in</button></div>
+    </section>
+
+    <!-- CHOOSE A NEW PASSWORD -->
+    <section id="viewReset" class="auth-card hidden" aria-labelledby="resetTitle">
+      <div class="auth-eyebrow">Password reset</div>
+      <h2 id="resetTitle">Choose a new password</h2>
+      <p class="auth-sub">Almost there — set a new password for your account and you'll be signed in.</p>
+      <form id="resetForm" class="auth-form">
+        <label>New password
+          <span class="pw-row">
+            <input type="password" id="rsPassword" required autocomplete="new-password" placeholder="At least 8 characters" />
+            <button type="button" class="pw-toggle" data-target="rsPassword" aria-label="Show password">Show</button>
+          </span>
+        </label>
+        <label>Confirm new password
+          <input type="password" id="rsPassword2" required autocomplete="new-password" placeholder="Same password again" />
+        </label>
+        <button type="submit" class="auth-submit" id="resetSubmit">Save new password</button>
+      </form>
+    </section>
+
+    <!-- ACCOUNT (already signed in) -->
+    <section id="viewAccount" class="auth-card hidden" aria-labelledby="accountTitle">
+      <div class="auth-eyebrow">Your account</div>
+      <h2 id="accountTitle">You're signed in</h2>
+      <p class="auth-sub">Everything you save — favorite companies, notes, your resume — syncs to this account automatically.</p>
+
+      <div class="account-identity">
+        <span class="avatar" id="accountAvatar">?</span>
+        <div>
+          <strong><span id="accountNameDisplay">Your account</span><span class="verified-badge" id="accountVerifiedBadge">Email verified</span></strong>
+          <small id="accountEmailDisplay"></small>
+        </div>
+      </div>
+
+      <form id="profileForm" class="auth-form">
+        <label>Display name
+          <input type="text" id="acName" autocomplete="name" placeholder="Your name" />
+        </label>
+        <div class="auth-actions" style="margin-top:0">
+          <button type="submit" class="mini-btn">Save name</button>
+          <a class="mini-btn primary" href="/">Open my workspace ↗</a>
+          <button type="button" class="mini-btn" id="accountSignOut">Sign out</button>
+        </div>
+      </form>
+
+      <div class="account-danger">
+        <h3>Delete account</h3>
+        <p>This permanently deletes your account and everything saved to it on the server. Data in this browser is not touched. This can't be undone.</p>
+        <button type="button" class="link-btn" id="deleteReveal">Delete my account…</button>
+        <form id="deleteForm" class="auth-form hidden" style="margin-top:14px">
+          <label>Enter your password to confirm
+            <input type="password" id="delPassword" autocomplete="current-password" placeholder="Your password" />
+          </label>
+          <button type="submit" class="auth-submit danger" id="deleteSubmit">Permanently delete my account</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/features/auth-page.js?v=17"></script>
+</body>
+</html>
