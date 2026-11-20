@@ -1,7 +1,7 @@
 const helpDialog = document.createElement("dialog");
 helpDialog.className = "help-dialog";
 helpDialog.setAttribute("aria-labelledby", "helpTitle");
-helpDialog.innerHTML = `<button aria-label="Close help">✕</button><div class="eyebrow">MAKE YOURSELF AT HOME</div><h2 id="helpTitle">Find your next chapter.</h2><p>Discover companies, narrow your search, and compare up to three teams side by side. Save favorites and keep private notes in their profiles.</p><p>In Resume Studio, choose from four templates, add an optional photo, and preview your own details without AI. Print your finished resume or save it as a PDF.</p><p><strong>Shortcuts:</strong> press / to search or Ctrl/Cmd + K for quick actions. The header switch remembers your light or dark mode preference.</p><p>As a guest, your saved details and photo stay in this browser. <strong>Sign in</strong> and they also save to your account, so they follow you across devices. Photos are never sent to the AI provider. AI polishing sends your form text to your configured provider.</p>`;
+helpDialog.innerHTML = `<button aria-label="Close help">✕</button><div class="eyebrow">MAKE YOURSELF AT HOME</div><h2 id="helpTitle">Find your next chapter.</h2><p>Discover companies, narrow your search, and compare up to three teams side by side. Save favorites and keep private notes in their profiles.</p><p>In Resume Studio, choose from four templates, add an optional photo, and preview your own details without AI. Print your finished resume or save it as a PDF.</p><p><strong>Shortcuts:</strong> press / to search or Ctrl/Cmd + K for quick actions.</p><p>As a guest, your saved details and photo stay in this browser. <strong>Sign in</strong> and they also save to your account, so they follow you across devices. Photos are never sent to the AI provider. AI polishing sends your form text to your configured provider.</p>`;
 document.body.append(helpDialog);
 helpDialog.querySelector("button").onclick = () => helpDialog.close();
 document.getElementById("helpBtn").onclick = () => helpDialog.showModal();
@@ -79,34 +79,6 @@ for (const id of ["analyzer", "resume", "assistant"]) {
       : "AI-powered · Needs a configured AI provider. Your input is sent to that provider — review generated content before using it.";
   document.querySelector(`#${id} .panel-header`).after(note);
 }
-/* Appearance: an explicit choice overrides the OS preference. */
-const THEME_ICONS = {
-  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"/></svg>',
-  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 14.7A8.7 8.7 0 0 1 9.3 3.6a8.7 8.7 0 1 0 11.1 11.1Z"/></svg>',
-};
-function paintThemeToggle() {
-  const dark = document.documentElement.dataset.theme === "dark";
-  document.getElementById("themeIcon").innerHTML = dark
-    ? THEME_ICONS.sun
-    : THEME_ICONS.moon;
-  document.getElementById("themeLabel").textContent = dark
-    ? "Light mode"
-    : "Dark mode";
-  document
-    .getElementById("themeToggle")
-    .setAttribute("aria-label", `Switch to ${dark ? "light" : "dark"} mode`);
-}
-document.getElementById("themeToggle").onclick = () => {
-  const next =
-    document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-  document.documentElement.dataset.theme = next;
-  try {
-    localStorage.setItem("techmap_theme", next);
-  } catch {}
-  paintThemeToggle();
-};
-window.addEventListener("themechange", paintThemeToggle);
-paintThemeToggle();
 try {
   if (localStorage.getItem("techmap_layout") === "list")
     document.getElementById("listView").click();

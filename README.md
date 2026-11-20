@@ -34,7 +34,7 @@ Installing dependencies needs an internet connection. After installation, the di
 
 ## What's included
 
-- A warm ivory-and-zellige-green workspace with a midnight-cedar dark theme and a remembered light/dark preference.
+- A light-only workspace with slate typography, violet accents, and motion that respects reduced-motion preferences.
 - Typography is self-hosted: **Fraunces** for display, **Inter** for the interface, and **IBM Plex Mono** for labels and figures (all SIL Open Font License, bundled in `static/assets/fonts/`). No webfont download is needed, so the app looks the same offline.
 - Searchable company directory with city/specialty/contact filters, sorting, grid/list views, favorites, comparison of up to three companies, and private company notes.
 - **Ecosystem insights** dashboard: company/website/email/phone totals plus top specialties, top cities, and how-to-apply breakdowns, all from the included dataset.
@@ -43,7 +43,7 @@ Installing dependencies needs an internet connection. After installation, the di
 - Optional JPG, PNG, or WebP profile photo, up to 5 MB and 25 megapixels. Images are center-cropped into a 512 px square JPEG in the browser. Upload a pre-cropped portrait if you want different framing. Replace/remove it at any time.
 - Photos appear in all four templates, printed/PDF resumes, and the Studio HTML attachment prepared through Apply. Photo-free resumes remain fully supported and are often preferable for ATS submissions.
 - Automatic local form saving, remembered style/photo, and live updates to a locally previewed resume. AI-generated resumes update only when you explicitly preview your own details or polish again.
-- **Optional accounts** (`/login.html`): create an account with email verification and everything above — favorites, company notes, Resume Studio details/resume/photo/style, profile, theme and layout — is saved to your account automatically and follows you across browsers and devices. Guests keep the original browser-only behaviour; work you did as a guest is migrated into your account the first time you sign in on that browser. See [Accounts & email](#accounts--email-verification).
+- **Optional accounts** (`/login.html`): create an account with email verification and everything above — favorites, company notes, Resume Studio details/resume/photo/style, profile and layout — is saved to your account automatically and follows you across browsers and devices. Guests keep the original browser-only behaviour; work you did as a guest is migrated into your account the first time you sign in on that browser. See [Accounts & email](#accounts--email-verification).
 - Resume analysis (score, strengths, improvements, keyword matches, and detected specialties you can jump to in the directory), AI-assisted cover letters, application-email drafts, and a career assistant using the provider APIs configured below.
 - Application drafts open in Gmail or your mail app for you to review and send yourself; the server never sends mail.
 - Searchable **Ctrl/Cmd + K** quick actions, `/` directory search, and a built-in help dialog.
@@ -89,7 +89,7 @@ See `.env.example` for all knobs (`SMTP_USE_SSL`, token lifetimes, `AUTH_REQUIRE
 
 ## Your data and privacy
 
-As a guest, favorites, company notes, resume details, style/theme/layout preferences, and the processed photo are stored in **this browser's localStorage** only. Other devices, browser profiles, ports, and hosts have separate storage, and clearing site data removes them.
+As a guest, favorites, company notes, resume details, style and layout preferences, and the processed photo are stored in **this browser's localStorage** only. Other devices, browser profiles, ports, and hosts have separate storage, and clearing site data removes them.
 
 When you **sign in**, those same items are additionally mirrored to your account in the server-side SQLite database (`data/techmap.db`) so they survive cleared site data and follow you to other browsers/devices. The browser copy remains the working copy; signing out stops the mirroring but leaves the local copy in place. Deleting your account (on the account page) permanently deletes the server copy. There is still no separate backup/restore interface — back up `data/techmap.db` if you self-host for others.
 
@@ -166,7 +166,7 @@ static/                             Everything the browser loads — see static/
 ├── README.md                       Frontend layout, cascade, and load-order guide
 ├── assets/
 │   ├── fonts/                      Self-hosted woff2 subsets + OFL licences
-│   │   ├── fraunces-*.woff2        Display serif (variable)
+│   │   ├── fraunces-*.woff2        Bundled legacy serif (variable)
 │   │   ├── inter-*.woff2           Interface sans (variable)
 │   │   ├── ibm-plex-mono-*.woff2   Labels and figures
 │   │   └── LICENSE-*.txt           Fraunces / Inter / IBM Plex Mono (OFL)
@@ -178,13 +178,11 @@ static/                             Everything the browser loads — see static/
 │   ├── studio.css                  Resume Studio UI + resume documents + print
 │   └── auth.css                    Login/account page + sidebar account widget
 └── js/
-    ├── core/
-    │   └── theme.js                Pre-paint saved/system theme initialization
     └── features/                   Loaded in order at the end of <body>
         ├── app.js                  Directory, favorites, analyzer, letters/Apply, chat
         ├── auth.js                 Account widget + localStorage→account sync
         ├── auth-page.js            Sign-in/registration/reset forms (login.html)
-        ├── workspace.js            Theme toggle, help, views, comparison, notes
+        ├── workspace.js            Help, views, comparison, notes
         ├── quick-actions.js        Searchable Ctrl/Cmd + K launcher
         └── studio.js               Local preview, photo processing, styling, motion
 
