@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/icons/mark.svg?v=18" type="image/svg+xml" />
 <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="css/base.css?v=18" />
-<link rel="stylesheet" href="css/auth.css?v=18" />
+<link rel="stylesheet" href="css/auth.css?v=19" />
 </head>
 <body class="auth-page">
 
@@ -28,7 +28,7 @@
   </aside>
 
   <main class="auth-main">
-    <a class="auth-back" href="/">← Back to the workspace</a>
+    <a id="authBack" class="auth-back" href="/">← Back to the workspace</a>
 
     <div id="authAlert" class="auth-alert hidden" role="alert"></div>
 
@@ -153,6 +153,10 @@
         </div>
       </div>
 
+      <div class="account-photo-settings">
+        <div id="accountPhotoPicker"></div>
+        <p class="auth-fine-print">This photo appears on your account. It also appears on your public portfolio if Portfolio Studio is set to use your account photo.</p>
+      </div>
       <form id="profileForm" class="auth-form">
         <label>Display name
           <input type="text" id="acName" autocomplete="name" placeholder="Your name" />
@@ -180,6 +184,7 @@
   </main>
 </div>
 
-<script src="js/features/auth-page.js?v=18"></script>
+<script src="js/features/photos.js?v=1"></script>
+<script src="js/features/auth-page.js?v=19"></script>
 </body>
 </html>

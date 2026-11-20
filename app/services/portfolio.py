@@ -6,6 +6,8 @@ from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator
 
+from .photos import Photo
+
 Template = Literal['minimal', 'editorial', 'terminal', 'gallery', 'executive', 'bento', 'atlas', 'monograph']
 Short = Annotated[str, StringConstraints(strip_whitespace=True, max_length=140)]
 Body = Annotated[str, StringConstraints(strip_whitespace=True, max_length=2400)]
@@ -36,7 +38,13 @@ class Entry(BaseModel):
     validate_url = field_validator('url')(safe_link)
 
 
+class Project(Entry):
+    cover: Photo = ''
+
+
 class Portfolio(BaseModel):
+    photo_mode: Literal['account', 'custom', 'none'] = 'account'
+    portrait: Photo = ''
     name: Short = ''
     headline: Short = ''
     location: Short = ''
@@ -49,7 +57,7 @@ class Portfolio(BaseModel):
     website: Link = ''
     resume: Link = ''
     template: Template = 'minimal'
-    projects: list[Entry] = Field(default_factory=list, max_length=12)
+    projects: list[Project] = Field(default_factory=list, max_length=12)
     experience: list[Entry] = Field(default_factory=list, max_length=12)
     education: list[Entry] = Field(default_factory=list, max_length=12)
     certificates: list[Entry] = Field(default_factory=list, max_length=12)
@@ -65,7 +73,7 @@ SECTIONS = (('projects', 'Projects'), ('experience', 'Experience'),
             ('education', 'Education'), ('certificates', 'Certifications'))
 
 
-def render_portfolio(p: Portfolio) -> str:
+def render_portfolio(p: Portfolio, account_photo: str = '') -> str:
     def text(tag, value, cls=''):
         return f'<{tag} class="{cls}">{escape(value)}</{tag}>' if value else ''
 
@@ -76,6 +84,10 @@ def render_portfolio(p: Portfolio) -> str:
         return (f'<a class="{cls}" href="{escape(url, quote=True)}"{aria}>'
                 f'{escape(label)} <span aria-hidden="true">↗</span></a>')
 
+    portrait = {'account': account_photo, 'custom': p.portrait, 'none': ''}[p.photo_mode]
+    portrait_image = (f'<img class="portfolio-portrait" src="{escape(portrait, quote=True)}" alt="">'
+                      if portrait else '')
+    portrait_class = ' has-portrait' if portrait else ''
     name = p.name or 'Your name'
     initials = ''.join(word[0].upper() for word in name.split()[:2])
     links = ''.join(link(url, label) for url, label in (
@@ -103,6 +115,9 @@ def render_portfolio(p: Portfolio) -> str:
         for index, entry in enumerate(entries, 1):
             visual = (f'<div class="project-cover" aria-hidden="true"><span>PROJECT / {index:02}</span>'
                       f'<i></i><b>{index:02}</b></div>') if key == 'projects' else ''
+            if key == 'projects' and entry.cover:
+                visual = (f'<div class="project-cover uploaded-cover"><img src="{escape(entry.cover, quote=True)}" '
+                          'alt="" loading="lazy" decoding="async"></div>')
             action = {'projects': 'View project', 'certificates': 'View credential'}.get(key, 'Learn more')
             cards.append(f'<article>{visual}<div class="entry-copy">' + text('p', entry.period, 'period')
                          + text('h3', entry.title) + text('p', entry.subtitle, 'subtitle')
@@ -116,10 +131,10 @@ def render_portfolio(p: Portfolio) -> str:
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{escape((p.headline or name + ' — Portfolio')[:140], quote=True)}">
-<title>{escape(name)} — Portfolio</title><link rel="stylesheet" href="/css/portfolio-public.css?v=2"></head>
+<title>{escape(name)} — Portfolio</title><link rel="stylesheet" href="/css/portfolio-public.css?v=3"></head>
 <body class="{p.template}">
 <div class="site" id="top"><div class="site-bar"><a class="wordmark" href="#top" aria-label="Back to top">{escape(initials)}</a>{index}</div>
-<main class="composition"><header class="identity"><div class="identity-copy">
+<main class="composition"><header class="identity{portrait_class}">{portrait_image}<div class="identity-copy">
 <p class="location"><span aria-hidden="true"></span>{escape(p.location or 'Portfolio')}</p>
 <h1>{escape(name)}</h1>{text('p', p.headline, 'headline')}{text('p', p.bio, 'bio')}{profile}</div>
 <div class="identity-art" aria-hidden="true"><div class="art-orbit"></div><span>{escape(initials)}</span></div>

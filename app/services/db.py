@@ -51,6 +51,11 @@ CREATE TABLE IF NOT EXISTS user_state (
     PRIMARY KEY (user_id, key)
 );
 
+CREATE TABLE IF NOT EXISTS account_photos (
+    user_id    INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    photo      TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS portfolios (
     user_id    INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     slug       TEXT NOT NULL UNIQUE,

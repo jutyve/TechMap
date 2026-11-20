@@ -69,3 +69,7 @@
 .portfolio-option-card { padding: 9px; }
 .portfolio-thumb { height: 56px; }
 .portfolio-thumb.minimal { --thumb: #edf3ef; --stroke: #31564c; }
+#portfolioPhotoHint { font-size: 12px; color: var(--ink-3); }
+#portfolioPhotoHint a { color: var(--brand-text); text-decoration: underline; }
+.portfolio-form .photo-picker input[type="file"] { padding: 5px; }
+.portfolio-entry .photo-picker > img { width: 96px; height: 54px; }

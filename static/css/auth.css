@@ -495,3 +495,14 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
+
+.avatar { position: relative; overflow: hidden; }
+.avatar > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.account-photo-settings { margin: 16px 0; }
+.photo-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.photo-picker > img { width: 58px; height: 58px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+.photo-picker label { flex: 1 1 170px; min-width: 0; font-size: 12px; font-weight: 650; }
+.photo-picker input { display: block; width: 100%; margin-top: 4px; font-size: 12px; }
+.photo-picker .photo-status { flex-basis: 100%; font-size: 12px; color: var(--ink-3); }
+.photo-picker .photo-status:empty { display: none; }
+.photo-picker [hidden] { display: none !important; }

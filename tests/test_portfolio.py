@@ -1,5 +1,7 @@
 """Portfolio lifecycle tests (requires httpx in addition to runtime dependencies)."""
 
+import base64
+import io
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,7 +10,9 @@ from unittest.mock import patch
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from PIL import Image
 
+from app.api.routes.photos import router as photos_router
 from app.api.routes.portfolio import router
 from app.services import accounts, db
 from app.services.config import SESSION_COOKIE
@@ -25,6 +29,7 @@ class PortfolioTests(unittest.TestCase):
         db.init_db()
         app = FastAPI()
         app.include_router(router)
+        app.include_router(photos_router)
         self.client = TestClient(app)
         self.addCleanup(self.client.close)
         self.owner, self.owner_id = self.account('owner')
@@ -70,6 +75,37 @@ class PortfolioTests(unittest.TestCase):
         self.owner.put(api, json=payload)
         accounts.delete_user(self.owner_id)
         self.assertEqual(self.client.get('/portfolio/new-name').status_code, 404)
+
+    def test_account_photo_inheritance_and_independent_images(self):
+        def jpeg(color):
+            buf = io.BytesIO()
+            Image.new('RGB', (8, 8), color).save(buf, format='JPEG')
+            return 'data:image/jpeg;base64,' + base64.b64encode(buf.getvalue()).decode()
+
+        api, page = '/api/account/photo', '/portfolio/samira-dev'
+        initial, replacement, custom, cover = map(jpeg, ['red', 'blue', 'green', 'yellow'])
+        self.assertEqual(self.client.put(api, json={'photo': initial}).status_code, 401)
+        self.assertEqual(self.owner.put(api, json={'photo': 'data:image/jpeg;base64,PHN2Zz4='}).status_code, 422)
+        self.assertEqual(self.owner.put(api, json={'photo': initial}).status_code, 200)
+        self.assertEqual(self.other.get(api).json(), {'photo': ''})
+        payload = {**self.data, 'published': True, 'projects': [{'title': 'Website', 'cover': cover}]}
+        self.assertEqual(self.owner.put('/api/portfolio', json=payload).status_code, 200)
+        self.assertIn(initial, self.client.get(page).text)
+        self.assertIn(cover, self.client.get(page).text)
+        self.assertIn(initial, self.owner.post('/api/portfolio/preview', json=payload).text)
+        self.assertNotIn(initial, self.client.post('/api/portfolio/preview', json=payload).text)
+        self.assertEqual(self.owner.put(api, json={'photo': replacement}).status_code, 200)
+        self.assertIn(replacement, self.client.get(page).text)
+        self.assertEqual(self.owner.put('/api/portfolio', json={**payload, 'photo_mode': 'custom', 'portrait': custom}).status_code, 200)
+        self.assertIn(custom, self.client.get(page).text)
+        self.assertNotIn(replacement, self.client.get(page).text)
+        self.assertEqual(self.owner.get(api).json(), {'photo': replacement})
+        self.assertEqual(self.owner.put('/api/portfolio', json={**payload, 'photo_mode': 'none', 'portrait': custom}).status_code, 200)
+        self.assertNotIn(custom, self.client.get(page).text)
+        self.assertNotIn(replacement, self.client.get(page).text)
+        self.assertIn(cover, self.client.get(page).text)
+        self.assertEqual(self.owner.put(api, json={'photo': ''}).status_code, 200)
+        self.assertEqual(self.owner.get(api).json(), {'photo': ''})
 
     def test_templates_and_validation(self):
         for template in get_args(Template):

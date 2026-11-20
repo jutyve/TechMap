@@ -149,3 +149,15 @@ footer span { font-weight: 700; }
   .identity { display: block; }
   .identity-art { display: none; }
 }
+.portfolio-portrait { display: block; width: clamp(70px, 12vw, 128px); aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 3px solid var(--paper); }
+.identity.has-portrait { display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: flex-start; }
+.identity.has-portrait .portfolio-portrait { flex: 0 0 auto; }
+.identity.has-portrait .identity-copy { min-width: 0; flex: 1; }
+.identity.has-portrait .identity-art { display: none; }
+.editorial .identity.has-portrait, .atlas .identity.has-portrait { flex-direction: column; }
+.editorial .identity.has-portrait { align-items: center; }
+.uploaded-cover.project-cover { display: block; padding: 0; min-height: 0; }
+.uploaded-cover img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+@media (max-width: 485px) {
+  .identity.has-portrait { flex-direction: column; gap: 12px; }
+}
