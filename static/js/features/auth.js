@@ -2,7 +2,7 @@
  *
  * Guests keep the original behaviour: everything lives in localStorage.
  * When a user is signed in, the whitelisted localStorage keys (favorites,
- * company notes, Resume Studio form/resume/photo/style, profile, theme,
+ * company notes, Resume Studio form/resume/photo/style, profile,
  * layout) are mirrored to /api/me/state:
  *
  *  - On load the server copy is applied to localStorage (reloading once if
@@ -25,7 +25,6 @@
     "techmap_resume_accent",
     "techmap_resume_origin",
     "techmap_resume_photo",
-    "techmap_theme",
     "techmap_layout",
   ];
   const ACCOUNT_KEY = "techmap_account_id"; // local only, never synced
@@ -67,7 +66,7 @@
     try {
       return JSON.parse(raw);
     } catch {
-      return raw; // plain string values (theme, template, photo, ...)
+      return raw; // plain string values (template, photo, ...)
     }
   };
   const serializeServer = (value) =>
@@ -344,7 +343,7 @@
 
     if (changed) {
       // Features read their saved values once at startup; reload a single
-      // time so favorites, resume, theme etc. reflect the account copy.
+      // time so favorites, resume, etc. reflect the account copy.
       let alreadyReloaded = false;
       try {
         alreadyReloaded = sessionStorage.getItem("techmap_synced_reload") === String(user.id);

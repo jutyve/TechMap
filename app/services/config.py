@@ -88,7 +88,6 @@ SYNCED_STATE_KEYS = {
     "techmap_resume_accent",
     "techmap_resume_origin",
     "techmap_resume_photo",
-    "techmap_theme",
     "techmap_layout",
 }
 # The processed Studio photo is a data URL of up to ~800 KB; allow headroom.

@@ -2,7 +2,7 @@
 
 The frontend keeps working from localStorage exactly as it does for guests;
 when a user is signed in, the whitelisted keys (favorites, company notes,
-Resume Studio form/data/photo/style, profile, theme, layout) are mirrored
+Resume Studio form/data/photo/style, profile, layout) are mirrored
 here so the workspace follows them across browsers and devices.
 """
 

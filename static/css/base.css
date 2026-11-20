@@ -140,43 +140,42 @@
 
 /* --------------------------------------------------------------------------
    2. Design tokens
-   Light "Ivory atelier" · Dark "Midnight cedar"
-   Warm paper neutrals, zellige-green brand, saffron + terracotta accents.
+   Light surfaces, slate ink and violet accents.
    -------------------------------------------------------------------------- */
 
 :root {
   color-scheme: light;
 
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --font-display: var(--font-sans);
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
   /* Surfaces */
-  --bg: #f7f4ee;
-  --bg-tint: #efeade;
+  --bg: #f7f8fc;
+  --bg-tint: #eef0fa;
   --surface: #ffffff;
-  --surface-2: #fbf8f2;
-  --surface-3: #f3efe5;
+  --surface-2: #fafaff;
+  --surface-3: #f0f1f8;
   --surface-glass: rgba(255, 255, 255, 0.78);
 
   /* Hairlines */
-  --line: #e8e2d6;
-  --line-2: #dcd4c4;
-  --line-strong: #c9bfab;
+  --line: #e3e5ef;
+  --line-2: #d8daea;
+  --line-strong: #bfc3da;
 
   /* Ink */
-  --ink: #16211c;
-  --ink-2: #4d5b54;
-  --ink-3: #64706a;
-  --ink-4: #767f79;
+  --ink: #161a32;
+  --ink-2: #404762;
+  --ink-3: #525b76;
+  --ink-4: #606984;
 
   /* Brand + accents */
-  --brand: #1d5b45;
-  --brand-2: #12402f;
-  --brand-ink: #f6fbf7;
-  --brand-text: #1a5540;
-  --brand-soft: #e8f0e9;
-  --brand-line: #cde0d2;
+  --brand: #5242d6;
+  --brand-2: #4433bc;
+  --brand-ink: #ffffff;
+  --brand-text: #4837bc;
+  --brand-soft: #eeebff;
+  --brand-line: #dbd4ff;
   --gold: #b0801f;      /* fills and ornaments */
   --gold-ink: #8d6410;  /* gold that has to be read as text */
   --gold-2: #d9a942;
@@ -198,18 +197,17 @@
   --danger-soft: #fbe9e6;
 
   /* Shell */
-  --sidebar-bg: #13352a;
-  --sidebar-bg-2: #0e2a21;
-  --sidebar-ink: #eaf1e8;
-  --sidebar-ink-2: #a9c0b3;
-  --sidebar-ink-3: #7c9889;
-  --sidebar-line: rgba(233, 245, 235, 0.12);
-  --sidebar-active: rgba(244, 250, 240, 0.1);
+  --sidebar-bg: #ffffff;
+  --sidebar-ink: var(--ink);
+  --sidebar-ink-2: var(--ink-2);
+  --sidebar-ink-3: var(--ink-4);
+  --sidebar-line: var(--line);
+  --sidebar-active: var(--brand-soft);
 
-  --header-bg: rgba(251, 249, 245, 0.86);
-  --hero-bg: linear-gradient(122deg, #f1f3e5 0%, #eaefdc 42%, #e3e9d2 100%);
-  --hero-ink: #22392c;
-  --hero-line: #ccd6b8;
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --hero-bg: linear-gradient(115deg, #fbfaff 0%, #f0edff 52%, #e5edff 100%);
+  --hero-ink: var(--ink);
+  --hero-line: #dad7f2;
 
   /* Radii */
   --radius-xs: 6px;
@@ -225,8 +223,8 @@
   --shadow-3: 0 30px 60px -28px rgba(19, 28, 23, 0.35), 0 4px 12px rgba(23, 33, 27, 0.06);
   --shadow-4: 0 50px 90px -40px rgba(15, 24, 19, 0.5);
 
-  --ring: #4c8a6d;
-  --grain-opacity: 0.035;
+  --ring: #6353e3;
+  --grain-opacity: 0;
   --grain-blend: multiply;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -244,75 +242,6 @@
   --accent3: var(--gold);
   --green: var(--ok);
   --focus: var(--ring);
-}
-
-html[data-theme="dark"] {
-  color-scheme: dark;
-
-  --bg: #0a1210;
-  --bg-tint: #0d1714;
-  --surface: #121c18;
-  --surface-2: #16221d;
-  --surface-3: #1b2924;
-  --surface-glass: rgba(14, 22, 19, 0.72);
-
-  --line: #253430;
-  --line-2: #2f4039;
-  --line-strong: #3d524a;
-
-  --ink: #e9efe9;
-  --ink-2: #aab7af;
-  --ink-3: #8a988f;
-  --ink-4: #79867f;
-
-  --brand: #48a37b;
-  --brand-2: #35825f;
-  --brand-ink: #04130d;
-  --brand-text: #8fd3ac;
-  --brand-soft: #16281f;
-  --brand-line: #2c4a3c;
-  --gold: #e0b35e;
-  --gold-ink: #e5bb6d;
-  --gold-2: #f0cc86;
-  --gold-soft: #2a2317;
-  --gold-line: #4a3d23;
-  --terracotta: #e08a63;
-  --terracotta-soft: #2b1d17;
-  --terracotta-line: #4d3227;
-  --indigo: #93aede;
-  --indigo-soft: #1a2233;
-  --sage: #9dba90;
-
-  --ok: #6fc492;
-  --ok-soft: #14291f;
-  --warn: #e0b35e;
-  --warn-soft: #2a2317;
-  --danger: #ef8377;
-  --danger-soft: #2d1a18;
-
-  --sidebar-bg: #071110;
-  --sidebar-bg-2: #0a1815;
-  --sidebar-ink: #e6efe8;
-  --sidebar-ink-2: #96aca1;
-  --sidebar-ink-3: #6d8579;
-  --sidebar-line: rgba(226, 240, 230, 0.1);
-  --sidebar-active: rgba(240, 250, 242, 0.08);
-
-  --header-bg: rgba(11, 18, 16, 0.82);
-  --hero-bg: linear-gradient(122deg, #16261f 0%, #14211c 50%, #101b17 100%);
-  --hero-ink: #e7f1e4;
-  --hero-line: #2c4335;
-
-  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-2: 0 12px 28px -16px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.2);
-  --shadow-3: 0 34px 70px -30px rgba(0, 0, 0, 0.75), 0 4px 14px rgba(0, 0, 0, 0.25);
-  --shadow-4: 0 60px 110px -45px rgba(0, 0, 0, 0.85);
-
-  --ring: #7fc29a;
-  --grain-opacity: 0.05;
-  --grain-blend: overlay;
-
-  --accent3: var(--gold);
 }
 
 /* --------------------------------------------------------------------------
@@ -816,14 +745,11 @@ textarea:disabled {
 select {
   appearance: none;
   padding-right: 34px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2379857e' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23606984' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 11px center;
   background-size: 14px;
   cursor: pointer;
-}
-html[data-theme="dark"] select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2382908a' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 }
 select option {
   background: var(--surface);
@@ -1324,12 +1250,6 @@ label {
   letter-spacing: 0.01em;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
   transition: transform 0.3s var(--ease);
-}
-[data-theme="dark"] .company-logo {
-  border-color: hsl(var(--logo-hue, 158) 24% 26%);
-  background: linear-gradient(150deg, hsl(var(--logo-hue, 158) 26% 24%), hsl(var(--logo-hue, 158) 22% 15%));
-  color: hsl(var(--logo-hue, 158) 58% 80%);
-  box-shadow: none;
 }
 .company-logo.big {
   width: 62px;

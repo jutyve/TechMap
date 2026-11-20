@@ -20,7 +20,7 @@ static/
 │       └── mark.svg        Brand mark (favicon, nav brand, hero art)
 ├── css/                    Loaded in cascade order — see below
 │   ├── base.css            @font-face declarations and the design tokens
-│   │                       (light "ivory atelier" + dark "midnight cedar"),
+│   │                       (light only),
 │   │                       reset, typography, shared components
 │   ├── workspace.css       Shell: sidebar, header, hero, directory, insights,
 │   │                       responsive rules (overrides base)
@@ -29,16 +29,13 @@ static/
 │   └── auth.css            Login/account page + the sidebar account widget
 │                           (loaded last on index.html, after base on login.html)
 ├── js/
-│   ├── core/
-│   │   └── theme.js        Runs in <head> before first paint; sets the
-│   │                       saved/system light–dark theme on <html>
 │   └── features/           Loaded at the end of <body>, in this order
 │       ├── app.js          Directory data, favorites, detail panel,
 │       │                   analyzer, cover-letter/Apply flows, dashboard, chat
 │       ├── auth.js         Account widget + sync of the saved localStorage
 │       │                   keys to /api/me/state when signed in (index only)
 │       ├── auth-page.js    Sign-in / registration / reset forms (login.html only)
-│       ├── workspace.js    Shell behaviour: theme toggle, help, filters,
+│       ├── workspace.js    Shell behaviour: help, filters,
 │       │                   grid/list views, comparison, private notes
 │       ├── quick-actions.js  Ctrl/Cmd + K launcher
 │       └── studio.js       Resume Studio: local preview, photo processing,
@@ -49,13 +46,10 @@ static/
 
 ## Visual language
 
-Warm paper neutrals, a zellige-green brand, and saffron/terracotta accents.
-Every colour, radius, shadow and easing lives in the `:root` custom properties
-at the top of `base.css`; the dark theme is the same list re-declared under
-`html[data-theme="dark"]`, so a new component only has to use tokens to work in
-both themes. Display type is Fraunces (a soft serif), body copy is Inter, and
-mono labels/figures are IBM Plex Mono. The subtle paper grain over the whole
-app is a `body::after` layer driven by `--grain-opacity`.
+White and cool gray surfaces, slate text, and violet accents. Shared colors,
+radii, elevation, and easing live in the `:root` tokens in `base.css`. Inter
+is used for both display and body text, with IBM Plex Mono for labels and
+figures. Entrance and interaction effects respect `prefers-reduced-motion`.
 
 The four resume documents (`studio.css`, `.rdoc-*`) deliberately use system
 font stacks rather than the bundled webfonts: what someone sees in the preview
@@ -63,8 +57,7 @@ is what a recruiter sees in the printed or exported file on any machine.
 
 ## Rules that keep this tidy
 
-- **Load order is part of the design.** In `<head>`, `js/core/theme.js` must
-  run before the stylesheets paint, and the CSS cascade is
+- **Load order is part of the design.** In `<head>`, the CSS cascade is
   `base.css` → `workspace.css` → `studio.css` → `auth.css` (later files
   override earlier ones). At the end of `<body>`, `features/app.js` loads
   first because the other feature scripts use the globals it defines
@@ -76,7 +69,7 @@ is what a recruiter sees in the printed or exported file on any machine.
   in a release.
 - **Where new files go:** icons/images → `assets/` (icons in `assets/icons/`),
   fonts → `assets/fonts/`, styles → `css/` (mind the cascade), page behaviour →
-  `js/features/`, and only scripts that must run before first paint → `js/core/`.
+  `js/features/`.
 - **Fonts:** add the `.woff2` subset to `assets/fonts/`, declare it with
   `@font-face` in `base.css`, and keep the OFL licence text beside it. Prefer
   the Latin and Latin-Extended subsets so the bundle stays small.

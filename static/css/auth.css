@@ -28,10 +28,10 @@
   margin-left: auto;
   flex-shrink: 0;
   padding: 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid var(--brand-line);
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  background: var(--brand-soft);
+  color: var(--brand-text);
   font-size: 11.5px;
   font-weight: 600;
   text-decoration: none;
@@ -39,8 +39,8 @@
   transition: background 0.2s, border-color 0.2s;
 }
 .account-cta:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.45);
+  background: var(--brand-line);
+  border-color: var(--brand);
 }
 .account-cta:disabled {
   opacity: 0.6;
@@ -83,17 +83,17 @@
   padding: 44px 48px;
   overflow: hidden;
   background:
-    radial-gradient(560px 420px at 85% -10%, rgba(217, 164, 65, 0.16), transparent 60%),
-    linear-gradient(165deg, #17452f 0%, #0e2c1f 55%, #0a2016 100%);
-  color: #eef5ef;
+    var(--hero-bg);
+  border-right: 1px solid var(--line);
+  color: var(--ink);
 }
 .auth-brand::after {
   content: "";
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    linear-gradient(rgba(82, 66, 214, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(82, 66, 214, 0.07) 1px, transparent 1px);
   background-size: 44px 44px;
   pointer-events: none;
 }
@@ -105,7 +105,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #ffffff;
+  color: var(--brand-text);
   text-decoration: none;
   font-family: var(--font-display);
   font-size: 21px;
@@ -116,7 +116,7 @@
   height: 38px;
 }
 .auth-brand .brand-row .brand-accent {
-  color: #bcd8c4;
+  color: var(--brand-text);
   font-style: italic;
   font-weight: 500;
   margin-left: 5px;
@@ -129,11 +129,11 @@
   margin: auto 0 0;
 }
 .auth-brand h1 em {
-  color: #e8c477;
+  color: var(--brand-text);
 }
 .auth-brand .brand-sub {
   max-width: 42ch;
-  color: #bfd4c4;
+  color: var(--ink-2);
   line-height: 1.65;
   font-size: 15px;
 }
@@ -141,7 +141,7 @@
   list-style: none;
   margin: 6px 0 0;
   padding: 20px 0 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid var(--brand-line);
   display: grid;
   gap: 11px;
 }
@@ -149,21 +149,21 @@
   display: flex;
   gap: 11px;
   align-items: baseline;
-  color: #dcebe0;
+  color: var(--ink-2);
   font-size: 13.5px;
 }
 .auth-sync-list li::before {
   content: "★";
-  color: #e8c477;
+  color: var(--brand-text);
   font-size: 11px;
 }
 .auth-brand .brand-foot {
-  color: #8fae99;
+  color: var(--ink-3);
   font-size: 12.5px;
   line-height: 1.6;
 }
 .auth-brand .brand-foot a {
-  color: #dcebe0;
+  color: var(--ink-2);
 }
 
 .auth-main {
@@ -484,4 +484,14 @@
   .account-cta {
     transition: none;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .auth-card {
+    animation: auth-arrive 0.45s var(--ease) both;
+  }
+}
+@keyframes auth-arrive {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
 }
