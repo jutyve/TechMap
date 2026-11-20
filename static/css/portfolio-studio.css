@@ -56,3 +56,16 @@
   .portfolio-jump { display: inline-block; margin-top: 8px; color: var(--brand-text); font-size: 13px; }
   .portfolio-preview { scroll-margin-top: 80px; }
 }
+
+/* Give the site canvas more room than the editor on wide workspaces. */
+@media (min-width: 1180px) {
+  .portfolio-layout { grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr); }
+}
+.portfolio-preview { background: var(--surface-2); }
+.portfolio-preview-bar { background: var(--surface); flex-wrap: wrap; }
+.portfolio-preview-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+#portfolioPreviewMode { color: var(--ink-3); font-size: 11px; }
+#portfolioSample { font-size: 11px; }
+.portfolio-option-card { padding: 9px; }
+.portfolio-thumb { height: 56px; }
+.portfolio-thumb.minimal { --thumb: #edf3ef; --stroke: #31564c; }
