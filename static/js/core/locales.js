@@ -394,8 +394,8 @@ window.techmapLocales = {
   "Modular and colorful": ["Modulaire et coloré", "وحدات ملوّنة"],
   "Split layout": ["Mise en page divisée", "تخطيط مقسوم"],
   "High-contrast typography": ["Typographie contrastée", "خطوط عالية التباين"],
-  "Map": ["Carte", "الخريطة"],
-  "Open in Google Maps": ["Ouvrir dans Google Maps", "افتح في خرائط Google"],
-  "Open Google Maps for": ["Ouvrir Google Maps pour", "افتح خرائط Google لشركة"],
-  "Maps searches by company name and city. Confirm the location before visiting.": ["Google Maps recherche le nom de l’entreprise et la ville. Vérifiez l’adresse avant de vous déplacer.", "تبحث الخرائط حسب اسم الشركة والمدينة. تحقّق من الموقع قبل الزيارة."],
+  "Directions": ["Itinéraire", "الاتجاهات"],
+  "Get directions in Google Maps": ["Itinéraire dans Google Maps", "الاتجاهات في خرائط Google"],
+  "Get directions to": ["Obtenir l’itinéraire vers", "احصل على الاتجاهات إلى"],
+  "Google Maps uses your current location when available. Confirm the company match before you go.": ["Google Maps utilise votre position actuelle si elle est disponible. Vérifiez l’entreprise proposée avant de partir.", "تستخدم خرائط Google موقعك الحالي عند توفره. تحقّق من مطابقة الشركة قبل الانطلاق."],
 };
