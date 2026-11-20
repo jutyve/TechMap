@@ -9,6 +9,20 @@
     executive: ['Executive', 'Classic and polished'], bento: ['Bento', 'Modular and colorful'],
     atlas: ['Atlas', 'Split layout'], monograph: ['Monograph', 'High-contrast typography'],
   };
+  // Preview-only content; never added to the form or publishing payload.
+  const sample = {
+    name: 'Nadia Belkacem', headline: 'Product designer & creative developer', location: 'Rabat, Morocco',
+    bio: 'I design and build digital tools that make complicated things feel simple. I’m drawn to work that brings local stories, thoughtful systems, and the open web together.',
+    skills: 'Design systems, Creative coding, Accessibility, Prototyping, Research',
+    projects: [
+      { title: 'The Medina Index', subtitle: 'Digital archive · Art direction & development', period: '2025', description: 'A browsable atlas of independent makers and workshops, built around interviews and hand-drawn maps.' },
+      { title: 'Fieldnotes', subtitle: 'Open-source toolkit · Design systems', period: '2024', description: 'A set of accessible components for teams publishing field research on the web.' },
+    ],
+    experience: [{ title: 'Product Designer', subtitle: 'Studio Tilia', period: '2023–Present', description: 'Lead the design of publishing tools for independent researchers and small teams.' }],
+    education: [{ title: 'BA in Visual Communication', subtitle: 'School of Design', period: '2022' }],
+    certificates: [{ title: 'Digital Accessibility', subtitle: 'Professional development', period: '2025' }],
+  };
+  let samplePreference = null;
   const groups = {
     projects: ['Projects', 'project', 'Technologies or role', 'Project link'],
     experience: ['Experience', 'role', 'Company or organization', 'Company link'],
@@ -107,16 +121,25 @@
     return response;
   }
 
+  function showingSample(data) {
+    return samplePreference ?? !Object.entries(data).some(([key, value]) =>
+      key !== 'template' && (Array.isArray(value) ? value.length > 0 : Boolean(value)));
+  }
+
   async function refreshPreview() {
     const controller = new AbortController();
     previewRequest = controller;
     try {
+      const data = collect();
+      const example = showingSample(data);
       const response = await request('/preview', {
-        method: 'POST', body: JSON.stringify(collect()), signal: controller.signal,
+        method: 'POST', body: JSON.stringify(example ? { ...sample, template: data.template } : data), signal: controller.signal,
       });
       const html = await response.text();
       if (controller.signal.aborted) return;
       el('portfolioFrame').srcdoc = html;
+      el('portfolioPreviewMode').textContent = example ? 'Sample content' : 'Private preview';
+      el('portfolioSample').textContent = example ? 'Show my content' : 'Show sample';
       previewStatus.hidden = true;
     } catch (error) {
       if (controller.signal.aborted) return;
@@ -179,6 +202,10 @@
   }
 
   form.addEventListener('input', queuePreview);
+  el('portfolioSample').onclick = () => {
+    samplePreference = !showingSample(collect());
+    queuePreview();
+  };
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (busy || !event.submitter) return;

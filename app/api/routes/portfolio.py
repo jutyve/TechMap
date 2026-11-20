@@ -12,7 +12,7 @@ from ...services.portfolio import Portfolio, PortfolioSave, render_portfolio
 router = APIRouter(tags=['portfolio'])
 PAGE_HEADERS = {
     'Cache-Control': 'no-store',
-    'Content-Security-Policy': "default-src 'none'; style-src 'self'; base-uri 'none'; form-action 'none'",
+    'Content-Security-Policy': "default-src 'none'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'",
     'Referrer-Policy': 'no-referrer',
     'X-Content-Type-Options': 'nosniff',
 }

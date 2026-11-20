@@ -69,8 +69,12 @@ def render_portfolio(p: Portfolio) -> str:
     def text(tag, value, cls=''):
         return f'<{tag} class="{cls}">{escape(value)}</{tag}>' if value else ''
 
-    def link(url, label):
-        return f'<a href="{escape(url, quote=True)}">{escape(label)}</a>' if url else ''
+    def link(url, label, cls='', context=''):
+        if not url:
+            return ''
+        aria = f' aria-label="{escape(label + ": " + context, quote=True)}"' if context else ''
+        return (f'<a class="{cls}" href="{escape(url, quote=True)}"{aria}>'
+                f'{escape(label)} <span aria-hidden="true">↗</span></a>')
 
     name = p.name or 'Your name'
     initials = ''.join(word[0].upper() for word in name.split()[:2])
@@ -78,27 +82,47 @@ def render_portfolio(p: Portfolio) -> str:
         (p.github, 'GitHub'), (p.linkedin, 'LinkedIn'), (p.website, 'Website'),
         (p.resume, 'Résumé'), ('mailto:' + p.email if p.email else '', 'Email me')))
     sections = []
+    anchors = []
+
+    def section(key, label, body):
+        index = len(sections) + 1
+        anchors.append(f'<a href="#{key}">{label}</a>')
+        sections.append(f'<section id="{key}" class="section {key}" aria-labelledby="heading-{key}">'
+                        f'<div class="section-heading"><span aria-hidden="true">{index:02}</span>'
+                        f'<h2 id="heading-{key}">{label}</h2></div>{body}</section>')
+
     for key, label in SECTIONS:
+        if key == 'experience':
+            tags = ''.join(text('li', skill.strip()) for skill in p.skills.split(',')[:40])
+            if tags:
+                section('skills', 'Skills', f'<ul>{tags}</ul>')
         entries = getattr(p, key)
         if not entries:
             continue
-        cards = ''.join(
-            '<article>' + text('p', entry.period, 'period') + text('h3', entry.title)
-            + text('p', entry.subtitle, 'subtitle') + text('p', entry.description, 'description')
-            + link(entry.url, 'View details ↗') + '</article>' for entry in entries
-        )
-        sections.append(f'<section class="section {key}"><h2>{label}</h2><div class="entries">{cards}</div></section>')
-    tags = ''.join(text('li', skill.strip()) for skill in p.skills.split(',')[:40])
-    if tags:
-        sections.insert(1, f'<section class="section skills"><h2>Skills</h2><ul>{tags}</ul></section>')
-    nav = f'<nav aria-label="Profile links">{links}</nav>' if links else ''
+        cards = []
+        for index, entry in enumerate(entries, 1):
+            visual = (f'<div class="project-cover" aria-hidden="true"><span>PROJECT / {index:02}</span>'
+                      f'<i></i><b>{index:02}</b></div>') if key == 'projects' else ''
+            action = {'projects': 'View project', 'certificates': 'View credential'}.get(key, 'Learn more')
+            cards.append(f'<article>{visual}<div class="entry-copy">' + text('p', entry.period, 'period')
+                         + text('h3', entry.title) + text('p', entry.subtitle, 'subtitle')
+                         + text('p', entry.description, 'description')
+                         + link(entry.url, action, 'entry-link', entry.title) + '</div></article>')
+        section(key, 'Selected projects' if key == 'projects' else label,
+                '<div class="entries">' + ''.join(cards) + '</div>')
+
+    profile = f'<nav class="profile-links" aria-label="Profile links">{links}</nav>' if links else ''
+    index = f'<nav class="index-links" aria-label="Page sections">{"".join(anchors)}</nav>' if anchors else ''
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{escape((p.headline or name + ' — Portfolio')[:140], quote=True)}">
-<title>{escape(name)} — Portfolio</title><link rel="stylesheet" href="/css/portfolio-public.css?v=1"></head>
-<body class="{p.template}"><main class="site">
-<header class="identity"><span class="initials" aria-hidden="true">{escape(initials)}</span>
-{text('p', p.location, 'location')}<h1>{escape(name)}</h1>{text('p', p.headline, 'headline')}
-{text('p', p.bio, 'bio')}{nav}</header><div class="content">{''.join(sections)}</div>
-<footer><a href="/?studio=portfolio">Made with TechMap Portfolio Studio</a></footer>
-</main></body></html>'''
+<title>{escape(name)} — Portfolio</title><link rel="stylesheet" href="/css/portfolio-public.css?v=2"></head>
+<body class="{p.template}">
+<div class="site" id="top"><div class="site-bar"><a class="wordmark" href="#top" aria-label="Back to top">{escape(initials)}</a>{index}</div>
+<main class="composition"><header class="identity"><div class="identity-copy">
+<p class="location"><span aria-hidden="true"></span>{escape(p.location or 'Portfolio')}</p>
+<h1>{escape(name)}</h1>{text('p', p.headline, 'headline')}{text('p', p.bio, 'bio')}{profile}</div>
+<div class="identity-art" aria-hidden="true"><div class="art-orbit"></div><span>{escape(initials)}</span></div>
+</header><div class="content">{''.join(sections)}</div></main>
+<footer><span>{escape(name)}</span><a href="/?studio=portfolio">Made with TechMap</a></footer></div>
+</body></html>'''
