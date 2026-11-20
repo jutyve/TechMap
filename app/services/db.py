@@ -50,6 +50,13 @@ CREATE TABLE IF NOT EXISTS user_state (
     updated_at INTEGER NOT NULL,
     PRIMARY KEY (user_id, key)
 );
+
+CREATE TABLE IF NOT EXISTS portfolios (
+    user_id    INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    slug       TEXT NOT NULL UNIQUE,
+    content    TEXT NOT NULL,
+    published  INTEGER NOT NULL DEFAULT 0 CHECK (published IN (0, 1))
+);
 """
 
 

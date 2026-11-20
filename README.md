@@ -207,3 +207,18 @@ The API documentation is available at `/docs` when the server is running. Main r
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+### Portfolio Studio
+
+Open **Portfolio studio** from the workspace to choose one of eight designs and
+preview a site with your bio, skills, social links, projects, experience,
+education, and certifications. Sign in to save a private draft or publish.
+Each account can manage one portfolio at `/portfolio/<username>`. Anyone can
+visit a published page without an account. Changing the username replaces the
+old URL; unpublishing takes it offline without deleting the saved content.
+Published data lives in the same SQLite database as accounts, so keep that
+file on persistent storage when deploying TechMap. The link is internet-facing
+only if the TechMap server itself is publicly accessible.
+
+Run the portfolio lifecycle tests with `python -m unittest discover -s tests`
+(after installing the optional test dependency `httpx`).

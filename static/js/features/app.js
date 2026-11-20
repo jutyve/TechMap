@@ -283,7 +283,7 @@ function initTabs() {
   const panels = $$(".tab-panel");
   const toolsToggle = $("#toolsToggle");
   const toolsMenu = $("#toolsMenu");
-  const toolTabs = ["analyzer", "resume", "assistant"];
+  const toolTabs = ["analyzer", "resume", "portfolio", "assistant"];
 
   function activate(target) {
     const label = document.querySelector(`.nav-tabs [data-tab="${target}"]`);

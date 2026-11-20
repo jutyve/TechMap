@@ -34,5 +34,5 @@ app.add_middleware(
 
 app.include_router(api_router)
 
-# Mounted last so every /api route is matched before the static file handler.
+# Mounted last so API and public portfolio routes precede the static handler.
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
