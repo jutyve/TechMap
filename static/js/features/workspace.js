@@ -180,8 +180,8 @@ function updateComparison() {
     const selected = isCompared(button.dataset.compareId);
     button.setAttribute("aria-pressed", String(selected));
     button.textContent = selected
-      ? "✓ Selected for comparison"
-      : "+ Add to comparison";
+      ? window.techmapLanguage.t("✓ Selected for comparison")
+      : window.techmapLanguage.t("+ Add to comparison");
   });
 }
 window.toggleCompare = (company) => {

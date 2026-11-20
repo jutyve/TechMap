@@ -1,4 +1,5 @@
 (() => {
+  const { lang, t, number } = window.techmapLanguage;
   const key = 'techmap_workspace_tour_v1';
   const steps = [
     ['.nav-tab[data-tab="companies"]', 'Find your next team', 'Start here to browse Morocco’s tech companies. Open a company to see what it does, find contact details, or save it to your shortlist.'],
@@ -65,11 +66,12 @@
     }
     const target = document.querySelector(selector);
     target?.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
-    count.textContent = `Workspace tour · ${index + 1} of ${steps.length}`;
-    title.textContent = heading;
-    description.textContent = copy;
+    const progress = lang === 'en' ? `${index + 1} of ${steps.length}` : `${number(index + 1)}/${number(steps.length)}`;
+    count.textContent = `${t('Workspace tour')} · ${progress}`;
+    title.textContent = t(heading);
+    description.textContent = t(copy);
     back.disabled = index === 0;
-    next.textContent = index === steps.length - 1 ? 'Done' : 'Next';
+    next.textContent = t(index === steps.length - 1 ? 'Done' : 'Next');
     position();
     title.focus({ preventScroll: true });
     schedulePosition();
