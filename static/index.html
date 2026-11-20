@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/studio.css?v=18" />
 <link rel="stylesheet" href="css/auth.css?v=19" />
 <link rel="stylesheet" href="css/portfolio-studio.css?v=3" />
+<link rel="stylesheet" href="css/tour.css?v=1" />
 </head>
 <body>
 
@@ -478,6 +479,14 @@
 <div id="compareTray" class="compare-tray hidden" aria-label="Selected companies"><div><strong id="compareCount">0 companies selected</strong><span>Make a more informed next move.</span></div><div id="compareNames" class="compare-names"></div><button id="openCompare" class="mini-btn primary" disabled>Compare</button><button id="clearCompare" class="mini-btn">Clear</button></div>
 <dialog id="compareDialog" class="compare-dialog" aria-labelledby="compareTitle"><button id="closeCompare" class="dialog-close" aria-label="Close comparison">✕</button><div class="eyebrow">Your next team, side by side</div><h2 id="compareTitle">Find your best fit.</h2><p class="muted">Directory details, not live job listings. Verify information before applying.</p><div id="compareContent"></div></dialog>
 <dialog id="launcherDialog" class="launcher-dialog" aria-label="Quick actions"><div class="launcher-search"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.6"/><path d="m16 16 4.6 4.6"/></svg></span><input id="launcherInput" placeholder="Where would you like to go?" aria-label="Search quick actions" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="launcherResults" autocomplete="off"><button id="closeLauncher" aria-label="Close quick actions">Esc</button></div><div id="launcherResults" role="listbox" aria-label="Available actions"></div><div class="launcher-footer"><span>↑ ↓ to navigate &nbsp; ↵ to open</span><span>Your workspace, one shortcut away.</span></div></dialog>
+<dialog id="workspaceTour" class="workspace-tour" aria-labelledby="tourTitle" aria-describedby="tourDescription">
+  <div id="tourSpotlight" class="tour-spotlight" aria-hidden="true" hidden></div>
+  <div id="tourCard" class="tour-card">
+    <div id="tourCount" class="eyebrow"></div>
+    <h2 id="tourTitle" tabindex="-1"></h2><p id="tourDescription"></p>
+    <div class="tour-actions"><button id="tourSkip" type="button" class="mini-btn">Skip tour</button><button id="tourBack" type="button" class="mini-btn">Back</button><button id="tourNext" type="button" class="mini-btn primary">Next</button></div>
+  </div>
+</dialog>
 <div id="toast" class="toast" role="status"></div>
 
 
@@ -489,5 +498,6 @@
 <script src="js/features/quick-actions.js?v=19"></script>
 <script src="js/features/studio.js?v=18"></script>
 <script src="js/features/portfolio.js?v=3"></script>
+<script src="js/features/tour.js?v=1"></script>
 </body>
 </html>
