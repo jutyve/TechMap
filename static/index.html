@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="css/base.css?v=18" />
 <link rel="stylesheet" href="css/workspace.css?v=18" />
 <link rel="stylesheet" href="css/studio.css?v=18" />
-<link rel="stylesheet" href="css/auth.css?v=18" />
-<link rel="stylesheet" href="css/portfolio-studio.css?v=2" />
+<link rel="stylesheet" href="css/auth.css?v=19" />
+<link rel="stylesheet" href="css/portfolio-studio.css?v=3" />
 </head>
 <body>
 
@@ -324,6 +324,15 @@
       <form id="portfolioForm" class="portfolio-form">
         <fieldset><legend>01 / Choose a template</legend><div id="portfolioTemplates" class="portfolio-templates"></div></fieldset>
         <fieldset><legend>02 / Your profile</legend><div class="portfolio-fields">
+          <label class="full">Portfolio profile photo
+            <select name="photo_mode" aria-describedby="portfolioPhotoHint">
+              <option value="account">Use account photo</option>
+              <option value="custom">Use a separate portfolio photo</option>
+              <option value="none">Don't show a photo</option>
+            </select>
+          </label>
+          <p id="portfolioPhotoHint" class="full">Account photos update here automatically when you change them in <a id="portfolioAccountSettings" href="/login.html?next=%2F%3Fstudio%3Dportfolio">Account settings</a>. A separate portfolio photo never changes your account photo.</p>
+          <div id="portfolioPortrait" class="full hidden"></div>
           <label>Display name<input name="name" maxlength="140" placeholder="Samira Amrani" autocomplete="name"></label>
           <label>Headline<input name="headline" maxlength="140" placeholder="Frontend developer"></label>
           <label>Location<input name="location" maxlength="140" placeholder="Rabat, Morocco"></label>
@@ -474,10 +483,11 @@
 
 
 <script src="js/features/app.js?v=19"></script>
-<script src="js/features/auth.js?v=18"></script>
+<script src="js/features/photos.js?v=1"></script>
+<script src="js/features/auth.js?v=19"></script>
 <script src="js/features/workspace.js?v=18"></script>
 <script src="js/features/quick-actions.js?v=19"></script>
 <script src="js/features/studio.js?v=18"></script>
-<script src="js/features/portfolio.js?v=2"></script>
+<script src="js/features/portfolio.js?v=3"></script>
 </body>
 </html>

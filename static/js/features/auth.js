@@ -280,6 +280,12 @@
       headerAvatar.textContent = initials;
       headerAvatar.title = `${currentUser.name || currentUser.email} — account settings`;
     }
+    const avatarOwner = currentUser;
+    techmapPhotos.accountPhoto().then(({ photo }) => {
+      if (currentUser !== avatarOwner) return;
+      techmapPhotos.avatar(widget.querySelector(".avatar"), photo);
+      techmapPhotos.avatar(headerAvatar, photo);
+    }).catch(() => {});
     document.getElementById("signOutBtn").addEventListener("click", signOut);
   }
 

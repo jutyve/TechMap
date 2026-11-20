@@ -11,6 +11,8 @@
     return value.startsWith("/") && !value.startsWith("//") ? value : "/";
   })();
 
+  if (next === "/?studio=portfolio") $("authBack").href = next;
+
   const views = ["viewAuth", "viewCheckEmail", "viewForgot", "viewForgotSent", "viewReset", "viewAccount"];
   function showView(id) {
     views.forEach((view) => $(view).classList.toggle("hidden", view !== id));
@@ -282,8 +284,18 @@
     return (first + last).toUpperCase() || "?";
   }
 
+  let selectedPhoto = '';
+  const accountPicker = techmapPhotos.picker($("accountPhotoPicker"), "Account photo", {
+    async onChange(photo) {
+      await techmapPhotos.accountPhoto(photo);
+      selectedPhoto = photo;
+      techmapPhotos.avatar($("accountAvatar"), photo);
+    },
+  });
+
   function paintAccount(user) {
     $("accountAvatar").textContent = initials(user.name, user.email);
+    techmapPhotos.avatar($("accountAvatar"), selectedPhoto);
     $("accountNameDisplay").textContent = user.name || "Your account";
     $("accountEmailDisplay").textContent = user.email;
     $("accountVerifiedBadge").classList.toggle("hidden", !user.is_verified);
@@ -356,6 +368,11 @@
       .then(({ user }) => {
         paintAccount(user);
         showView("viewAccount");
+        techmapPhotos.accountPhoto().then(({ photo }) => {
+          selectedPhoto = photo;
+          accountPicker.set(photo);
+          techmapPhotos.avatar($("accountAvatar"), photo);
+        }).catch(() => {});
       })
       .catch(() => {
         /* not signed in — keep the sign-in form */

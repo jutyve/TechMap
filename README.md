@@ -222,3 +222,10 @@ only if the TechMap server itself is publicly accessible.
 
 Run the portfolio lifecycle tests with `python -m unittest discover -s tests`
 (after installing the optional test dependency `httpx`).
+
+Set or remove your account photo in **Account settings**. In Portfolio Studio,
+choose **Use account photo** to keep it in sync with your public portfolio,
+**Use a separate portfolio photo** for an independent upload, or **Don't show a
+photo** to keep your account photo off the site. Each project can have its own
+cover. The editor accepts JPG, PNG, or WebP up to 10 MB and resizes them before
+saving. Changes to portfolio-specific photos go live only when you publish.

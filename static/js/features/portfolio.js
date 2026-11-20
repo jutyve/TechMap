@@ -11,7 +11,7 @@
   };
   // Preview-only content; never added to the form or publishing payload.
   const sample = {
-    name: 'Nadia Belkacem', headline: 'Product designer & creative developer', location: 'Rabat, Morocco',
+    photo_mode: 'none', name: 'Nadia Belkacem', headline: 'Product designer & creative developer', location: 'Rabat, Morocco',
     bio: 'I design and build digital tools that make complicated things feel simple. I’m drawn to work that brings local stories, thoughtful systems, and the open web together.',
     skills: 'Design systems, Creative coding, Accessibility, Prototyping, Research',
     projects: [
@@ -34,10 +34,19 @@
     ['period', 'Date or period', 'text', 140], ['url', '', 'url', 500],
     ['description', 'Description', 'textarea', 2400],
   ];
-  const fields = ['name', 'headline', 'location', 'email', 'bio', 'skills', 'github', 'linkedin', 'website', 'resume', 'template'];
+  const fields = ['name', 'headline', 'location', 'email', 'bio', 'skills', 'github', 'linkedin', 'website', 'resume', 'template', 'photo_mode'];
   const lists = {};
   const handoffKey = "techmap_portfolio_signin_draft";
   let initialized = false, busy = false, current = null, previewTimer, previewRequest;
+
+  let pendingPhotos = 0;
+  const covers = new WeakMap();
+  const onBusy = (busy) => { pendingPhotos += busy ? 1 : -1; };
+  const onImageChange = () => { samplePreference = false; queuePreview(); };
+  const portrait = techmapPhotos.picker(el('portfolioPortrait'), 'Portfolio photo', { onChange: onImageChange, onBusy });
+  function paintPhotoMode() {
+    el('portfolioPortrait').classList.toggle('hidden', form.elements.photo_mode.value !== 'custom');
+  }
 
   for (const [key, [label, caption]] of Object.entries(templates)) {
     const option = document.createElement('label');
@@ -68,6 +77,14 @@
       wrapper.append(input);
       entry.append(wrapper);
     }
+    if (key === 'projects') {
+      const host = document.createElement('div');
+      host.className = 'full';
+      entry.append(host);
+      const cover = techmapPhotos.picker(host, 'Project cover', { maxEdge: 1280, onChange: onImageChange, onBusy });
+      cover.set(data.cover);
+      covers.set(entry, cover);
+    }
     const remove = document.createElement('button');
     remove.type = 'button';
     remove.className = 'mini-btn portfolio-remove';
@@ -91,11 +108,13 @@
 
   function collect(strict = false) {
     const data = Object.fromEntries(fields.map(key => [key, form.elements[key].value.trim()]));
+    data.portrait = portrait.get();
     for (const key of Object.keys(groups)) {
       data[key] = [];
       for (const entry of lists[key].list.children) {
         const inputs = [...entry.querySelectorAll('[data-field]')];
         const values = Object.fromEntries(inputs.map(input => [input.dataset.field, input.value.trim()]));
+        if (key === 'projects') values.cover = covers.get(entry).get();
         if (!Object.values(values).some(Boolean)) continue;
         if (!values.title) {
           if (strict) { inputs[0].focus(); throw new Error(`Enter a title for each ${groups[key][1]} you add.`); }
@@ -123,7 +142,7 @@
 
   function showingSample(data) {
     return samplePreference ?? !Object.entries(data).some(([key, value]) =>
-      key !== 'template' && (Array.isArray(value) ? value.length > 0 : Boolean(value)));
+      !['template', 'photo_mode'].includes(key) && (Array.isArray(value) ? value.length > 0 : Boolean(value)));
   }
 
   async function refreshPreview() {
@@ -179,7 +198,9 @@
       } catch { /* Session storage may be blocked. */ }
       const source = handoff && (!current || window.confirm('Continue the draft you started before signing in? Your saved portfolio will not change until you save or publish.')) ? handoff : current;
       if (source) {
-        for (const key of [...fields, 'slug']) form.elements[key].value = source[key];
+        for (const key of [...fields, 'slug']) form.elements[key].value = source[key] ?? (key === 'photo_mode' ? 'account' : '');
+        portrait.set(source.portrait);
+        paintPhotoMode();
         for (const key of Object.keys(groups)) source[key].forEach(entry => addEntry(key, entry));
       }
       paintPublished();
@@ -202,6 +223,7 @@
   }
 
   form.addEventListener('input', queuePreview);
+  form.elements.photo_mode.addEventListener('change', () => { paintPhotoMode(); onImageChange(); });
   el('portfolioSample').onclick = () => {
     samplePreference = !showingSample(collect());
     queuePreview();
@@ -209,6 +231,7 @@
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (busy || !event.submitter) return;
+    if (pendingPhotos) { status.textContent = 'Wait for your images to finish processing.'; return; }
     const slug = form.elements.slug.value.trim();
     const published = event.submitter.value === 'publish';
     if (!slug) { status.textContent = 'Choose a public username.'; form.elements.slug.focus(); return; }
@@ -247,15 +270,18 @@
     catch { status.textContent = `Copy your public link: ${url}`; }
   };
 
-  el('portfolioSignIn').addEventListener('click', event => {
+  function handoffDraft(event) {
     try {
+      if (pendingPhotos) throw new Error('Wait for your images to finish processing.');
       const draft = { ...collect(true), slug: form.elements.slug.value.trim() };
       sessionStorage.setItem(handoffKey, JSON.stringify(draft));
     } catch (error) {
       event.preventDefault();
       status.textContent = error.message;
     }
-  });
+  }
+  el('portfolioSignIn').addEventListener('click', handoffDraft);
+  el('portfolioAccountSettings').addEventListener('click', handoffDraft);
 
   const tab = document.querySelector('.nav-tab[data-tab="portfolio"]');
   tab.addEventListener('click', initialize);

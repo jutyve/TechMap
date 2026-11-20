@@ -5,14 +5,14 @@ import sqlite3
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 
-from ..deps import get_current_user, require_same_origin
+from ..deps import get_current_user, get_optional_user, require_same_origin
 from ...services.db import connection
 from ...services.portfolio import Portfolio, PortfolioSave, render_portfolio
 
 router = APIRouter(tags=['portfolio'])
 PAGE_HEADERS = {
     'Cache-Control': 'no-store',
-    'Content-Security-Policy': "default-src 'none'; style-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'",
+    'Content-Security-Policy': "default-src 'none'; style-src 'self'; font-src 'self'; img-src data:; base-uri 'none'; form-action 'none'",
     'Referrer-Policy': 'no-referrer',
     'X-Content-Type-Options': 'nosniff',
 }
@@ -56,17 +56,23 @@ def unpublish_portfolio(user=Depends(get_current_user)):
 
 
 @router.post('/api/portfolio/preview', response_class=HTMLResponse)
-def preview_portfolio(payload: Portfolio):
-    return HTMLResponse(render_portfolio(payload), headers=PAGE_HEADERS)
+def preview_portfolio(payload: Portfolio, user=Depends(get_optional_user)):
+    photo = ''
+    if user and payload.photo_mode == 'account':
+        with connection() as conn:
+            row = conn.execute('SELECT photo FROM account_photos WHERE user_id = ?', (user['id'],)).fetchone()
+            photo = row['photo'] if row else ''
+    return HTMLResponse(render_portfolio(payload, photo), headers=PAGE_HEADERS)
 
 
 @router.get('/portfolio/{username}', response_class=HTMLResponse)
 def public_portfolio(username: str):
     with connection() as conn:
-        row = conn.execute('SELECT content FROM portfolios WHERE slug = ? AND published = 1', (username,)).fetchone()
+        row = conn.execute('''SELECT portfolios.content, account_photos.photo FROM portfolios
+            LEFT JOIN account_photos USING (user_id) WHERE slug = ? AND published = 1''', (username,)).fetchone()
     if row is None:
         return HTMLResponse('''<!doctype html><html lang="en"><meta charset="utf-8">
 <title>Portfolio not found</title><h1>Portfolio not found</h1>
 <p>This portfolio may be unpublished or the address may have changed.</p><a href="/">Back to TechMap</a></html>''',
                             status_code=404, headers=PAGE_HEADERS)
-    return HTMLResponse(render_portfolio(Portfolio.model_validate_json(row['content'])), headers=PAGE_HEADERS)
+    return HTMLResponse(render_portfolio(Portfolio.model_validate_json(row['content']), row['photo'] or ''), headers=PAGE_HEADERS)
