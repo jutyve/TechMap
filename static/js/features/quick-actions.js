@@ -1,4 +1,5 @@
 (() => {
+  const { t } = window.techmapLanguage;
   const el = (id) => document.getElementById(id);
   /* Local line icons for each action. */
   const actionIcon = (paths) =>
@@ -81,17 +82,17 @@
     const input = el("launcherInput");
     const query = input.value.trim().toLowerCase();
     visible = commands.filter((c) =>
-      (c[0] + " " + c[1]).toLowerCase().includes(query),
+      [c[0], c[1], t(c[0]), t(c[1])].join(" ").toLowerCase().includes(query),
     );
     active = Math.max(0, Math.min(active, visible.length - 1));
     el("launcherResults").innerHTML =
       visible
         .map(
           (c, i) =>
-            `<div role="option" id="command-${i}" data-command="${i}" aria-selected="${i === active}" class="launcher-option"><span aria-hidden="true">${c[2]}</span><div><strong>${c[0]}</strong><small>${c[1]}</small></div><span aria-hidden="true">↵</span></div>`,
+            `<div role="option" id="command-${i}" data-command="${i}" aria-selected="${i === active}" class="launcher-option"><span aria-hidden="true">${c[2]}</span><div><strong>${t(c[0])}</strong><small>${t(c[1])}</small></div><span aria-hidden="true">↵</span></div>`,
         )
         .join("") ||
-      '<p class="launcher-empty">No actions found. Try “resume” or “companies”.</p>';
+      `<p class="launcher-empty">${t("No actions found. Try “resume” or “companies”.")}</p>`;
     if (visible.length) {
       input.setAttribute("aria-activedescendant", `command-${active}`);
       el(`command-${active}`).scrollIntoView({ block: "nearest" });

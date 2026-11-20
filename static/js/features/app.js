@@ -234,7 +234,7 @@ async function loadFavoritesView() {
   if (state.favorites.size === 0) {
     grid.innerHTML = "";
     empty.classList.remove("hidden");
-    $("#resultsCount").textContent = "0 favorites";
+    $("#resultsCount").textContent = window.techmapLanguage.companyCount?.(0, true) ?? "0 favorites";
     return;
   }
 
@@ -244,7 +244,7 @@ async function loadFavoritesView() {
     if (myReq !== state.reqId || state.view !== "favorites") return;
     const items = (data.items || []).map(normalizeCompany);
 
-    $("#resultsCount").textContent = `${items.length} favorite${items.length === 1 ? "" : "s"}`;
+    $("#resultsCount").textContent = window.techmapLanguage.companyCount?.(items.length, true) ?? `${items.length} favorite${items.length === 1 ? "" : "s"}`;
     empty.classList.toggle("hidden", items.length !== 0);
 
     grid.innerHTML = "";
@@ -287,7 +287,7 @@ function initTabs() {
 
   function activate(target) {
     const label = document.querySelector(`.nav-tabs [data-tab="${target}"]`);
-    if (label) document.getElementById("currentPage").textContent = label.textContent.replace(/^[^a-zA-Z]+/, "").replace(/ AI$/, "").trim();
+    if (label) document.getElementById("currentPage").textContent = [...label.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent).join(" ").trim();
     window.scrollTo({ top: 0, behavior: "instant" });
     tabButtons.forEach((t) => t.classList.toggle("active", t.dataset.tab === target));
     toolsToggle.classList.toggle("active", toolTabs.includes(target));
@@ -468,7 +468,7 @@ function renderCompanies(items, reset) {
   const grid = $("#companiesGrid");
   const empty = $("#emptyState");
 
-  $("#resultsCount").textContent = `${state.total} compan${state.total === 1 ? "y" : "ies"}`;
+  $("#resultsCount").textContent = window.techmapLanguage.companyCount?.(state.total, false) ?? `${state.total} compan${state.total === 1 ? "y" : "ies"}`;
 
   if (reset) grid.innerHTML = "";
   empty.classList.toggle("hidden", state.total !== 0);
@@ -489,11 +489,12 @@ function renderCompanies(items, reset) {
 }
 
 function createCard(c) {
+  const { t } = window.techmapLanguage;
   const card = document.createElement("article");
   card.className = "company-card";
   card.tabIndex = 0;
   card.setAttribute("role", "button");
-  card.setAttribute("aria-label", `Open details for ${c.company_name}`);
+  card.setAttribute("aria-label", `${t("Open details for")} ${c.company_name}`);
 
   const initial = (c.company_name || "?").split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const site = safeUrl(c.website) || safeUrl(c.apply_link);
@@ -505,26 +506,26 @@ function createCard(c) {
     <div class="card-top">
       <div class="company-logo" style="--logo-hue:${(c.id * 47) % 360}">${escapeHtml(initial)}</div>
       <div class="card-top-right">
-        <div class="contact-hints">${c.careers_url ? '<span class="careers-indicator">Careers page</span>' : '<span class="directory-indicator">In the directory</span>'}</div>
-        <button type="button" class="fav-btn ${fav ? "active" : ""}" data-id="${c.id}" aria-label="Save ${escapeHtml(c.company_name)}" aria-pressed="${fav}">${fav ? "★" : "☆"}</button>
+        <div class="contact-hints">${c.careers_url ? `<span class="careers-indicator">${t("Careers page")}</span>` : `<span class="directory-indicator">${t("In the directory")}</span>`}</div>
+        <button type="button" class="fav-btn ${fav ? "active" : ""}" data-id="${c.id}" aria-label="${t("Save")} ${escapeHtml(c.company_name)}" aria-pressed="${fav}">${fav ? "★" : "☆"}</button>
       </div>
     </div>
-    <h3 class="company-name">${escapeHtml(c.company_name)}</h3>
+    <h3 class="company-name" dir="auto">${escapeHtml(c.company_name)}</h3>
     <div class="company-city"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</div>
     <div class="specialty-tags">
       ${shown.map((s) => `<span class="tag">${escapeHtml(s)}</span>`).join("")}
       ${extra > 0 ? `<span class="tag tag-more">+${extra}</span>` : ""}
     </div>
-    <p class="company-desc">${escapeHtml(truncate(c.description, 150) || "Explore this company’s specialties and contact details to see where your skills could fit.")}</p>
+    <p class="company-desc" dir="auto">${escapeHtml(truncate(c.description, 150) || t("Explore this company’s specialties and contact details to see where your skills could fit."))}</p>
     <div class="card-footer">
       ${
         site
-          ? `<button type="button" class="btn-website" data-url="${escapeHtml(site)}">Website ↗</button>`
-          : `<button type="button" class="btn-website disabled" disabled>No website</button>`
+          ? `<button type="button" class="btn-website" data-url="${escapeHtml(site)}">${t("Website ↗")}</button>`
+          : `<button type="button" class="btn-website disabled" disabled>${t("No website")}</button>`
       }
-      <button type="button" class="btn-email">View company →</button>
+      <button type="button" class="btn-email">${t("View company →")}</button>
     </div>
-    <button type="button" class="compare-pick" data-compare-id="${c.id}" aria-pressed="${window.isCompared?.(c.id) || false}">${window.isCompared?.(c.id) ? "✓ Selected for comparison" : "+ Add to comparison"}</button>
+    <button type="button" class="compare-pick" data-compare-id="${c.id}" aria-pressed="${window.isCompared?.(c.id) || false}">${window.isCompared?.(c.id) ? t("✓ Selected for comparison") : t("+ Add to comparison")}</button>
   `;
 
   card.addEventListener("click", (e) => {
@@ -999,7 +1000,7 @@ async function loadStats() {
 
 function animateCounter(id, value) {
   const el = document.getElementById(id);
-  el.textContent = value.toLocaleString();
+  el.textContent = window.techmapLanguage.number(value);
   if (!canAnimate()) return;
 
   const obj = { val: 0 };
@@ -1009,7 +1010,7 @@ function animateCounter(id, value) {
     round: 1,
     duration: 1200,
     easing: "easeOutExpo",
-    update: () => (el.textContent = obj.val.toLocaleString()),
+    update: () => (el.textContent = window.techmapLanguage.number(obj.val)),
   });
 }
 
@@ -1101,7 +1102,7 @@ function renderRaceChart(containerId, data, limit = 8) {
         row.el.classList.toggle("leader", rank === 0);
       }
       row.fill.style.width = `${(live[idx] / max) * 100}%`;
-      row.val.textContent = Math.round(live[idx]).toLocaleString();
+      row.val.textContent = window.techmapLanguage.number(Math.round(live[idx]));
     });
   };
 

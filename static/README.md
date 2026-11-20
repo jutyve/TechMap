@@ -76,3 +76,13 @@ is what a recruiter sees in the printed or exported file on any machine.
 - **Renaming/moving a stylesheet?** `js/features/studio.js` fetches
   `css/base.css` + `css/studio.css` by path to build the standalone resume
   HTML used by Apply — update those paths too.
+
+## Interface languages
+
+The workspace and sign-in pages offer English, French, and Arabic. The picker
+remembers the language in this browser. `js/core/language.js` sets `lang` and
+`dir` before paint, `js/core/locales.js` holds the interface strings, and
+`css/language.css` mirrors the Arabic layout. Use `techmapLanguage.t()` for
+strings built in JavaScript and keep company data, authored content, and form
+values separate from translated labels. Public portfolio text uses its own
+writing direction rather than the visitor’s workspace preference.

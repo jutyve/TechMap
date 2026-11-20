@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<script src="js/core/locales.js?v=1"></script>
+<script src="js/core/language.js?v=1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sign in — TechMap Maroc</title>
 <meta name="description" content="Sign in to TechMap Maroc to save your favorite companies, notes and resume to your account." />
@@ -10,6 +12,7 @@
 <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="css/base.css?v=18" />
 <link rel="stylesheet" href="css/auth.css?v=19" />
+<link rel="stylesheet" href="css/language.css?v=1" />
 </head>
 <body class="auth-page">
 
@@ -28,6 +31,7 @@
   </aside>
 
   <main class="auth-main">
+    <label class="language-control"><span class="language-label">Language</span><select id="languagePreference" aria-label="Language" data-language-names><option value="en" lang="en">English</option><option value="fr" lang="fr">Français</option><option value="ar" lang="ar">العربية</option></select></label>
     <a id="authBack" class="auth-back" href="/">← Back to the workspace</a>
 
     <div id="authAlert" class="auth-alert hidden" role="alert"></div>
@@ -186,5 +190,6 @@
 
 <script src="js/features/photos.js?v=1"></script>
 <script src="js/features/auth-page.js?v=19"></script>
+<script src="js/features/language-ui.js?v=1"></script>
 </body>
 </html>

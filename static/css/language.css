@@ -1,0 +1,50 @@
+/* noto-sans-arabic-arabic-wght-normal */
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../assets/fonts/noto-sans-arabic-arabic-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1;
+}
+
+.language-control { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; color: var(--ink-3); font-size: 12px; }
+.language-control select { min-width: 84px; max-width: 112px; padding-block: 7px; padding-inline: 9px 29px; border: 1px solid var(--line-2); border-radius: var(--radius-pill); background-color: var(--surface); color: var(--ink); font: inherit; }
+.auth-main > .language-control { align-self: flex-end; }
+:root:lang(ar) { --font-sans: "Noto Sans Arabic", Inter, Tahoma, "Segoe UI", Arial, sans-serif; --font-mono: var(--font-sans); }
+:root:lang(ar) :is(h1,h2,h3,.eyebrow,.nav-label,.workspace-header > div:first-child,.hero-kicker,.art-coordinate,.brand-accent) { letter-spacing: normal; }
+:root:lang(ar) .brand-text { direction: ltr; unicode-bidi: isolate; }
+:root:lang(ar) :is(.nav-tab,.sidebar-note button,.launcher-option,.company-card,.auth-card) { text-align: start; }
+:root:lang(ar) :is(input[type=email],input[type=url],input[type=tel],#portfolioSlug,.portfolio-url,kbd) { direction: ltr; unicode-bidi: isolate; }
+:root:lang(ar) select { padding-left: 34px; padding-right: 10px; background-position: left 11px center; }
+:root:lang(ar) .language-control select { padding-inline: 9px 29px; }
+:root:lang(ar) .navbar { inset: 0 0 0 auto; border-right: 0; border-left: 1px solid var(--sidebar-line); }
+:root:lang(ar) :is(.workspace-header,.main-content) { margin-left: 0; margin-right: 264px; }
+:root:lang(ar) .nav-tab.active::before { left: auto; right: -18px; border-radius: 3px 0 0 3px; }
+:root:lang(ar) .sidebar-note::after { right: auto; left: -34px; }
+:root:lang(ar) :is(.account-cta,.ai-pill,.local-profile .online-dot) { margin-left: 0; margin-inline-start: auto; }
+:root:lang(ar) .hero-art { right: auto; left: 0; }
+:root:lang(ar) .art-coordinate { right: auto; left: 24px; text-align: left; }
+:root:lang(ar) .switch-track::after { left: auto; right: 3px; }
+:root:lang(ar) .switch input:checked + .switch-track::after { transform: translateX(-14px); }
+:root:lang(ar) .auth-brand { border-right: 0; border-left: 1px solid var(--line); }
+:root:lang(ar) :is(.detail-box .detail-close,.dialog-close) { right: auto; left: 22px; }
+:root:lang(ar) .detail-head { padding-right: 0; padding-left: 46px; }
+:root:lang(ar) #tourSkip { margin-right: 0; margin-inline-end: auto; }
+:root:lang(ar) :is(.search-box input,.chat-input textarea) { text-align: start; }
+@media (max-width: 1240px) {
+  :root:lang(ar) :is(.workspace-header,.main-content) { margin-right: 232px; }
+  .language-label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+@media (max-width: 720px) {
+  :root:lang(ar) .navbar { inset: auto; border-left: 0; }
+  :root:lang(ar) :is(.workspace-header,.main-content) { margin-right: 0; }
+  :root:lang(ar) .hero-art { right: auto; left: -14%; }
+  :root:lang(ar) .nav-tabs { mask-image: linear-gradient(270deg, #000 0, #000 calc(100% - 26px), transparent 100%); }
+  .workspace-header .breadcrumb,.workspace-header .crumb-separator { display: none; }
+  .workspace-header #currentPage { overflow-wrap: anywhere; }
+  .header-right { gap: 5px; }
+}
+:root:lang(ar) .results-count { margin-inline-start: auto; margin-left: 0; padding-inline-start: 14px; padding-left: 0; }
+:root:lang(ar) .portfolio-templates :is(strong,small) { text-align: start; }
+:root:lang(ar) .bar-fill { transform-origin: right center; }

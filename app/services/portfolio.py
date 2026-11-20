@@ -75,7 +75,7 @@ SECTIONS = (('projects', 'Projects'), ('experience', 'Experience'),
 
 def render_portfolio(p: Portfolio, account_photo: str = '') -> str:
     def text(tag, value, cls=''):
-        return f'<{tag} class="{cls}">{escape(value)}</{tag}>' if value else ''
+        return f'<{tag} class="{cls}" dir="auto">{escape(value)}</{tag}>' if value else ''
 
     def link(url, label, cls='', context=''):
         if not url:
@@ -136,7 +136,7 @@ def render_portfolio(p: Portfolio, account_photo: str = '') -> str:
 <div class="site" id="top"><div class="site-bar"><a class="wordmark" href="#top" aria-label="Back to top">{escape(initials)}</a>{index}</div>
 <main class="composition"><header class="identity{portrait_class}">{portrait_image}<div class="identity-copy">
 <p class="location"><span aria-hidden="true"></span>{escape(p.location or 'Portfolio')}</p>
-<h1>{escape(name)}</h1>{text('p', p.headline, 'headline')}{text('p', p.bio, 'bio')}{profile}</div>
+<h1 dir="auto">{escape(name)}</h1>{text('p', p.headline, 'headline')}{text('p', p.bio, 'bio')}{profile}</div>
 <div class="identity-art" aria-hidden="true"><div class="art-orbit"></div><span>{escape(initials)}</span></div>
 </header><div class="content">{''.join(sections)}</div></main>
 <footer><span>{escape(name)}</span><a href="/?studio=portfolio">Made with TechMap</a></footer></div>
