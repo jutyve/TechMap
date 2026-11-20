@@ -45,6 +45,12 @@
       () => nav("resume"),
     ],
     [
+      "Portfolio studio",
+      "Build and publish your own portfolio website",
+      ACTION_ICONS.studio,
+      () => nav("portfolio"),
+    ],
+    [
       "Resume analyzer",
       "Review your resume with AI",
       ACTION_ICONS.analyzer,

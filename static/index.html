@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/workspace.css?v=18" />
 <link rel="stylesheet" href="css/studio.css?v=18" />
 <link rel="stylesheet" href="css/auth.css?v=18" />
+<link rel="stylesheet" href="css/portfolio-studio.css?v=1" />
 </head>
 <body>
 
@@ -28,6 +29,7 @@
       <div id="toolsMenu" class="hidden"></div>
       <button class="nav-tab" data-tab="analyzer"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1.6v2.4M12 20v2.4M1.6 12h2.4M20 12h2.4"/></svg></span> Resume analyzer</button>
       <button class="nav-tab" data-tab="resume"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2.8h6.4L19 8.4v12a1.4 1.4 0 0 1-1.4 1.4H7a1.4 1.4 0 0 1-1.4-1.4V4.2A1.4 1.4 0 0 1 7 2.8Z"/><path d="M13.2 2.9v5.6H19"/><path d="M9 13.4h6M9 17h3.6"/></svg></span> Resume studio</button>
+      <button class="nav-tab" data-tab="portfolio"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M7 6.5h.1M7 15h4m4-2 2 2-2 2"/></svg></span> Portfolio studio</button>
       <button class="nav-tab" data-tab="assistant"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.2v3.4M16.9 4.9h3.4M6.6 16.4v2.4M5.4 17.6h2.4"/></svg></span> Career assistant <span class="ai-pill">AI</span></button>
     </div>
   </div>
@@ -311,6 +313,55 @@
   </section>
 
 <footer class="workspace-footer"><span>techmap maroc <span class="footer-dot">·</span> Built for what's next</span><span>Company details may change. Verify before applying.</span></footer>
+  <section id="portfolio" class="tab-panel">
+    <div class="portfolio-intro">
+      <div class="eyebrow">Career tools / Portfolio Studio</div>
+      <h1>Give your work a home.</h1>
+      <p>Choose a design, add your work, and publish a website anyone can visit.</p>
+      <a class="portfolio-jump" href="#portfolioPreview">Jump to preview ↓</a>
+    </div>
+    <div class="portfolio-layout">
+      <form id="portfolioForm" class="portfolio-form">
+        <fieldset><legend>01 / Choose a template</legend><div id="portfolioTemplates" class="portfolio-templates"></div></fieldset>
+        <fieldset><legend>02 / Your profile</legend><div class="portfolio-fields">
+          <label>Display name<input name="name" maxlength="140" placeholder="Samira Amrani" autocomplete="name"></label>
+          <label>Headline<input name="headline" maxlength="140" placeholder="Frontend developer"></label>
+          <label>Location<input name="location" maxlength="140" placeholder="Rabat, Morocco"></label>
+          <label>Public contact email<input name="email" type="email" maxlength="254" placeholder="hello@example.com"></label>
+          <label class="full">About you<textarea name="bio" maxlength="2400" rows="4" placeholder="Tell visitors what you do and what you care about."></textarea></label>
+          <label class="full">Skills (comma separated)<input name="skills" maxlength="2400" placeholder="JavaScript, Figma, Accessibility"></label>
+          <label>GitHub URL<input name="github" type="url" maxlength="500" placeholder="https://github.com/username"></label>
+          <label>LinkedIn URL<input name="linkedin" type="url" maxlength="500" placeholder="https://www.linkedin.com/in/username"></label>
+          <label>Personal website URL<input name="website" type="url" maxlength="500" placeholder="https://example.com"></label>
+          <label>Résumé URL<input name="resume" type="url" maxlength="500" placeholder="https://example.com/resume.pdf"></label>
+        </div></fieldset>
+        <fieldset><legend>03 / Add your work</legend><div id="portfolioSections"></div></fieldset>
+        <fieldset class="portfolio-publishing"><legend>04 / Publish your site</legend>
+          <label for="portfolioSlug">Public username</label>
+          <div class="portfolio-url"><span>/portfolio/</span><input name="slug" id="portfolioSlug" pattern="[a-z0-9]+(-[a-z0-9]+)*" minlength="3" maxlength="40" placeholder="samira-amrani" autocomplete="off" aria-describedby="portfolioSlugHelp"></div>
+          <p id="portfolioSlugHelp">Use 3–40 lowercase letters, numbers, or single hyphens between words. Changing the username changes the public link.</p>
+          <p>Everything you publish, including your contact email if entered, is visible to anyone.</p>
+          <div id="portfolioGuest" class="hidden"><a id="portfolioSignIn" href="/login.html?next=%2F%3Fstudio%3Dportfolio">Sign in or create an account</a> to save and publish. You can preview without an account.</div>
+          <div id="portfolioActions" class="portfolio-actions hidden">
+            <button type="submit" value="draft" class="mini-btn" id="portfolioDraft">Save private draft</button>
+            <button type="submit" value="publish" class="mini-btn primary" id="portfolioPublish">Publish website</button>
+            <button type="button" class="mini-btn hidden" id="portfolioUnpublish">Unpublish</button>
+          </div>
+          <div id="portfolioLive" class="portfolio-actions hidden">
+            <a id="portfolioOpen" target="_blank" rel="noopener noreferrer">Open public website ↗</a>
+            <button type="button" id="portfolioCopy" class="mini-btn">Copy link</button>
+          </div>
+          <p id="portfolioStatus" role="status"></p>
+        </fieldset>
+      </form>
+      <aside id="portfolioPreview" class="portfolio-preview" aria-label="Portfolio preview">
+        <div class="portfolio-preview-bar"><div><div class="eyebrow">Live preview</div><strong id="portfolioDesign">Minimal</strong></div><span>Not public</span></div>
+        <p id="portfolioPreviewStatus" role="status" hidden></p>
+        <iframe id="portfolioFrame" title="Preview of your portfolio website" sandbox></iframe>
+      </aside>
+    </div>
+  </section>
+
 </main>
 
 <!-- COMPANY DETAIL -->
@@ -422,10 +473,11 @@
 
 
 
-<script src="js/features/app.js?v=18"></script>
+<script src="js/features/app.js?v=19"></script>
 <script src="js/features/auth.js?v=18"></script>
 <script src="js/features/workspace.js?v=18"></script>
-<script src="js/features/quick-actions.js?v=18"></script>
+<script src="js/features/quick-actions.js?v=19"></script>
 <script src="js/features/studio.js?v=18"></script>
+<script src="js/features/portfolio.js?v=1"></script>
 </body>
 </html>
