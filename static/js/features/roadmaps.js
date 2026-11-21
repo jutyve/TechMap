@@ -273,6 +273,10 @@
     read:     { label: "Read",         cls: "read" },
   };
 
+  // Per-phase path colours, echoing the reference quest map's vivid branches.
+  const PHASE_COLORS = ["#e0a52e", "#2f9e7a", "#e8743b", "#7b5cc4", "#d6453d"];
+  const ARROW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>';
+
   const STORE_KEY = "techmap_roadmaps";
   let built = false;
   let activeId = ROADMAPS[0].id;
@@ -305,23 +309,20 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const stepId = (rm, pi, si) => `${rm.id}-${pi}-${si}`;
 
-  function stepHtml(rm, pi, si, step) {
+  function stepNode(rm, pi, si, step) {
     const sid = stepId(rm, pi, si);
     const done = isDone(rm.id, sid);
-    const t = TYPE_META[step.type] || TYPE_META.read;
+    const play = !!(step.link || step.tab);
     let action = "";
     if (step.tab) {
-      action = `<button type="button" class="rm-action" data-tablink="${escapeHtml(step.tab)}">Open ${escapeHtml(step.tabLabel || step.tab)} <span aria-hidden="true">↗</span></button>`;
+      action = `<button type="button" class="qm-action" data-tablink="${escapeHtml(step.tab)}">Open ${escapeHtml(step.tabLabel || step.tab)} <span aria-hidden="true">↗</span></button>`;
     } else if (step.link) {
-      action = `<a class="rm-action" href="${escapeHtml(step.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(step.linkLabel || "Open resource")} <span aria-hidden="true">↗</span></a>`;
+      action = `<a class="qm-action" href="${escapeHtml(step.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(step.linkLabel || "Open resource")} <span aria-hidden="true">↗</span></a>`;
     }
-    return `<div class="rm-step${done ? " done" : ""}" data-id="${escapeHtml(sid)}">
-      <button type="button" class="rm-check" aria-pressed="${done}" aria-label="Mark '${escapeHtml(step.title)}' as done"></button>
-      <div class="rm-step-body">
-        <div class="rm-step-top"><h4>${escapeHtml(step.title)}</h4><span class="rm-type rm-type--${t.cls}">${escapeHtml(t.label)}</span></div>
-        <p>${escapeHtml(step.desc)}</p>
-        ${action}
-      </div>
+    return `<div class="qm-node${done ? " done" : ""}${play ? " qm-node--play" : ""}" data-id="${escapeHtml(sid)}" title="${escapeHtml(step.title)}">
+      <button type="button" class="qm-check" aria-pressed="${done}" aria-label="Mark '${escapeHtml(step.title)}' as done"></button>
+      <span class="qm-node-label">${escapeHtml(step.title)}</span>
+      ${action ? `<span class="qm-node-meta">${action}</span>` : ""}
     </div>`;
   }
 
@@ -344,18 +345,26 @@
     $("#roadmapBlurb").textContent = rm.blurb;
 
     const phases = $("#roadmapPhases");
-    phases.innerHTML = rm.phases.map((ph, pi) => `
-      <div class="rm-phase">
-        <div class="rm-phase-head"><span class="rm-phase-num">${pi + 1}</span><h3>${escapeHtml(ph.name)}</h3></div>
-        <div class="rm-steps">${ph.steps.map((s, si) => stepHtml(rm, pi, si, s)).join("")}</div>
-      </div>`).join("");
+    phases.classList.add("qm-map");
+    phases.innerHTML = rm.phases.map((ph, pi) => {
+      const color = PHASE_COLORS[pi % PHASE_COLORS.length];
+      const nodes = ph.steps.map((s, si) => stepNode(rm, pi, si, s)).join("");
+      return `<div class="qm-phase" style="--phase:${color}">
+        <div class="qm-trunk">
+          <div class="qm-mission"><span class="qm-mission-icon">${ARROW_SVG}</span></div>
+          <span class="qm-mission-label">${escapeHtml(ph.name)}</span>
+          <div class="qm-trunk-line"></div>
+        </div>
+        <div class="qm-branch"><div class="qm-nodes">${nodes}</div></div>
+      </div>`;
+    }).join("");
 
     updateProgress(rm);
 
-    const steps = $$(".rm-step", phases);
-    if (window.canAnimate && window.canAnimate() && steps.length) {
-      steps.forEach((el) => (el.style.opacity = "0"));
-      anime({ targets: steps, opacity: [0, 1], translateY: [14, 0], delay: anime.stagger(26), duration: 420, easing: "easeOutQuad" });
+    const nodes = $$(".qm-node", phases);
+    if (window.canAnimate && window.canAnimate() && nodes.length) {
+      nodes.forEach((el) => (el.style.opacity = "0"));
+      anime({ targets: nodes, opacity: [0, 1], translateY: [14, 0], scale: [0.96, 1], delay: anime.stagger(20), duration: 420, easing: "easeOutQuad" });
     }
   }
 
@@ -366,9 +375,9 @@
       if (target) target.click();
       return;
     }
-    const check = e.target.closest(".rm-check");
+    const check = e.target.closest(".qm-check");
     if (!check) return;
-    const step = check.closest(".rm-step");
+    const step = check.closest(".qm-node");
     const sid = step.dataset.id;
     toggleStep(activeId, sid);
     const done = isDone(activeId, sid);
