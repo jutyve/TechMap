@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<script src="js/core/locales.js?v=6"></script>
+<script src="js/core/locales.js?v=7"></script>
 <script src="js/core/language.js?v=1"></script>
 <script src="js/core/appearance.js?v=1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="css/workspace.css?v=19" />
 <link rel="stylesheet" href="css/studio.css?v=18" />
 <link rel="stylesheet" href="css/auth.css?v=19" />
-<link rel="stylesheet" href="css/portfolio-studio.css?v=3" />
+<link rel="stylesheet" href="css/portfolio-studio.css?v=4" />
 <link rel="stylesheet" href="css/tour.css?v=1" />
 <link rel="stylesheet" href="css/language.css?v=1" />
 <link rel="stylesheet" href="css/appearance.css?v=2" />
@@ -275,7 +275,7 @@
           </div>
         </div>
 
-        <div class="studio-create-actions"><button type="button" id="previewDetailsBtn" class="mini-btn primary">Preview my details <span>↗</span></button><button type="submit" id="generateResumeBtn" class="analyze-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.4v3.2M17 5h3.2"/></svg><span>Polish with AI</span></button></div><p class="studio-fine-print">Preview works without AI. Polishing uses your configured provider.</p>
+        <div class="studio-create-actions"><button type="button" id="previewDetailsBtn" class="mini-btn primary">Preview my details <span>↗</span></button><button type="submit" id="generateResumeBtn" class="analyze-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.4v3.2M17 5h3.2"/></svg><span>Polish with AI</span></button><button type="button" id="syncResumeToPortfolioBtn" class="mini-btn">Sync to Portfolio Studio <span>→</span></button></div><p class="studio-fine-print">Preview works without AI. Polishing uses your configured provider.</p>
       </form>
 
       <div class="resume-preview-pane">
@@ -297,6 +297,7 @@
           <div class="resume-actions">
             <button type="button" id="printResumeBtn" class="mini-btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V3.6h10V9"/><rect x="3.5" y="9" width="17" height="7.4" rx="2"/><path d="M7 14.6h10V20H7z"/></svg> Print / Save as PDF</button>
             <button type="button" id="copyResumeBtn" class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11.4" height="11.4" rx="2.4"/><path d="M15 6.2V5.4A1.4 1.4 0 0 0 13.6 4H5.4A1.4 1.4 0 0 0 4 5.4v8.2A1.4 1.4 0 0 0 5.4 15h.8"/></svg> Copy as text</button>
+            <button type="button" id="syncPreviewToPortfolioBtn" class="mini-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg> Sync to Portfolio</button>
           </div>
           <div id="resumePreview" class="resume-preview template-classic"></div>
         </div>
@@ -336,7 +337,37 @@
     </div>
     <div class="portfolio-layout">
       <form id="portfolioForm" class="portfolio-form">
-        <fieldset><legend>01 / Choose a template</legend><div id="portfolioTemplates" class="portfolio-templates"></div></fieldset>
+        <section id="portfolioSyncCard" class="portfolio-sync-card" aria-labelledby="portfolioSyncTitle">
+          <div class="portfolio-sync-head">
+            <div>
+              <div class="eyebrow">Resume Studio sync</div>
+              <h2 id="portfolioSyncTitle">Import your résumé details</h2>
+              <p id="portfolioSyncSummary">Bring over your profile, skills, experience, education, and projects from Resume Studio in one click.</p>
+            </div>
+          </div>
+          <label id="portfolioSyncPhotoWrap" class="portfolio-sync-check hidden">
+            <input type="checkbox" id="portfolioSyncPhoto" checked>
+            <span>Include Resume Studio photo</span>
+          </label>
+          <div id="portfolioSyncButtons" class="portfolio-sync-actions">
+            <button type="button" id="portfolioSyncMerge" class="mini-btn primary">Import from Resume Studio</button>
+            <button type="button" id="portfolioSyncReplace" class="mini-btn hidden">Replace with Resume</button>
+            <button type="button" id="portfolioSyncOpenResume" class="mini-btn hidden">Open Resume Studio</button>
+            <button type="button" id="portfolioSyncUndo" class="mini-btn hidden">Undo sync</button>
+          </div>
+          <p id="portfolioSyncStatus" class="portfolio-sync-status" role="status"></p>
+        </section>
+        <fieldset><legend>01 / Choose a template</legend>
+          <div id="portfolioTemplates" class="portfolio-templates"></div>
+          <div class="portfolio-motion-control">
+            <span class="portfolio-motion-label">Page animations</span>
+            <div class="portfolio-motion-options" role="radiogroup" aria-label="Page animations">
+              <label class="portfolio-motion-pill"><input type="radio" name="motion" value="expressive" checked><span>Expressive</span></label>
+              <label class="portfolio-motion-pill"><input type="radio" name="motion" value="subtle"><span>Subtle</span></label>
+              <label class="portfolio-motion-pill"><input type="radio" name="motion" value="none"><span>Off</span></label>
+            </div>
+          </div>
+        </fieldset>
         <fieldset><legend>02 / Your profile</legend><div class="portfolio-fields">
           <label class="full">Portfolio profile photo
             <select name="photo_mode" aria-describedby="portfolioPhotoHint">
@@ -378,7 +409,7 @@
         </fieldset>
       </form>
       <aside id="portfolioPreview" class="portfolio-preview" aria-label="Portfolio preview">
-        <div class="portfolio-preview-bar"><div><div class="eyebrow">Live preview</div><strong id="portfolioDesign">Minimal</strong></div><div class="portfolio-preview-tools"><span id="portfolioPreviewMode">Sample content</span><button type="button" id="portfolioSample" class="mini-btn">Show my content</button></div></div>
+        <div class="portfolio-preview-bar"><div><div class="eyebrow">Live preview</div><strong id="portfolioDesign">Minimal</strong></div><div class="portfolio-preview-tools"><span id="portfolioPreviewMode">Sample content</span><button type="button" id="portfolioReplay" class="mini-btn" title="Replay page animations">Replay</button><button type="button" id="portfolioSample" class="mini-btn">Show my content</button></div></div>
         <p id="portfolioPreviewStatus" role="status" hidden></p>
         <iframe id="portfolioFrame" title="Preview of your portfolio website" sandbox></iframe>
       </aside>
@@ -608,8 +639,8 @@
 <script src="js/features/auth.js?v=19"></script>
 <script src="js/features/workspace.js?v=19"></script>
 <script src="js/features/quick-actions.js?v=21"></script>
-<script src="js/features/studio.js?v=18"></script>
-<script src="js/features/portfolio.js?v=3"></script>
+<script src="js/features/studio.js?v=19"></script>
+<script src="js/features/portfolio.js?v=4"></script>
 <script src="js/features/tour.js?v=3"></script>
 <script src="js/features/language-ui.js?v=1"></script>
 <script src="js/core/map-locations.js?v=1"></script>

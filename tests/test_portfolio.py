@@ -16,7 +16,7 @@ from app.api.routes.photos import router as photos_router
 from app.api.routes.portfolio import router
 from app.services import accounts, db
 from app.services.config import SESSION_COOKIE
-from app.services.portfolio import Template
+from app.services.portfolio import Motion, Template
 
 
 class PortfolioTests(unittest.TestCase):
@@ -122,6 +122,32 @@ class PortfolioTests(unittest.TestCase):
         self.assertEqual(self.owner.put('/api/portfolio', json={**self.data, 'published': True, 'name': ' '}).status_code, 422)
         self.assertEqual(self.owner.put('/api/portfolio', json=self.data,
                                         headers={'Origin': 'https://other.example'}).status_code, 403)
+
+    def test_motion_presets_and_script_free_animation_markup(self):
+        # Default motion is expressive when omitted (backward-compatible with older records).
+        default_preview = self.client.post('/api/portfolio/preview', json={'name': 'Amina'})
+        self.assertEqual(default_preview.status_code, 200)
+        self.assertIn('class="site motion-expressive"', default_preview.text)
+        self.assertIn('/css/portfolio-public.css?v=4', default_preview.text)
+        self.assertNotIn('<script', default_preview.text)
+        self.assertNotIn('style=', default_preview.text)
+
+        for motion in get_args(Motion):
+            with self.subTest(motion=motion):
+                response = self.client.post('/api/portfolio/preview', json={'name': 'Amina', 'motion': motion})
+                self.assertEqual(response.status_code, 200)
+                self.assertIn(f'class="site motion-{motion}"', response.text)
+
+        self.assertEqual(self.client.post('/api/portfolio/preview', json={'motion': 'bouncy'}).status_code, 422)
+
+        # Persists chosen motion preset on published portfolio pages.
+        payload = {**self.data, 'published': True, 'motion': 'subtle'}
+        self.assertEqual(self.owner.put('/api/portfolio', json=payload).status_code, 200)
+        self.assertEqual(self.owner.get('/api/portfolio').json()['motion'], 'subtle')
+        public_page = self.client.get('/portfolio/samira-dev')
+        self.assertEqual(public_page.status_code, 200)
+        self.assertIn('class="site motion-subtle"', public_page.text)
+        self.assertIn("default-src 'none'", public_page.headers['content-security-policy'])
 
 
 if __name__ == '__main__':

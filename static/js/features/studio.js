@@ -254,6 +254,24 @@
     renderResumePreview(state.resumeData, state.resumeTemplate);
   }
   el("previewDetailsBtn").onclick = previewOwnDetails;
+  async function syncResumeToPortfolio() {
+    const payload = persistForm();
+    const hasForm = Object.values(payload).some(Boolean);
+    if (!hasForm && !state.resumeData && !photo) {
+      el("rFullName").focus();
+      showToast("Add some resume details first to sync them to your portfolio.");
+      return;
+    }
+    const portfolioTab = document.querySelector('.nav-tab[data-tab="portfolio"]');
+    if (portfolioTab) portfolioTab.click();
+    if (window.techmapPortfolio?.openFromResume) {
+      await window.techmapPortfolio.openFromResume();
+    }
+  }
+  const syncFormBtn = el("syncResumeToPortfolioBtn");
+  const syncPreviewBtn = el("syncPreviewToPortfolioBtn");
+  if (syncFormBtn) syncFormBtn.onclick = syncResumeToPortfolio;
+  if (syncPreviewBtn) syncPreviewBtn.onclick = syncResumeToPortfolio;
   let timer;
   el("resumeForm").addEventListener("input", (event) => {
     if (event.target.type === "file") return;
