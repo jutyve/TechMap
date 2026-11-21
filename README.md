@@ -232,18 +232,12 @@ saving. Changes to portfolio-specific photos go live only when you publish.
 
 ### Verify office coordinates and enable map layers
 
-The app prefers `database/data/morocco_tech_companies_coordinates.csv` when it
-exists. The original `morocco_tech_companies_clean.csv` is unchanged. In the
-copy, enter decimal **latitude, longitude** in the `coordonates` column (for
-example `"33.5731, -7.5898"` in raw CSV), only after confirming the Maps listing
-matches the company and city. Leave unresolved cells as `introuvable`. Do not
-reorder the directory rows: their order determines existing company IDs.
-
-Run `python -m scripts.coordinate_review` to report progress toward 70%, or
-`python -m scripts.coordinate_review --queue /tmp/maps-review.csv` to create a
-separate review sheet with Google Maps search links. Filled positions show as
-individual office pins in the selected city and are used for directions.
-Unresolved companies still appear in city groups and use name/city directions.
+The Company map uses OpenStreetMap street tiles and supports panning and
+street-level zoom. The original `morocco_tech_companies_clean.csv` remains the
+only directory source. If you later verify office locations, you can add a
+`coordonates` column with decimal **latitude, longitude** to that file. Only
+verified positions should go there. Unverified companies remain in the city
+directory and do not get office pins. Keep the row order to preserve company IDs.
 
 The company profile’s **Load map preview** button loads an OpenStreetMap street
 preview by default. To enable Street, Satellite, Hybrid, and Traffic layers

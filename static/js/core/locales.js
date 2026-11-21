@@ -445,4 +445,11 @@ window.techmapLocales = {
   "Google Maps layers unavailable; showing the street map.": ["Couches Google Maps indisponibles ; affichage du plan des rues.", "طبقات خرائط Google غير متاحة؛ تُعرض خريطة الشوارع."],
   "Verified pins": ["Repères vérifiés", "مواقع مؤكدة"],
   "Office pins use verified coordinates when available. Other companies are grouped by approximate city location.": ["Les repères de bureau utilisent des coordonnées vérifiées si disponibles. Les autres entreprises sont regroupées par ville approximative.", "تستخدم دبابيس المكاتب إحداثيات مؤكدة عند توفرها. وتُجمع بقية الشركات حسب موقع المدينة التقريبي."],
+  "City directory": ["Annuaire par ville", "دليل المدن"],
+  "Reset map view": ["Réinitialiser la carte", "إعادة ضبط الخريطة"],
+  "Interactive street map": ["Plan des rues interactif", "خريطة شوارع تفاعلية"],
+  "Street tiles could not load. Check your connection and try again.": ["Le plan des rues n’a pas pu se charger. Vérifiez la connexion et réessayez.", "تعذّر تحميل خريطة الشوارع. تحقّق من الاتصال ثم أعد المحاولة."],
+  "Explore streets and neighborhoods. Pick a city to browse its companies.": ["Explorez les rues et les quartiers. Choisissez une ville pour consulter ses entreprises.", "استكشف الشوارع والأحياء. اختر مدينة لتصفح شركاتها."],
+  "Companies in this city": ["Entreprises de cette ville", "الشركات في هذه المدينة"],
+  "City markers open the directory. An office pin is shown only when a verified company location is available.": ["Les repères de ville ouvrent l’annuaire. Un bureau est marqué uniquement si son emplacement est vérifié.", "تفتح علامات المدن الدليل. لا يظهر دبوس المكتب إلا عند توفر موقع مؤكد للشركة."],
 };

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<script src="js/core/locales.js?v=5"></script>
+<script src="js/core/locales.js?v=6"></script>
 <script src="js/core/language.js?v=1"></script>
 <script src="js/core/appearance.js?v=1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,8 +18,9 @@
 <link rel="stylesheet" href="css/portfolio-studio.css?v=3" />
 <link rel="stylesheet" href="css/tour.css?v=1" />
 <link rel="stylesheet" href="css/language.css?v=1" />
-<link rel="stylesheet" href="css/appearance.css?v=1" />
-<link rel="stylesheet" href="css/company-map.css?v=2" />
+<link rel="stylesheet" href="css/appearance.css?v=2" />
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css?v=1.9.4" />
+<link rel="stylesheet" href="css/company-map.css?v=3" />
 </head>
 <body>
 
@@ -384,19 +385,13 @@
     <header class="map-intro">
       <div class="eyebrow">The company atlas</div>
       <h1 id="mapTitle">Morocco’s tech map</h1>
-      <p>Pick a city, then hover, focus, or tap a company pin to see what it does.</p>
+      <p>Explore streets and neighborhoods. Pick a city to browse its companies.</p>
     </header>
     <div class="atlas-layout">
       <section class="atlas-map" aria-label="Map of Morocco">
-        <div class="atlas-map-toolbar"><span><i></i> City clusters</span><div class="atlas-zoom" dir="ltr"><button id="atlasZoomOut" type="button" aria-label="Zoom out">−</button><button id="atlasZoomIn" type="button" aria-label="Zoom in">+</button><button id="atlasReset" type="button" aria-label="Reset map zoom">↺</button></div></div>
-        <div class="atlas-viewport" dir="ltr">
-          <div class="atlas-plane" id="atlasPlane">
-            <img src="assets/maps/morocco.svg" alt="" width="660" height="640" />
-            <span class="atlas-ocean" aria-hidden="true">Atlantic Ocean</span>
-            <div id="atlasMarkers"></div><div id="atlasExactMarkers"></div>
-          </div>
-        </div>
-        <p class="atlas-attribution"><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a></p>
+        <div class="atlas-map-toolbar"><span><i></i> City directory</span><button id="atlasReset" type="button" class="mini-btn">Reset map view</button></div>
+        <div id="atlasStreetMap" class="atlas-viewport" dir="ltr" aria-label="Interactive street map"></div>
+        <p id="atlasTileStatus" class="atlas-tile-status hidden" role="status">Street tiles could not load. Check your connection and try again.</p>
       </section>
       <aside class="atlas-sidebar" aria-label="Explore companies on the map">
         <label for="atlasCity">Choose a city</label>
@@ -413,10 +408,10 @@
           </div>
           <label for="atlasSearch">Find a company in this city</label>
           <input type="search" id="atlasSearch" placeholder="Search companies or specialties…" />
-          <p class="atlas-pin-caption">Company pins · schematic city view</p>
-          <div class="atlas-pin-grid" id="atlasPins" role="group" aria-label="Company pins"></div>
+          <p class="atlas-pin-caption">Companies in this city</p>
+          <div class="atlas-pin-grid" id="atlasPins" role="group" aria-label="Companies in this city"></div>
         </div>
-        <p class="atlas-note">Office pins use verified coordinates when available. Other companies are grouped by approximate city location.</p>
+        <p class="atlas-note">City markers open the directory. An office pin is shown only when a verified company location is available.</p>
       </aside>
     </div>
   </section>
@@ -551,7 +546,8 @@
 <script src="js/features/language-ui.js?v=1"></script>
 <script src="js/core/map-locations.js?v=1"></script>
 <script src="js/features/company-location.js?v=1"></script>
-<script src="js/features/company-map.js?v=2"></script>
+<script src="vendor/leaflet/leaflet.js?v=1.9.4"></script>
+<script src="js/features/company-map.js?v=3"></script>
 <script src="js/features/appearance-ui.js?v=1"></script>
 </body>
 </html>

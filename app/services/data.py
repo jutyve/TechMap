@@ -6,7 +6,7 @@ from typing import Optional
 
 import pandas as pd
 
-from .config import COLUMNS, COORDINATES_CSV_PATH, CSV_PATH
+from .config import COLUMNS, CSV_PATH
 
 _cache = {"mtime": None, "df": None}
 
@@ -119,7 +119,7 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_data() -> pd.DataFrame:
-    path = COORDINATES_CSV_PATH if os.path.isfile(COORDINATES_CSV_PATH) else CSV_PATH
+    path = CSV_PATH
     if not os.path.exists(path):
         if _cache["df"] is None or _cache["mtime"] != "missing":
             print(f"WARNING: {path} not found - the app will show no companies.")

@@ -90,11 +90,10 @@ writing direction rather than the visitor’s workspace preference.
 ## Company map and appearance
 
 The Company map loads the full, lightweight directory from `/api/companies/map`.
-`company-map.js` plots verified office coordinates when present. Other companies
-are grouped at approximate city centers, with a schematic city panel. The local outline in
-`assets/maps/morocco.svg` uses public-domain Natural Earth 1:50m geometry from
-World Atlas. No map service or visitor geolocation is needed to browse the
-atlas. Directions open separately in Google Maps.
+`company-map.js` renders OpenStreetMap street tiles through the locally bundled
+Leaflet library. City markers link to the city directory; office markers are
+shown only for verified CSV coordinates. Directions open separately in Google
+Maps. Street tiles need a browser internet connection.
 
 `js/core/appearance.js` applies the saved appearance before paint. Light mode
 is the default; the workspace and sign-in page share the optional dark theme.

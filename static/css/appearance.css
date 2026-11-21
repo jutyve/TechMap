@@ -18,7 +18,6 @@
   --shadow-3: 0 20px 48px -16px #08091ab0;
 }
 :root[data-appearance="dark"] .atlas-map { --sea: #191d34; }
-:root[data-appearance="dark"] .atlas-plane > img { filter: invert(.85) hue-rotate(191deg) saturate(.7); }
 :root[data-appearance="dark"] .discovery-hero::before { opacity: .18; }
 :root[data-appearance="dark"] .company-logo { background: var(--surface-3); color: var(--brand-text); border-color: var(--line-2); }
 :root[data-appearance="dark"] .auth-alert.error { color: var(--danger); }

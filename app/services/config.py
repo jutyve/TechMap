@@ -12,7 +12,6 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 CSV_PATH = os.path.join(BASE_DIR, "database", "data", "morocco_tech_companies_clean.csv")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
-COORDINATES_CSV_PATH = os.path.join(BASE_DIR, "database", "data", "morocco_tech_companies_coordinates.csv")
 GOOGLE_MAPS_BROWSER_KEY = os.environ.get("GOOGLE_MAPS_BROWSER_KEY", "").strip()
 
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024

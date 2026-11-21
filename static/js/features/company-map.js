@@ -7,9 +7,11 @@
   const search = el('atlasSearch');
   const status = el('atlasStatus');
   const pins = el('atlasPins');
-  const plane = el('atlasPlane');
+  const home = { center: [30.4, -8.8], zoom: 5 };
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let map, cityMarkers, officeMarkers;
   const pinIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
-  let activeCity, selectedCompany, loading = false, loaded = false, zoom = 1, mapFocus = null;
+  let activeCity, selectedCompany, loading = false, loaded = false;
 
   const button = (className) => {
     const node = document.createElement('button');
@@ -17,19 +19,23 @@
     return node;
   };
 
-  function point(center) {
-    const [lat, lon] = center;
-    return { x: (lon + 18.4) * 36 / 660 * 100, y: (36.8 - lat) * 40 / 640 * 100 };
+  function setMapView(center, zoom) {
+    map.setView(center, zoom, { animate: !reducedMotion.matches });
   }
 
-  function paintZoom() {
-    const center = mapFocus || activeCity?.center;
-    const focus = center ? point(center) : { x: 58, y: 35 };
-    plane.style.transformOrigin = `${focus.x}% ${focus.y}%`;
-    plane.style.setProperty('--atlas-zoom', zoom);
-    plane.style.setProperty('--marker-scale', 1 / zoom);
-    el('atlasZoomOut').disabled = zoom <= 1;
-    el('atlasZoomIn').disabled = zoom >= 16;
+  function initStreetMap() {
+    if (map) return;
+    map = L.map('atlasStreetMap', { scrollWheelZoom: false, minZoom: 3, maxZoom: 19,
+      zoomAnimation: !reducedMotion.matches, fadeAnimation: !reducedMotion.matches });
+    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+    }).addTo(map);
+    tiles.on('tileerror', () => el('atlasTileStatus').classList.remove('hidden'));
+    tiles.on('tileload', () => el('atlasTileStatus').classList.add('hidden'));
+    cityMarkers = L.layerGroup().addTo(map);
+    officeMarkers = L.layerGroup().addTo(map);
+    map.setView(home.center, home.zoom);
   }
 
   function insight(company) {
@@ -47,36 +53,26 @@
 
   function focusOnCompany(company) {
     selectedCompany = company;
-    if (company.coordinates) {
-      mapFocus = company.coordinates;
-      zoom = Math.max(zoom, 5);
-      paintZoom();
-    }
+    if (company.coordinates) setMapView(company.coordinates, 17);
     insight(company);
   }
 
   function renderExactPins(companies) {
-    const markers = el('atlasExactMarkers');
-    markers.replaceChildren();
+    officeMarkers.clearLayers();
     for (const company of companies) {
       if (!company.coordinates) continue;
-      const mark = button('atlas-marker atlas-office-marker');
-      const { x, y } = point(company.coordinates);
-      mark.style.left = `${x}%`; mark.style.top = `${y}%`;
-      mark.innerHTML = pinIcon;
-      mark.setAttribute('aria-label', company.company_name);
-      const tip = document.createElement('span');
-      tip.className = 'atlas-city-tip'; tip.textContent = company.company_name;
-      tip.setAttribute('aria-hidden', 'true'); mark.append(tip);
-      mark.onpointerenter = mark.onfocus = () => insight(company);
-      mark.onpointerleave = mark.onblur = () => insight(selectedCompany);
-      mark.onclick = () => {
+      const pin = L.marker(company.coordinates, { title: company.company_name,
+        icon: L.divIcon({ className: 'atlas-street-pin', html: pinIcon, iconSize: [27, 27], iconAnchor: [13, 26] }) });
+      const tip = document.createElement('span'); tip.textContent = company.company_name;
+      pin.bindTooltip(tip, { direction: 'top' });
+      pin.on('mouseover', () => insight(company)).on('mouseout', () => insight(selectedCompany));
+      pin.on('click', () => {
         focusOnCompany(company);
         for (const candidate of pins.querySelectorAll('button')) {
           candidate.setAttribute('aria-pressed', String(candidate.dataset.id === String(company.id)));
         }
-      };
-      markers.append(mark);
+      });
+      pin.addTo(officeMarkers);
     }
   }
 
@@ -95,7 +91,7 @@
     for (const company of companies) {
       const node = button('atlas-company-pin');
       const label = document.createElement('span'); label.dir = 'auto'; label.textContent = company.company_name;
-      node.innerHTML = pinIcon;
+      if (company.coordinates) node.innerHTML = pinIcon;
       node.dataset.id = company.id;
       if (company.coordinates) node.classList.add('has-verified-pin');
       node.append(label);
@@ -115,13 +111,11 @@
     pins.scrollTop = 0;
   }
 
-  function selectCity(city) {
+  function selectCity(city, zoomToCity = true) {
     if (!city) return;
-    activeCity?.marker?.setAttribute('aria-pressed', 'false');
+    activeCity?.marker?.getElement()?.classList.remove('atlas-city-selected');
     activeCity = city;
-    mapFocus = null;
-    zoom = 1;
-    city.marker?.setAttribute('aria-pressed', 'true');
+    city.marker?.getElement()?.classList.add('atlas-city-selected');
     cityPicker.value = city.key;
     const exact = city.items.filter(company => company.coordinates).length;
     status.textContent = `${city.name} · ${t('Companies')}: ${number(city.items.length)} · ${t('Verified pins')}: ${number(exact)}`;
@@ -129,7 +123,7 @@
     selectedCompany = null;
     el('atlasCityDetails').classList.remove('hidden');
     renderPins();
-    paintZoom();
+    if (zoomToCity && city.center) setMapView(city.center, 12);
   }
 
   function addCity(city) {
@@ -137,20 +131,18 @@
     option.value = city.key; option.textContent = `${city.name} (${number(city.items.length)})`;
     cityPicker.append(option);
     if (!city.center) return;
-    const marker = button('atlas-marker');
-    const { x, y } = point(city.center);
-    marker.style.left = `${x}%`; marker.style.top = `${y}%`;
-    marker.setAttribute('aria-label', `${city.name} · ${t('Companies')}: ${number(city.items.length)}`);
-    marker.setAttribute('aria-pressed', 'false');
-    marker.textContent = number(city.items.length);
-    const tooltip = document.createElement('span'); tooltip.className = 'atlas-city-tip'; tooltip.textContent = city.name;
-    tooltip.setAttribute('aria-hidden', 'true'); marker.append(tooltip);
-    marker.addEventListener('click', () => selectCity(city));
-    city.marker = marker;
-    el('atlasMarkers').append(marker);
+    const count = document.createElement('span');
+    count.textContent = number(city.items.length);
+    const marker = L.marker(city.center, { title: `${city.name} · ${t('Companies')}: ${number(city.items.length)}`,
+      icon: L.divIcon({ className: 'atlas-street-city', html: count, iconSize: [29,29], iconAnchor: [14,14] }) });
+    const tooltip = document.createElement('span'); tooltip.textContent = city.name;
+    marker.bindTooltip(tooltip, { direction: 'top' });
+    marker.on('click', () => selectCity(city));
+    city.marker = marker.addTo(cityMarkers);
   }
 
   async function load() {
+    requestAnimationFrame(() => { initStreetMap(); map.invalidateSize({ pan: false }); });
     if (loading || loaded) return;
     loading = true;
     status.textContent = t('Loading company locations…');
@@ -159,6 +151,7 @@
       const response = await fetch('/api/companies/map');
       if (!response.ok) throw new Error('Map request failed');
       const { items } = await response.json();
+      initStreetMap();
       for (const company of items) {
         const key = normalize(company.city) || '_';
         if (!groups.has(key)) groups.set(key, { key, name: company.city || t('City not listed'), center: cityCenter(company.city), items: [] });
@@ -168,7 +161,7 @@
       cities.forEach(addCity);
       cityPicker.disabled = !cities.length;
       const first = [...cities].sort((a, b) => b.items.length - a.items.length)[0];
-      if (first) selectCity(first);
+      if (first) selectCity(first, false);
       else status.textContent = t('No company locations to show.');
       loaded = true;
     } catch {
@@ -181,8 +174,8 @@
   cityPicker.addEventListener('change', () => selectCity(groups.get(cityPicker.value)));
   search.addEventListener('input', renderPins);
   el('atlasRetry').onclick = load;
-  el('atlasZoomIn').onclick = () => { zoom = Math.min(16, zoom * 1.5); paintZoom(); };
-  el('atlasZoomOut').onclick = () => { zoom = Math.max(1, zoom / 1.5); paintZoom(); };
-  el('atlasReset').onclick = () => { zoom = 1; mapFocus = null; paintZoom(); };
-  paintZoom();
+  el('atlasReset').onclick = () => {
+    setMapView(home.center, home.zoom);
+    map.eachLayer(layer => { if (layer instanceof L.TileLayer) layer.redraw(); });
+  };
 })();
