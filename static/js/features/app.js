@@ -296,7 +296,7 @@ function initTabs() {
       if (p.id === target) {
         p.classList.add("active");
         if (canAnimate()) {
-          anime({ targets: p, opacity: [0, 1], translateY: [20, 0], duration: 500, easing: "easeOutQuad" });
+          anime({ targets: p, opacity: [0, 1], translateY: [20, 0], duration: 420, easing: "easeInOutQuad" });
         }
         if (target === "dashboard") loadStats();
       } else {
@@ -488,12 +488,12 @@ function renderCompanies(items, reset) {
   }
 }
 
-/* The directory has city names, not verified addresses or coordinates. */
+/* Use a verified point if present, otherwise let Maps resolve the company name and city. */
 function companyMapsUrl(company) {
   const url = new URL("https://www.google.com/maps/dir/");
   url.searchParams.set("api", "1");
   // Omit origin: Google Maps uses the device location when available.
-  url.searchParams.set("destination", [company.company_name, company.city, "Morocco"]
+  url.searchParams.set("destination", company.coordinates?.join(",") || [company.company_name, company.city, "Morocco"]
     .map((part) => (part || "").trim()).filter(Boolean).join(", "));
   return url.href;
 }
@@ -698,6 +698,21 @@ function detailHtml(c) {
         <div class="company-location-actions">${companyMapsLink(c)}
           <p class="muted">${window.techmapLanguage.t("Google Maps uses your current location when available. Confirm the company match before you go.")}</p>
         </div>
+        <div class="company-location-preview">
+          <div class="location-map-toolbar">
+            <button class="mini-btn location-load" type="button">${window.techmapLanguage.t("Load map preview")}</button>
+            <label hidden>${window.techmapLanguage.t("Map layers")}
+              <select class="location-layer">
+                <option value="roadmap">${window.techmapLanguage.t("Street map")}</option>
+                <option value="satellite">${window.techmapLanguage.t("Satellite")}</option>
+                <option value="hybrid">${window.techmapLanguage.t("Hybrid")}</option>
+                <option value="traffic">${window.techmapLanguage.t("Traffic")}</option>
+              </select>
+            </label>
+            <p class="muted location-map-status" role="status"></p>
+          </div>
+          <div class="location-frame" hidden></div>
+        </div>
         <h4>Links</h4>
         ${linkRow("Website", c.website, "Visit")}
         ${linkRow("Careers page", c.careers_url, "Open")}
@@ -723,6 +738,7 @@ function openDetail(company, cardEl) {
   const box = $(".detail-box", overlay);
 
   $("#detailContent").innerHTML = detailHtml(company);
+  window.initCompanyLocation?.(company, $("#detailContent"));
   window.addCompanyNotes?.(company);
   overlay.classList.remove("hidden");
   document.body.classList.add("no-scroll");
@@ -761,6 +777,7 @@ function closeDetail() {
 
   const finish = () => {
     overlay.classList.add("hidden");
+    $("#detailContent").replaceChildren();
     document.body.classList.remove("no-scroll");
     $(".detail-box", overlay).style.transform = "";
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });

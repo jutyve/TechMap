@@ -4,6 +4,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Query
 
+from ...services.config import GOOGLE_MAPS_BROWSER_KEY
 from ...services.data import (
     compute_stats,
     filter_companies,
@@ -50,6 +51,23 @@ def get_companies(
         "total": int(len(df)),
         "items": [public_company(row) for row in page.to_dict(orient="records")],
     }
+
+
+@router.get("/maps/config")
+def get_map_config():
+    # This is a browser key, restricted by HTTP referrer and API in Google Cloud.
+    return {"googleMapsBrowserKey": GOOGLE_MAPS_BROWSER_KEY}
+
+
+@router.get("/companies/map")
+def get_company_map():
+    """A lightweight, unpaginated view of city clusters and verified company coordinates."""
+    rows = load_data().sort_values(by=["_name", "_id"])
+    return {"items": [
+        {"id": int(row["_id"]), "company_name": row["company_name"],
+         "city": row["city"], "specialties": row["_specs"], "coordinates": row["_coordinates"]}
+        for row in rows[["_id", "company_name", "city", "_specs", "_coordinates"]].to_dict(orient="records")
+    ]}
 
 
 @router.get("/companies/by-ids")

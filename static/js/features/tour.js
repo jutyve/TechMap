@@ -4,6 +4,7 @@
   const steps = [
     ['.nav-tab[data-tab="companies"]', 'Find your next team', 'Start here to browse Morocco’s tech companies. Open a company to see what it does, find contact details, or save it to your shortlist.'],
     ['#searchInput', 'Narrow the directory', 'Search by company name, skill, or keyword. Use the filters nearby to narrow by city, specialty, or contact availability.'],
+    ['.nav-tab[data-tab="company-map"]', 'Explore the company map', 'Browse company pins by city across Morocco.'],
     ['.nav-tab[data-tab="dashboard"]', 'Get the big picture', 'Explore the ecosystem by city and specialty to see where different kinds of tech work are concentrated.'],
     ['.nav-tab[data-tab="analyzer"]', 'Review your résumé', 'Use the Resume Analyzer to get AI feedback on the experience and skills you’re presenting.'],
     ['.nav-tab[data-tab="resume"]', 'Build a résumé', 'Choose a template, preview your résumé, and print or save it as a PDF.'],

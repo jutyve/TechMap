@@ -34,7 +34,7 @@ Installing dependencies needs an internet connection. After installation, the di
 
 ## What's included
 
-- A light-only workspace with slate typography, violet accents, and motion that respects reduced-motion preferences.
+- A light-by-default workspace with optional dark mode, slate typography, violet accents, and motion that respects reduced-motion preferences.
 - Typography is self-hosted: **Fraunces** for display, **Inter** for the interface, and **IBM Plex Mono** for labels and figures (all SIL Open Font License, bundled in `static/assets/fonts/`). No webfont download is needed, so the app looks the same offline.
 - Searchable company directory with city/specialty/contact filters, sorting, grid/list views, favorites, comparison of up to three companies, and private company notes.
 - **Ecosystem insights** dashboard: company/website/email/phone totals plus top specialties, top cities, and how-to-apply breakdowns, all from the included dataset.
@@ -229,3 +229,19 @@ choose **Use account photo** to keep it in sync with your public portfolio,
 photo** to keep your account photo off the site. Each project can have its own
 cover. The editor accepts JPG, PNG, or WebP up to 10 MB and resizes them before
 saving. Changes to portfolio-specific photos go live only when you publish.
+
+### Verify office coordinates and enable map layers
+
+The Company map uses OpenStreetMap street tiles and supports panning and
+street-level zoom. The original `morocco_tech_companies_clean.csv` remains the
+only directory source. If you later verify office locations, you can add a
+`coordonates` column with decimal **latitude, longitude** to that file. Only
+verified positions should go there. Unverified companies remain in the city
+directory and do not get office pins. Keep the row order to preserve company IDs.
+
+The company profile’s **Load map preview** button loads an OpenStreetMap street
+preview by default. To enable Street, Satellite, Hybrid, and Traffic layers
+from Google, enable the **Maps JavaScript API** (with billing) in Google Cloud,
+restrict a browser key to that API and your site’s HTTP referrers, and set
+`GOOGLE_MAPS_BROWSER_KEY` in the environment before starting TechMap. The map
+is not loaded from a third party until a visitor asks to preview it.
