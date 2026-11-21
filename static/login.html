@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<script src="js/core/locales.js?v=1"></script>
+<script src="js/core/locales.js?v=4"></script>
 <script src="js/core/language.js?v=1"></script>
+<script src="js/core/appearance.js?v=1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sign in — TechMap Maroc</title>
 <meta name="description" content="Sign in to TechMap Maroc to save your favorite companies, notes and resume to your account." />
@@ -13,6 +14,7 @@
 <link rel="stylesheet" href="css/base.css?v=18" />
 <link rel="stylesheet" href="css/auth.css?v=19" />
 <link rel="stylesheet" href="css/language.css?v=1" />
+<link rel="stylesheet" href="css/appearance.css?v=1" />
 </head>
 <body class="auth-page">
 
@@ -31,7 +33,7 @@
   </aside>
 
   <main class="auth-main">
-    <label class="language-control"><span class="language-label">Language</span><select id="languagePreference" aria-label="Language" data-language-names><option value="en" lang="en">English</option><option value="fr" lang="fr">Français</option><option value="ar" lang="ar">العربية</option></select></label>
+    <div class="auth-preferences"><label class="language-control"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><select id="languagePreference" aria-label="Language" data-language-names><option value="en" lang="en">English</option><option value="fr" lang="fr">Français</option><option value="ar" lang="ar">العربية</option></select></label><button type="button" id="themeToggle" class="appearance-toggle" aria-label="Dark mode" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path class="theme-moon" d="M20.6 15.7A8.7 8.7 0 0 1 8.3 3.4a8.7 8.7 0 1 0 12.3 12.3Z"/><g class="theme-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></g></svg></button></div>
     <a id="authBack" class="auth-back" href="/">← Back to the workspace</a>
 
     <div id="authAlert" class="auth-alert hidden" role="alert"></div>
@@ -191,5 +193,6 @@
 <script src="js/features/photos.js?v=1"></script>
 <script src="js/features/auth-page.js?v=19"></script>
 <script src="js/features/language-ui.js?v=1"></script>
+<script src="js/features/appearance-ui.js?v=1"></script>
 </body>
 </html>

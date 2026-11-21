@@ -34,6 +34,12 @@
       },
     ],
     [
+      "Company map",
+      "Browse company pins by city across Morocco.",
+      ACTION_ICONS.discover,
+      () => nav("company-map"),
+    ],
+    [
       "Ecosystem insights",
       "Get to know the directory",
       ACTION_ICONS.insights,

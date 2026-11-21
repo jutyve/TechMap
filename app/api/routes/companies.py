@@ -52,6 +52,17 @@ def get_companies(
     }
 
 
+@router.get("/companies/map")
+def get_company_map():
+    """A lightweight, unpaginated view for city clusters (not street locations)."""
+    rows = load_data().sort_values(by=["_name", "_id"])
+    return {"items": [
+        {"id": int(row["_id"]), "company_name": row["company_name"],
+         "city": row["city"], "specialties": row["_specs"]}
+        for row in rows[["_id", "company_name", "city", "_specs"]].to_dict(orient="records")
+    ]}
+
+
 @router.get("/companies/by-ids")
 def get_companies_by_ids(ids: str = ""):
     wanted_ids = {int(i) for i in ids.split(",") if i.strip().isdigit()}

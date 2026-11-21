@@ -296,7 +296,7 @@ function initTabs() {
       if (p.id === target) {
         p.classList.add("active");
         if (canAnimate()) {
-          anime({ targets: p, opacity: [0, 1], translateY: [20, 0], duration: 500, easing: "easeOutQuad" });
+          anime({ targets: p, opacity: [0, 1], translateY: [20, 0], duration: 420, easing: "easeInOutQuad" });
         }
         if (target === "dashboard") loadStats();
       } else {

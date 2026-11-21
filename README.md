@@ -34,7 +34,7 @@ Installing dependencies needs an internet connection. After installation, the di
 
 ## What's included
 
-- A light-only workspace with slate typography, violet accents, and motion that respects reduced-motion preferences.
+- A light-by-default workspace with optional dark mode, slate typography, violet accents, and motion that respects reduced-motion preferences.
 - Typography is self-hosted: **Fraunces** for display, **Inter** for the interface, and **IBM Plex Mono** for labels and figures (all SIL Open Font License, bundled in `static/assets/fonts/`). No webfont download is needed, so the app looks the same offline.
 - Searchable company directory with city/specialty/contact filters, sorting, grid/list views, favorites, comparison of up to three companies, and private company notes.
 - **Ecosystem insights** dashboard: company/website/email/phone totals plus top specialties, top cities, and how-to-apply breakdowns, all from the included dataset.

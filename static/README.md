@@ -20,7 +20,7 @@ static/
 │       └── mark.svg        Brand mark (favicon, nav brand, hero art)
 ├── css/                    Loaded in cascade order — see below
 │   ├── base.css            @font-face declarations and the design tokens
-│   │                       (light only),
+│   │                       (light by default, optional dark mode),
 │   │                       reset, typography, shared components
 │   ├── workspace.css       Shell: sidebar, header, hero, directory, insights,
 │   │                       responsive rules (overrides base)
@@ -86,3 +86,16 @@ remembers the language in this browser. `js/core/language.js` sets `lang` and
 strings built in JavaScript and keep company data, authored content, and form
 values separate from translated labels. Public portfolio text uses its own
 writing direction rather than the visitor’s workspace preference.
+
+## Company map and appearance
+
+The Company map loads the full, lightweight directory from `/api/companies/map`.
+`company-map.js` pairs cities with approximate city centers; individual pins in
+the city panel are schematic, not office coordinates. The local outline in
+`assets/maps/morocco.svg` uses public-domain Natural Earth 1:50m geometry from
+World Atlas. No map service or visitor geolocation is needed to browse the
+atlas. Directions open separately in Google Maps.
+
+`js/core/appearance.js` applies the saved appearance before paint. Light mode
+is the default; the workspace and sign-in page share the optional dark theme.
+Published portfolios and résumé documents retain their own designs.
