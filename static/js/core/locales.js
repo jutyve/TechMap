@@ -394,4 +394,8 @@ window.techmapLocales = {
   "Modular and colorful": ["Modulaire et coloré", "وحدات ملوّنة"],
   "Split layout": ["Mise en page divisée", "تخطيط مقسوم"],
   "High-contrast typography": ["Typographie contrastée", "خطوط عالية التباين"],
+  "Directions": ["Itinéraire", "الاتجاهات"],
+  "Get directions in Google Maps": ["Itinéraire dans Google Maps", "الاتجاهات في خرائط Google"],
+  "Get directions to": ["Obtenir l’itinéraire vers", "احصل على الاتجاهات إلى"],
+  "Google Maps uses your current location when available. Confirm the company match before you go.": ["Google Maps utilise votre position actuelle si elle est disponible. Vérifiez l’entreprise proposée avant de partir.", "تستخدم خرائط Google موقعك الحالي عند توفره. تحقّق من مطابقة الشركة قبل الانطلاق."],
 };

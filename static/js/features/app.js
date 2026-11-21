@@ -488,6 +488,25 @@ function renderCompanies(items, reset) {
   }
 }
 
+/* The directory has city names, not verified addresses or coordinates. */
+function companyMapsUrl(company) {
+  const url = new URL("https://www.google.com/maps/dir/");
+  url.searchParams.set("api", "1");
+  // Omit origin: Google Maps uses the device location when available.
+  url.searchParams.set("destination", [company.company_name, company.city, "Morocco"]
+    .map((part) => (part || "").trim()).filter(Boolean).join(", "));
+  return url.href;
+}
+
+function companyMapsLink(company, compact = false) {
+  const { t } = window.techmapLanguage;
+  return `<a class="company-map-link${compact ? " compact" : " mini-btn"}"
+    href="${escapeHtml(companyMapsUrl(company))}" target="_blank" rel="noopener noreferrer"
+    aria-label="${escapeHtml(`${t("Get directions to")} ${company.company_name}`)}">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+    ${t(compact ? "Directions" : "Get directions in Google Maps")} <span aria-hidden="true">↗</span></a>`;
+}
+
 function createCard(c) {
   const { t } = window.techmapLanguage;
   const card = document.createElement("article");
@@ -511,7 +530,7 @@ function createCard(c) {
       </div>
     </div>
     <h3 class="company-name" dir="auto">${escapeHtml(c.company_name)}</h3>
-    <div class="company-city"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")}</div>
+    <div class="company-city"><svg class="location-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg> ${escapeHtml(c.city || "Morocco")} ${companyMapsLink(c, true)}</div>
     <div class="specialty-tags">
       ${shown.map((s) => `<span class="tag">${escapeHtml(s)}</span>`).join("")}
       ${extra > 0 ? `<span class="tag tag-more">+${extra}</span>` : ""}
@@ -529,6 +548,7 @@ function createCard(c) {
   `;
 
   card.addEventListener("click", (e) => {
+    if (e.target.closest(".company-map-link")) return;
     if (e.target.closest(".compare-pick")) { window.toggleCompare?.(c); return; }
     const favBtn = e.target.closest(".fav-btn");
     if (favBtn) {
@@ -674,6 +694,10 @@ function detailHtml(c) {
       </section>
 
       <section class="detail-section wide">
+        <h4>${window.techmapLanguage.t("Location")}</h4>
+        <div class="company-location-actions">${companyMapsLink(c)}
+          <p class="muted">${window.techmapLanguage.t("Google Maps uses your current location when available. Confirm the company match before you go.")}</p>
+        </div>
         <h4>Links</h4>
         ${linkRow("Website", c.website, "Visit")}
         ${linkRow("Careers page", c.careers_url, "Open")}

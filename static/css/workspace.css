@@ -1754,3 +1754,12 @@ body.has-comparison .main-content {
     height: 28px;
   }
 }
+
+.company-city { flex-wrap: wrap; }
+.company-map-link { display: inline-flex; align-items: center; justify-content: center; gap: 5px; text-decoration: none; }
+.company-map-link svg { width: 15px; height: 15px; flex: none; }
+.company-map-link.compact { white-space: nowrap; padding: 3px 7px; border-radius: var(--radius-pill); background: var(--brand-soft); color: var(--brand-text); font-size: 11px; font-weight: 650; }
+.company-map-link.compact:hover { background: var(--brand-line); text-decoration: underline; }
+.company-map-link.compact svg { display: none; }
+.company-location-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 9px 12px; margin-block: 8px 16px; }
+.company-location-actions p { flex: 1 1 13rem; font-size: 12px; }
