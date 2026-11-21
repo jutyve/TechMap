@@ -1,0 +1,189 @@
+/* Roadmaps tab — clean, connected vertical roadmap. Every step sits on a
+   single spine so the path is visibly continuous. Reuses the site tokens. */
+
+.roadmap-toolbar { margin: 22px 0 14px; }
+
+.roadmap-summary {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-1);
+  margin-bottom: 22px;
+}
+.roadmap-summary-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.roadmap-summary-head h2 { font-size: 21px; letter-spacing: -0.01em; margin: 0 0 4px; color: var(--ink); }
+.roadmap-summary-head p { margin: 0; color: var(--ink-3); font-size: 14px; max-width: 62ch; line-height: 1.5; }
+
+.roadmap-progress { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+.progress-track {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--brand), #7b6cf0);
+  transition: width 0.5s var(--ease);
+}
+.progress-label { font-size: 13px; color: var(--ink-3); font-weight: 600; white-space: nowrap; }
+
+/* ---- Vertical connected roadmap ---- */
+.rm-roadmap { position: relative; padding: 4px 0 8px; }
+/* the single continuous spine */
+.rm-roadmap::before {
+  content: "";
+  position: absolute;
+  left: 19px;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--line-2);
+}
+
+.rm-phase { position: relative; }
+.rm-phase-head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 22px 0 6px;
+  padding-left: 56px;
+}
+.rm-phase-num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--phase, var(--brand-soft));
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.rm-phase-head h3 { margin: 0; font-size: 16px; color: var(--ink); letter-spacing: -0.01em; }
+
+.rm-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 10px 0;
+}
+.rm-check {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--phase, var(--brand));
+  box-shadow: 0 4px 10px rgba(20, 20, 40, 0.12);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.12s var(--ease), border-color 0.2s var(--ease);
+}
+.rm-check:hover { transform: translateY(-2px); }
+.rm-check:active { transform: scale(0.92); }
+.rm-check::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 2px var(--phase, var(--brand));
+}
+.rm-check::after {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border-radius: 50%;
+  background: var(--phase, var(--brand));
+}
+
+.rm-step.done .rm-check { border-color: var(--ok); }
+.rm-step.done .rm-check::before { box-shadow: inset 0 0 0 2px var(--ok); }
+.rm-step.done .rm-check::after {
+  content: "✓";
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+}
+.rm-step.done .rm-card { border-color: var(--ok-soft); background: var(--ok-soft); }
+.rm-step.done .rm-card h4 { color: var(--ink-3); }
+
+.rm-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 15px;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.rm-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-1); }
+.rm-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.rm-card-top h4 { margin: 0; font-size: 15px; color: var(--ink); letter-spacing: -0.005em; }
+.rm-card p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-3); }
+
+.rm-type {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+.rm-type--course   { background: var(--indigo-soft); color: var(--indigo); }
+.rm-type--cert     { background: var(--brand-soft); color: var(--brand-text); }
+.rm-type--project  { background: #eaf1e7; color: var(--sage); }
+.rm-type--practice { background: var(--gold-soft); color: var(--gold-ink); }
+.rm-type--read     { background: var(--surface-3); color: var(--ink-3); }
+
+.rm-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  color: var(--brand-text);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s var(--ease), transform 0.18s var(--ease);
+}
+.rm-action:hover { background: var(--brand-soft); transform: translateY(-1px); }
+
+@media (max-width: 560px) {
+  .rm-phase-head { padding-left: 50px; }
+  .rm-step { grid-template-columns: 34px 1fr; gap: 12px; }
+  .rm-roadmap::before { left: 16px; }
+  .rm-check { width: 34px; height: 34px; }
+}
