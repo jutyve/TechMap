@@ -309,20 +309,23 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const stepId = (rm, pi, si) => `${rm.id}-${pi}-${si}`;
 
-  function stepNode(rm, pi, si, step) {
+  function stepCard(rm, pi, si, step) {
     const sid = stepId(rm, pi, si);
     const done = isDone(rm.id, sid);
-    const play = !!(step.link || step.tab);
+    const t = TYPE_META[step.type] || TYPE_META.read;
     let action = "";
     if (step.tab) {
-      action = `<button type="button" class="qm-action" data-tablink="${escapeHtml(step.tab)}">Open ${escapeHtml(step.tabLabel || step.tab)} <span aria-hidden="true">↗</span></button>`;
+      action = `<button type="button" class="rm-action" data-tablink="${escapeHtml(step.tab)}">Open ${escapeHtml(step.tabLabel || step.tab)} <span aria-hidden="true">↗</span></button>`;
     } else if (step.link) {
-      action = `<a class="qm-action" href="${escapeHtml(step.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(step.linkLabel || "Open resource")} <span aria-hidden="true">↗</span></a>`;
+      action = `<a class="rm-action" href="${escapeHtml(step.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(step.linkLabel || "Open resource")} <span aria-hidden="true">↗</span></a>`;
     }
-    return `<div class="qm-node${done ? " done" : ""}${play ? " qm-node--play" : ""}" data-id="${escapeHtml(sid)}" title="${escapeHtml(step.title)}">
-      <button type="button" class="qm-check" aria-pressed="${done}" aria-label="Mark '${escapeHtml(step.title)}' as done"></button>
-      <span class="qm-node-label">${escapeHtml(step.title)}</span>
-      ${action ? `<span class="qm-node-meta">${action}</span>` : ""}
+    return `<div class="rm-step${done ? " done" : ""}" data-id="${escapeHtml(sid)}">
+      <button type="button" class="rm-check" aria-pressed="${done}" aria-label="Mark '${escapeHtml(step.title)}' as done"></button>
+      <div class="rm-card">
+        <div class="rm-card-top"><h4>${escapeHtml(step.title)}</h4><span class="rm-type rm-type--${t.cls}">${escapeHtml(t.label)}</span></div>
+        <p>${escapeHtml(step.desc)}</p>
+        ${action}
+      </div>
     </div>`;
   }
 
@@ -345,26 +348,22 @@
     $("#roadmapBlurb").textContent = rm.blurb;
 
     const phases = $("#roadmapPhases");
-    phases.classList.add("qm-map");
+    phases.classList.add("rm-roadmap");
     phases.innerHTML = rm.phases.map((ph, pi) => {
       const color = PHASE_COLORS[pi % PHASE_COLORS.length];
-      const nodes = ph.steps.map((s, si) => stepNode(rm, pi, si, s)).join("");
-      return `<div class="qm-phase" style="--phase:${color}">
-        <div class="qm-trunk">
-          <div class="qm-mission"><span class="qm-mission-icon">${ARROW_SVG}</span></div>
-          <span class="qm-mission-label">${escapeHtml(ph.name)}</span>
-          <div class="qm-trunk-line"></div>
-        </div>
-        <div class="qm-branch"><div class="qm-nodes"><div class="qm-nodes-inner"><span class="qm-path"></span>${nodes}</div></div></div>
+      const steps = ph.steps.map((s, si) => stepCard(rm, pi, si, s)).join("");
+      return `<div class="rm-phase" style="--phase:${color}">
+        <div class="rm-phase-head"><span class="rm-phase-num">${pi + 1}</span><h3>${escapeHtml(ph.name)}</h3></div>
+        ${steps}
       </div>`;
     }).join("");
 
     updateProgress(rm);
 
-    const nodes = $$(".qm-node", phases);
-    if (window.canAnimate && window.canAnimate() && nodes.length) {
-      nodes.forEach((el) => (el.style.opacity = "0"));
-      anime({ targets: nodes, opacity: [0, 1], translateY: [14, 0], scale: [0.96, 1], delay: anime.stagger(20), duration: 420, easing: "easeOutQuad" });
+    const steps = $$(".rm-step", phases);
+    if (window.canAnimate && window.canAnimate() && steps.length) {
+      steps.forEach((el) => (el.style.opacity = "0"));
+      anime({ targets: steps, opacity: [0, 1], translateY: [12, 0], delay: anime.stagger(18), duration: 420, easing: "easeOutQuad" });
     }
   }
 
@@ -375,9 +374,9 @@
       if (target) target.click();
       return;
     }
-    const check = e.target.closest(".qm-check");
+    const check = e.target.closest(".rm-check");
     if (!check) return;
-    const step = check.closest(".qm-node");
+    const step = check.closest(".rm-step");
     const sid = step.dataset.id;
     toggleStep(activeId, sid);
     const done = isDone(activeId, sid);
