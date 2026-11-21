@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<script src="js/core/locales.js?v=4"></script>
+<script src="js/core/locales.js?v=5"></script>
 <script src="js/core/language.js?v=1"></script>
 <script src="js/core/appearance.js?v=1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="css/tour.css?v=1" />
 <link rel="stylesheet" href="css/language.css?v=1" />
 <link rel="stylesheet" href="css/appearance.css?v=1" />
-<link rel="stylesheet" href="css/company-map.css?v=1" />
+<link rel="stylesheet" href="css/company-map.css?v=2" />
 </head>
 <body>
 
@@ -393,7 +393,7 @@
           <div class="atlas-plane" id="atlasPlane">
             <img src="assets/maps/morocco.svg" alt="" width="660" height="640" />
             <span class="atlas-ocean" aria-hidden="true">Atlantic Ocean</span>
-            <div id="atlasMarkers"></div>
+            <div id="atlasMarkers"></div><div id="atlasExactMarkers"></div>
           </div>
         </div>
         <p class="atlas-attribution"><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a></p>
@@ -407,6 +407,7 @@
           <div class="atlas-insight" id="atlasInsight">
             <p class="eyebrow">Company insight</p>
             <h2 id="atlasCompanyName" dir="auto"></h2>
+            <p id="atlasPrecision" class="atlas-pin-caption"></p>
             <div id="atlasSpecialties" class="specialty-tags"></div>
             <a id="atlasDirections" class="mini-btn" target="_blank" rel="noopener noreferrer">Get directions in Google Maps ↗</a>
           </div>
@@ -415,7 +416,7 @@
           <p class="atlas-pin-caption">Company pins · schematic city view</p>
           <div class="atlas-pin-grid" id="atlasPins" role="group" aria-label="Company pins"></div>
         </div>
-        <p class="atlas-note">City locations are approximate. Company pins are grouped by city, not verified street addresses.</p>
+        <p class="atlas-note">Office pins use verified coordinates when available. Other companies are grouped by approximate city location.</p>
       </aside>
     </div>
   </section>
@@ -539,7 +540,7 @@
 
 
 
-<script src="js/features/app.js?v=23"></script>
+<script src="js/features/app.js?v=24"></script>
 <script src="js/features/photos.js?v=1"></script>
 <script src="js/features/auth.js?v=19"></script>
 <script src="js/features/workspace.js?v=19"></script>
@@ -548,7 +549,9 @@
 <script src="js/features/portfolio.js?v=3"></script>
 <script src="js/features/tour.js?v=3"></script>
 <script src="js/features/language-ui.js?v=1"></script>
-<script src="js/features/company-map.js?v=1"></script>
+<script src="js/core/map-locations.js?v=1"></script>
+<script src="js/features/company-location.js?v=1"></script>
+<script src="js/features/company-map.js?v=2"></script>
 <script src="js/features/appearance-ui.js?v=1"></script>
 </body>
 </html>

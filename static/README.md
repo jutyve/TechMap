@@ -90,8 +90,8 @@ writing direction rather than the visitor’s workspace preference.
 ## Company map and appearance
 
 The Company map loads the full, lightweight directory from `/api/companies/map`.
-`company-map.js` pairs cities with approximate city centers; individual pins in
-the city panel are schematic, not office coordinates. The local outline in
+`company-map.js` plots verified office coordinates when present. Other companies
+are grouped at approximate city centers, with a schematic city panel. The local outline in
 `assets/maps/morocco.svg` uses public-domain Natural Earth 1:50m geometry from
 World Atlas. No map service or visitor geolocation is needed to browse the
 atlas. Directions open separately in Google Maps.

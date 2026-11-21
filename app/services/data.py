@@ -6,7 +6,7 @@ from typing import Optional
 
 import pandas as pd
 
-from .config import COLUMNS, CSV_PATH
+from .config import COLUMNS, COORDINATES_CSV_PATH, CSV_PATH
 
 _cache = {"mtime": None, "df": None}
 
@@ -61,6 +61,16 @@ def safe_url(value) -> str:
     return value if value.lower().startswith(("http://", "https://")) else ""
 
 
+def parse_coordinates(value) -> list[float] | None:
+    """Read decimal latitude, longitude; never turn a missing value into a pin."""
+    try:
+        lat, lon = [float(part) for part in str(value).split(",")]
+    except (TypeError, ValueError):
+        return None
+    # Bounds also cover current directory entries near the southern extent.
+    return [lat, lon] if 20.5 <= lat <= 36.5 and -18.5 <= lon <= -0.5 else None
+
+
 def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     for col in COLUMNS:
         if col not in df.columns:
@@ -77,6 +87,7 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
         for key, raw in zip(df["_city_key"], df["city"])
     ]
 
+    df["_coordinates"] = df.get("coordonates", pd.Series("", index=df.index)).apply(parse_coordinates)
     df["_id"] = range(len(df))
     df["_name"] = df["company_name"].str.lower()
     df["_specs"] = df["specialties"].apply(split_specialties)
@@ -108,18 +119,19 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_data() -> pd.DataFrame:
-    if not os.path.exists(CSV_PATH):
+    path = COORDINATES_CSV_PATH if os.path.isfile(COORDINATES_CSV_PATH) else CSV_PATH
+    if not os.path.exists(path):
         if _cache["df"] is None or _cache["mtime"] != "missing":
-            print(f"WARNING: {CSV_PATH} not found - the app will show no companies.")
+            print(f"WARNING: {path} not found - the app will show no companies.")
             df = _prepare(pd.DataFrame(columns=COLUMNS))
             _cache.update(mtime="missing", df=df)
         return _cache["df"]
 
-    mtime = os.path.getmtime(CSV_PATH)
+    mtime = (path, os.path.getmtime(path))
 
     if _cache["mtime"] != mtime:
         df = pd.read_csv(
-            CSV_PATH,
+            path,
             dtype=str,
             encoding="utf-8-sig",
         ).fillna("")
@@ -141,6 +153,7 @@ def public_company(row: dict) -> dict:
         "id": int(row["_id"]),
         "company_name": row["company_name"],
         "city": row["city"],
+        "coordinates": row["_coordinates"],
         "specialties": row["_specs"],
         "description": row["description"],
         "website": safe_url(row["website"]),

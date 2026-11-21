@@ -229,3 +229,25 @@ choose **Use account photo** to keep it in sync with your public portfolio,
 photo** to keep your account photo off the site. Each project can have its own
 cover. The editor accepts JPG, PNG, or WebP up to 10 MB and resizes them before
 saving. Changes to portfolio-specific photos go live only when you publish.
+
+### Verify office coordinates and enable map layers
+
+The app prefers `database/data/morocco_tech_companies_coordinates.csv` when it
+exists. The original `morocco_tech_companies_clean.csv` is unchanged. In the
+copy, enter decimal **latitude, longitude** in the `coordonates` column (for
+example `"33.5731, -7.5898"` in raw CSV), only after confirming the Maps listing
+matches the company and city. Leave unresolved cells as `introuvable`. Do not
+reorder the directory rows: their order determines existing company IDs.
+
+Run `python -m scripts.coordinate_review` to report progress toward 70%, or
+`python -m scripts.coordinate_review --queue /tmp/maps-review.csv` to create a
+separate review sheet with Google Maps search links. Filled positions show as
+individual office pins in the selected city and are used for directions.
+Unresolved companies still appear in city groups and use name/city directions.
+
+The company profile’s **Load map preview** button loads an OpenStreetMap street
+preview by default. To enable Street, Satellite, Hybrid, and Traffic layers
+from Google, enable the **Maps JavaScript API** (with billing) in Google Cloud,
+restrict a browser key to that API and your site’s HTTP referrers, and set
+`GOOGLE_MAPS_BROWSER_KEY` in the environment before starting TechMap. The map
+is not loaded from a third party until a visitor asks to preview it.

@@ -45,3 +45,15 @@
 @media (max-width: 450px) { .atlas-marker { min-width: 14px; min-height: 14px; padding: 0 2px; font-size: 8px; } .atlas-map-toolbar { padding: 6px; } .atlas-zoom button { width: 24px; height: 24px; } }
 /* Keep the pin grid still while hovering companies with different-length names. */
 .atlas-insight { block-size: 164px; align-content: start; overflow: auto; }
+.company-location-preview { display: grid; gap: 9px; margin-block: 8px 18px; }
+.location-map-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.location-map-toolbar label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; }
+.location-map-toolbar [hidden],.location-frame[hidden] { display: none; }
+.location-map-toolbar select { width: auto; }
+.location-map-status { font-size: 12px; }
+.location-frame { height: 228px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface-2); }
+.location-frame iframe,.location-google-canvas { display: block; width: 100%; height: 100%; border: 0; }
+.atlas-office-marker { z-index: 1; background: var(--ok); color: var(--surface); min-width: 17px; min-height: 17px; padding: 1px; }
+.atlas-office-marker:is(:hover,:focus-visible) { z-index: 3; }
+.atlas-office-marker svg { width: 12px; height: 12px; }
+.atlas-company-pin.has-verified-pin svg { color: var(--ok); }
