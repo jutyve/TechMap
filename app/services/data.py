@@ -154,6 +154,7 @@ def public_company(row: dict) -> dict:
         "company_name": row["company_name"],
         "city": row["city"],
         "coordinates": row["_coordinates"],
+        "street_address": row.get("street_address", ""),
         "specialties": row["_specs"],
         "description": row["description"],
         "website": safe_url(row["website"]),

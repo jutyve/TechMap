@@ -65,8 +65,8 @@ def get_company_map():
     rows = load_data().sort_values(by=["_name", "_id"])
     return {"items": [
         {"id": int(row["_id"]), "company_name": row["company_name"],
-         "city": row["city"], "specialties": row["_specs"], "coordinates": row["_coordinates"]}
-        for row in rows[["_id", "company_name", "city", "_specs", "_coordinates"]].to_dict(orient="records")
+         "city": row["city"], "specialties": row["_specs"], "coordinates": row["_coordinates"], "street_address": row["street_address"]}
+        for row in rows.reindex(columns=["_id", "company_name", "city", "_specs", "_coordinates", "street_address"], fill_value="").to_dict(orient="records")
     ]}
 
 

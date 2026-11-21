@@ -245,3 +245,40 @@ from Google, enable the **Maps JavaScript API** (with billing) in Google Cloud,
 restrict a browser key to that API and your site’s HTTP referrers, and set
 `GOOGLE_MAPS_BROWSER_KEY` in the environment before starting TechMap. The map
 is not loaded from a third party until a visitor asks to preview it.
+
+### Turn company addresses into office pins
+
+Run these from a checkout containing `database/data/output.csv` (the address
+file on `main`). Its `idk` column contains the supplied street addresses.
+
+```bash
+python scripts/geocode_companies.py prepare --review /tmp/techmap-review.csv
+# Set GEOAPIFY_API_KEY in your environment first. Run on a machine that can reach api.geoapify.com.
+python scripts/geocode_companies.py geocode --review /tmp/techmap-review.csv --limit 25
+```
+
+Repeat `geocode` to resume pending lookups. Start with a small batch to check
+quality and provider quota. Check your Geoapify plan’s storage, usage, and
+attribution terms before publishing the results. The tool flags city mismatches,
+non-building matches, low confidence, and multiple address parts. Nothing is
+approved automatically. The review sheet also contains Google Maps links for
+manual lookup, including companies without an address.
+
+In the review sheet, confirm the company and office, correct the coordinates
+if needed, and set `approved=yes` for at most one row per company. Then run:
+
+```bash
+python scripts/geocode_companies.py apply --review /tmp/techmap-review.csv \
+  --output /tmp/techmap-directory-with-coordinates.csv
+```
+
+Inspect the result and replace `database/data/morocco_tech_companies_clean.csv`
+with it when ready. The merge preserves existing row order and fields, and only
+writes approved coordinates into the `coordonates` column. TechMap already reads
+that column for office pins and precise directions. Keep the temporary review
+and output files out of Git; never commit a provider API key.
+
+The canonical CSV records pin provenance in `coordinate_source`. Coordinates
+linked to OpenStreetMap nodes are © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright)
+and are available under the ODbL. `introuvable` means there is no confirmed pin
+in the directory yet, not that the company has no office.

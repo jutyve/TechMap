@@ -493,7 +493,7 @@ function companyMapsUrl(company) {
   const url = new URL("https://www.google.com/maps/dir/");
   url.searchParams.set("api", "1");
   // Omit origin: Google Maps uses the device location when available.
-  url.searchParams.set("destination", company.coordinates?.join(",") || [company.company_name, company.city, "Morocco"]
+  url.searchParams.set("destination", company.coordinates?.join(",") || [company.company_name, (/ \/ |⚠/.test(company.street_address || "")) ? "" : company.street_address, company.city, "Morocco"]
     .map((part) => (part || "").trim()).filter(Boolean).join(", "));
   return url.href;
 }
