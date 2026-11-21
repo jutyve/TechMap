@@ -299,6 +299,7 @@ function initTabs() {
           anime({ targets: p, opacity: [0, 1], translateY: [20, 0], duration: 420, easing: "easeInOutQuad" });
         }
         if (target === "dashboard") loadStats();
+        if (target === "certificates") window.loadCertificates?.();
       } else {
         p.classList.remove("active");
       }
