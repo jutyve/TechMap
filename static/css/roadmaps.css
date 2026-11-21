@@ -46,10 +46,9 @@
   border: 1px solid var(--line);
   background-color: var(--surface);
   background-image:
-    linear-gradient(45deg, var(--surface-3) 25%, transparent 25%, transparent 75%, var(--surface-3) 75%),
-    linear-gradient(45deg, var(--surface-3) 25%, transparent 25%, transparent 75%, var(--surface-3) 75%);
-  background-size: 34px 34px;
-  background-position: 0 0, 17px 17px;
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 30px 30px;
   padding: 26px 22px 30px;
   overflow: hidden;
 }
@@ -100,34 +99,55 @@
   background: linear-gradient(var(--phase), var(--line-2));
 }
 
-/* branch: horizontal path + circular checkpoints */
+/* branch: a real path line running through every checkpoint + the trunk stub */
 .qm-branch {
   position: relative;
-  padding: 30px 0 26px;
+  padding: 0;
 }
 .qm-branch::before {
   content: "";
   position: absolute;
   left: 0;
   top: 42px;
-  width: 46px;
+  width: 34px;
   height: 4px;
   border-radius: 4px;
   background: var(--phase);
+  z-index: 0;
 }
 .qm-nodes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 22px 26px;
-  padding-left: 46px;
+  overflow-x: auto;
+  padding: 16px 0 10px;
+}
+.qm-nodes-inner {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0 30px;
+  padding: 0 10px;
+  min-width: 100%;
+}
+/* the connecting path behind the circles */
+.qm-path {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--phase);
+  z-index: 0;
 }
 
 .qm-node {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  width: 96px;
+  width: 84px;
   text-align: center;
 }
 .qm-check {
@@ -216,12 +236,13 @@
 
 @media (max-width: 640px) {
   .qm-phase { grid-template-columns: 1fr; }
-  .qm-trunk { flex-direction: row; gap: 12px; align-items: center; margin-bottom: 10px; }
+  .qm-trunk { flex-direction: row; gap: 12px; align-items: center; margin-bottom: 6px; }
   .qm-mission { width: 60px; height: 60px; border-width: 3px; }
   .qm-mission-icon svg { width: 22px; height: 22px; }
   .qm-mission-label { margin-top: 0; text-align: left; max-width: none; }
   .qm-trunk-line { display: none; }
   .qm-branch { padding: 0; }
   .qm-branch::before { display: none; }
-  .qm-nodes { padding-left: 0; gap: 18px 20px; }
+  .qm-nodes { padding: 8px 0 10px; }
+  .qm-path { top: 26px; }
 }

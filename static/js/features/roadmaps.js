@@ -355,7 +355,7 @@
           <span class="qm-mission-label">${escapeHtml(ph.name)}</span>
           <div class="qm-trunk-line"></div>
         </div>
-        <div class="qm-branch"><div class="qm-nodes">${nodes}</div></div>
+        <div class="qm-branch"><div class="qm-nodes"><div class="qm-nodes-inner"><span class="qm-path"></span>${nodes}</div></div></div>
       </div>`;
     }).join("");
 
