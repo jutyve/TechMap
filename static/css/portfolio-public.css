@@ -1,12 +1,19 @@
 @font-face { font-family: Inter; src: url('/assets/fonts/inter-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
 @font-face { font-family: Fraunces; src: url('/assets/fonts/fraunces-latin-opsz-normal.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
 :root { color-scheme: light; }
+html { scroll-behavior: smooth; }
 *, *::before, *::after { box-sizing: border-box; }
 body {
   --bg: #f8f8f6; --paper: #fff; --ink: #192128; --muted: #505a61; --accent: #31564c;
   --wash: #e6efea; --edge: #d8dfdc; --hero: #edf3ef; --radius: 18px;
   --display: Inter, system-ui, sans-serif;
-  margin: 0; background: var(--bg); color: var(--ink);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --anim-dur: 0.72s;
+  --anim-y: 22px;
+  --anim-x: 0px;
+  --anim-scale: 0.985;
+  margin: 0; background: var(--bg); color: var(--ink); overflow-x: clip;
   font: 400 16px/1.65 Inter, system-ui, sans-serif; overflow-wrap: anywhere;
 }
 a { color: var(--accent); text-underline-offset: .22em; }
@@ -161,3 +168,328 @@ footer span { font-weight: 700; }
 @media (max-width: 485px) {
   .identity.has-portrait { flex-direction: column; gap: 12px; }
 }
+
+/* --- Pure-CSS Portfolio Animations (CSP-safe, script-free) --- */
+@keyframes pf-bar-in {
+  from { opacity: 0; transform: translate3d(0, -10px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes pf-surface-in {
+  from { opacity: 0; transform: translate3d(var(--anim-x), var(--anim-y), 0) scale(var(--anim-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes pf-rise {
+  from { opacity: 0; transform: translate3d(var(--anim-x), var(--anim-y), 0) scale(var(--anim-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes pf-heading-in {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes pf-portrait-in {
+  from { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.88); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes pf-art-in {
+  from { opacity: 0; transform: scale(0.84) rotate(-8deg); }
+  to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes pf-pill-in {
+  from { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.93); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes pf-orbit-spin {
+  from { transform: rotate(-28deg); }
+  to { transform: rotate(332deg); }
+}
+@keyframes pf-dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.38); opacity: .55; }
+}
+@keyframes pf-cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes pf-editorial-title {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); letter-spacing: -.01em; }
+  to { opacity: 1; transform: translate3d(0, 0, 0); letter-spacing: -.06em; }
+}
+@keyframes pf-monograph-snap {
+  from { opacity: 0; transform: translate3d(-10px, -10px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes pf-scroll-reveal {
+  from { opacity: 0; transform: translate3d(var(--anim-x), var(--anim-y), 0) scale(var(--anim-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Template-specific motion tuning */
+.minimal { --anim-dur: 0.66s; --anim-y: 16px; --anim-scale: 1; }
+.editorial { --anim-dur: 0.88s; --anim-y: 26px; --anim-scale: 1; }
+.terminal { --anim-dur: 0.48s; --anim-x: -14px; --anim-y: 4px; --anim-scale: 1; }
+.gallery { --anim-dur: 0.78s; --anim-y: 28px; --anim-scale: 0.96; }
+.executive { --anim-dur: 0.66s; --anim-x: -14px; --anim-y: 6px; --anim-scale: 1; }
+.bento { --ease-out: cubic-bezier(0.22, 1.18, 0.36, 1); --anim-dur: 0.7s; --anim-y: 24px; --anim-scale: 0.94; }
+.atlas { --anim-dur: 0.72s; --anim-y: 20px; --anim-scale: 0.99; }
+.monograph { --anim-dur: 0.54s; --anim-y: 16px; --anim-scale: 1; }
+
+/* Subtle motion preset */
+.site.motion-subtle {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --anim-dur: 0.45s;
+  --anim-y: 10px;
+  --anim-x: 0px;
+  --anim-scale: 1;
+}
+
+/* Choreographed entrance (active unless motion-none) */
+.site:not(.motion-none) .site-bar {
+  animation: pf-bar-in .56s var(--ease-out) .03s both;
+}
+.site:not(.motion-none) .identity {
+  animation: pf-surface-in var(--anim-dur) var(--ease-out) .07s both;
+}
+.site:not(.motion-none) .portfolio-portrait {
+  animation: pf-portrait-in .7s var(--ease-spring) .16s both;
+}
+.site:not(.motion-none) .identity .location {
+  animation: pf-rise .55s var(--ease-out) .16s both;
+}
+.site:not(.motion-none) .identity h1 {
+  animation: pf-rise var(--anim-dur) var(--ease-out) .23s both;
+}
+.site:not(.motion-none) .identity .headline {
+  animation: pf-rise var(--anim-dur) var(--ease-out) .32s both;
+}
+.site:not(.motion-none) .identity .bio {
+  animation: pf-rise var(--anim-dur) var(--ease-out) .4s both;
+}
+.site:not(.motion-none) .profile-links a {
+  animation: pf-pill-in .52s var(--ease-out) .46s both;
+}
+.site:not(.motion-none) .profile-links a:nth-child(2) { animation-delay: .52s; }
+.site:not(.motion-none) .profile-links a:nth-child(3) { animation-delay: .58s; }
+.site:not(.motion-none) .profile-links a:nth-child(4) { animation-delay: .64s; }
+.site:not(.motion-none) .profile-links a:nth-child(5) { animation-delay: .7s; }
+.site:not(.motion-none) .profile-links a:nth-child(6) { animation-delay: .76s; }
+.site:not(.motion-none) .identity-art {
+  animation: pf-art-in .85s var(--ease-out) .24s both;
+}
+
+/* Ambient touches (expressive mode only) */
+.site.motion-expressive .art-orbit {
+  animation: pf-orbit-spin 42s linear infinite;
+}
+.site.motion-expressive .location span {
+  animation: pf-dot-pulse 3.2s ease-in-out infinite;
+}
+.terminal .site.motion-expressive h1::after {
+  content: '_';
+  display: inline-block;
+  margin-left: .06em;
+  color: var(--accent);
+  animation: pf-cursor-blink 1.05s steps(1, end) infinite;
+}
+.editorial .site.motion-expressive .identity h1 {
+  animation-name: pf-editorial-title;
+}
+.monograph .site.motion-expressive .identity,
+.monograph .site.motion-expressive article {
+  animation-name: pf-monograph-snap;
+}
+.atlas .site.motion-expressive .identity {
+  --anim-x: -18px;
+  --anim-y: 0px;
+}
+
+/* Section & card entrance (universal fallback + opening fold) */
+.site:not(.motion-none) .section-heading {
+  animation: pf-heading-in .62s var(--ease-out) .46s both;
+}
+.site:not(.motion-none) .section:nth-child(2) .section-heading { animation-delay: .56s; }
+.site:not(.motion-none) .section:nth-child(3) .section-heading { animation-delay: .66s; }
+.site:not(.motion-none) .section:nth-child(4) .section-heading { animation-delay: .74s; }
+.site:not(.motion-none) .section:nth-child(5) .section-heading { animation-delay: .82s; }
+
+.site:not(.motion-none) .skills li {
+  animation: pf-pill-in .48s var(--ease-out) .52s both;
+}
+.site:not(.motion-none) .skills li:nth-child(2) { animation-delay: .55s; }
+.site:not(.motion-none) .skills li:nth-child(3) { animation-delay: .58s; }
+.site:not(.motion-none) .skills li:nth-child(4) { animation-delay: .61s; }
+.site:not(.motion-none) .skills li:nth-child(5) { animation-delay: .64s; }
+.site:not(.motion-none) .skills li:nth-child(6) { animation-delay: .67s; }
+.site:not(.motion-none) .skills li:nth-child(7) { animation-delay: .7s; }
+.site:not(.motion-none) .skills li:nth-child(8) { animation-delay: .73s; }
+.site:not(.motion-none) .skills li:nth-child(9) { animation-delay: .76s; }
+.site:not(.motion-none) .skills li:nth-child(10) { animation-delay: .79s; }
+.site:not(.motion-none) .skills li:nth-child(11) { animation-delay: .82s; }
+.site:not(.motion-none) .skills li:nth-child(12) { animation-delay: .85s; }
+.site:not(.motion-none) .skills li:nth-child(n+13) { animation-delay: .88s; }
+
+.site:not(.motion-none) article {
+  animation: pf-rise var(--anim-dur) var(--ease-out) .52s both;
+}
+.site:not(.motion-none) article:nth-child(2) { animation-delay: .61s; }
+.site:not(.motion-none) article:nth-child(3) { animation-delay: .7s; }
+.site:not(.motion-none) article:nth-child(4) { animation-delay: .78s; }
+.site:not(.motion-none) article:nth-child(5) { animation-delay: .85s; }
+.site:not(.motion-none) article:nth-child(6) { animation-delay: .92s; }
+.site:not(.motion-none) article:nth-child(n+7) { animation-delay: .98s; }
+
+.site:not(.motion-none) footer {
+  animation: pf-heading-in .6s var(--ease-out) .84s both;
+}
+
+/* Scroll-driven reveals for below-the-fold sections on supporting browsers */
+@supports (animation-timeline: view()) {
+  .site:not(.motion-none) .content > .section:nth-child(n+2) .section-heading,
+  .site:not(.motion-none) .content > .section:nth-child(n+2) article,
+  .site:not(.motion-none) .content > .section:nth-child(n+2) .skills ul,
+  .site:not(.motion-none) footer {
+    animation-name: pf-scroll-reveal;
+    animation-duration: 1s;
+    animation-delay: 0s;
+    animation-timing-function: var(--ease-out);
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 24%;
+  }
+  .site:not(.motion-none) .content > .section:nth-child(n+2) .skills li {
+    animation: none;
+  }
+  /* In Atlas desktop split view, the first two sections sit beside the hero above the fold. */
+  @media (min-width: 760px) {
+    .atlas .site:not(.motion-none) .content > .section:nth-child(2) .section-heading,
+    .atlas .site:not(.motion-none) .content > .section:nth-child(2) article,
+    .atlas .site:not(.motion-none) .content > .section:nth-child(2) .skills ul {
+      animation-timeline: auto;
+      animation-range: normal;
+      animation-name: pf-rise;
+      animation-duration: var(--anim-dur);
+      animation-delay: .56s;
+    }
+  }
+}
+
+/* Tactile hover & focus micro-interactions */
+.site:not(.motion-none) .wordmark,
+.site:not(.motion-none) .index-links a,
+.site:not(.motion-none) .profile-links a,
+.site:not(.motion-none) .skills li,
+.site:not(.motion-none) article,
+.site:not(.motion-none) .entry-link,
+.site:not(.motion-none) .portfolio-portrait {
+  transition: transform .26s var(--ease-out), box-shadow .26s var(--ease-out), border-color .22s ease, background-color .22s ease, color .22s ease;
+}
+.site:not(.motion-none) .project-cover i,
+.site:not(.motion-none) .uploaded-cover img {
+  transition: transform .48s var(--ease-out), opacity .3s ease;
+}
+.site:not(.motion-none) a span[aria-hidden="true"] {
+  display: inline-block;
+  transition: transform .24s var(--ease-out);
+}
+.site:not(.motion-none) a:hover span[aria-hidden="true"],
+.site:not(.motion-none) a:focus-visible span[aria-hidden="true"] {
+  transform: translate(2.5px, -2.5px);
+}
+.site:not(.motion-none) .wordmark:hover {
+  border-color: var(--accent);
+  background: var(--wash);
+  transform: translateY(-1px);
+}
+.site:not(.motion-none) .index-links a {
+  position: relative;
+}
+.site:not(.motion-none) .index-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s var(--ease-out);
+}
+.site:not(.motion-none) .index-links a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+.site:not(.motion-none) .index-links a:hover::after,
+.site:not(.motion-none) .index-links a:focus-visible::after {
+  transform: scaleX(1);
+}
+.site:not(.motion-none) .profile-links a:hover {
+  border-color: var(--accent);
+  background: var(--wash);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+.site:not(.motion-none) .skills li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+.site:not(.motion-none) .portfolio-portrait:hover {
+  transform: scale(1.03);
+}
+.site:not(.motion-none) article:hover {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--edge));
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ink) 8%, transparent);
+}
+.site:not(.motion-none) article:hover .uploaded-cover img {
+  transform: scale(1.04);
+}
+.site:not(.motion-none) article:hover .project-cover i {
+  transform: rotate(-16deg) scale(1.06);
+  opacity: .3;
+}
+.site:not(.motion-none) .projects article:nth-child(even):hover .project-cover i {
+  transform: rotate(32deg) scale(1.06);
+}
+.site.motion-subtle article:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--ink) 6%, transparent);
+}
+/* Borderless row templates get an understated hover shift rather than a card shadow. */
+.minimal .site:not(.motion-none) .section:not(.projects) article:hover,
+.editorial .site:not(.motion-none) article:hover,
+.executive .site:not(.motion-none) article:hover {
+  transform: translateX(4px);
+  box-shadow: none;
+  border-color: var(--accent);
+}
+.monograph .site:not(.motion-none) article:hover,
+.monograph .site:not(.motion-none) .profile-links a:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 var(--ink);
+  border-color: var(--ink);
+}
+
+/* Explicit motion-none and OS reduced-motion respect */
+.site.motion-none,
+.site.motion-none *,
+.site.motion-none *::before,
+.site.motion-none *::after {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .site, .site *, .site *::before, .site *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media print {
+  .site, .site *, .site *::before, .site *::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+

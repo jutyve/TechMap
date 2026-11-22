@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_vali
 from .photos import Photo
 
 Template = Literal['minimal', 'editorial', 'terminal', 'gallery', 'executive', 'bento', 'atlas', 'monograph']
+Motion = Literal['expressive', 'subtle', 'none']
 Short = Annotated[str, StringConstraints(strip_whitespace=True, max_length=140)]
 Body = Annotated[str, StringConstraints(strip_whitespace=True, max_length=2400)]
 Link = Annotated[str, StringConstraints(strip_whitespace=True, max_length=500)]
@@ -57,6 +58,7 @@ class Portfolio(BaseModel):
     website: Link = ''
     resume: Link = ''
     template: Template = 'minimal'
+    motion: Motion = 'expressive'
     projects: list[Project] = Field(default_factory=list, max_length=12)
     experience: list[Entry] = Field(default_factory=list, max_length=12)
     education: list[Entry] = Field(default_factory=list, max_length=12)
@@ -131,9 +133,9 @@ def render_portfolio(p: Portfolio, account_photo: str = '') -> str:
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{escape((p.headline or name + ' — Portfolio')[:140], quote=True)}">
-<title>{escape(name)} — Portfolio</title><link rel="stylesheet" href="/css/portfolio-public.css?v=3"></head>
+<title>{escape(name)} — Portfolio</title><link rel="stylesheet" href="/css/portfolio-public.css?v=4"></head>
 <body class="{p.template}">
-<div class="site" id="top"><div class="site-bar"><a class="wordmark" href="#top" aria-label="Back to top">{escape(initials)}</a>{index}</div>
+<div class="site motion-{p.motion}" id="top"><div class="site-bar"><a class="wordmark" href="#top" aria-label="Back to top">{escape(initials)}</a>{index}</div>
 <main class="composition"><header class="identity{portrait_class}">{portrait_image}<div class="identity-copy">
 <p class="location"><span aria-hidden="true"></span>{escape(p.location or 'Portfolio')}</p>
 <h1 dir="auto">{escape(name)}</h1>{text('p', p.headline, 'headline')}{text('p', p.bio, 'bio')}{profile}</div>
