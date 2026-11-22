@@ -301,6 +301,7 @@ function initTabs() {
         if (target === "dashboard") loadStats();
         if (target === "certificates") window.loadCertificates?.();
         if (target === "roadmaps") window.loadRoadmaps?.();
+        if (target === "projects") window.loadProjects?.();
       } else {
         p.classList.remove("active");
       }

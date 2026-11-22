@@ -3,7 +3,7 @@
  * Guests keep the original behaviour: everything lives in localStorage.
  * When a user is signed in, the whitelisted localStorage keys (favorites,
  * company notes, Resume Studio form/resume/photo/style, profile,
- * layout) are mirrored to /api/me/state:
+ * layout, saved project ideas) are mirrored to /api/me/state:
  *
  *  - On load the server copy is applied to localStorage (reloading once if
  *    anything changed, so every feature re-reads the synced values).
@@ -26,6 +26,7 @@
     "techmap_resume_origin",
     "techmap_resume_photo",
     "techmap_layout",
+    "techmap_projects",
   ];
   const ACCOUNT_KEY = "techmap_account_id"; // local only, never synced
 

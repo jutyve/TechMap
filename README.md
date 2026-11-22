@@ -37,6 +37,7 @@ Installing dependencies needs an internet connection. After installation, the di
 - A light-by-default workspace with optional dark mode, slate typography, violet accents, and motion that respects reduced-motion preferences.
 - Typography is self-hosted: **Fraunces** for display, **Inter** for the interface, and **IBM Plex Mono** for labels and figures (all SIL Open Font License, bundled in `static/assets/fonts/`). No webfont download is needed, so the app looks the same offline.
 - Searchable company directory with city/specialty/contact filters, sorting, grid/list views, favorites, comparison of up to three companies, and private company notes.
+- **Project library** with 118 shippable project briefs across 13 specialties (frontend, backend, full-stack, mobile, data/AI, DevOps, security, design, QA, IT support, embedded/IoT, marketing and product). Filter by difficulty and time, save ideas, track *building* and *shipped*, copy a CV-ready bullet or the full brief, and send an idea straight into Portfolio Studio or Resume Studio. Saved progress stays in the browser and syncs with an account.
 - **Ecosystem insights** dashboard: company/website/email/phone totals plus top specialties, top cities, and how-to-apply breakdowns, all from the included dataset.
 - **Resume Studio** with Classic, Modern, Bold, and Editorial templates, plus four accent colors (forest, navy, terracotta, charcoal).
 - **Preview my details**: a local, non-AI preview that uses only the words you enter. Put each experience, education, or project entry on a new line. AI polishing is optional.
@@ -178,10 +179,13 @@ static/                             Everything the browser loads — see static/
 │   ├── studio.css                  Resume Studio UI + resume documents + print
 │   └── auth.css                    Login/account page + sidebar account widget
 └── js/
+    ├── core/                       Shared, non-UI scripts (appearance, language, project data)
+    │   └── projects-data.js        Curated project-idea library (static data)
     └── features/                   Loaded in order at the end of <body>
         ├── app.js                  Directory, favorites, analyzer, letters/Apply, chat
         ├── auth.js                 Account widget + localStorage→account sync
         ├── auth-page.js            Sign-in/registration/reset forms (login.html)
+        ├── projects.js             Project library: filters, saved/shipped state, briefs
         ├── workspace.js            Help, views, comparison, notes
         ├── quick-actions.js        Searchable Ctrl/Cmd + K launcher
         └── studio.js               Local preview, photo processing, styling, motion
@@ -207,6 +211,29 @@ The API documentation is available at `/docs` when the server is running. Main r
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+### Portfolio projects
+
+Open **Projects** from the Career tools menu (under Roadmaps) to browse the
+project library. Each brief is designed for one person to ship with free tools
+and includes:
+
+- the problem and the smallest useful scope;
+- key features, a suggested stack and three concrete shipping steps;
+- why the project earns a place on a CV;
+- a ready-to-adapt CV bullet, with `[X]` placeholders for your real numbers;
+- free starter resources for that specialty.
+
+Filter by specialty, difficulty or time commitment, or press **Surprise me**.
+**Save** an idea, mark it **Building** or **Shipped**, and use **Saved only** to
+come back to your shortlist. Saved/shipped state is stored in this browser and
+is part of the account state that syncs to `/api/me/state` (key
+`techmap_projects`). **Add to Portfolio Studio** inserts the project into the
+Portfolio Studio editor (you still review and save/publish there), and **Add to
+Resume Studio** appends a draft line to the résumé projects field.
+
+The library is static frontend data in `static/js/core/projects-data.js`; add an
+idea by following the same object shape and it appears automatically.
 
 ### Portfolio Studio
 

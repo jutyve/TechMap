@@ -9,6 +9,7 @@
     ['.nav-tab[data-tab="analyzer"]', 'Review your résumé', 'Use the Resume Analyzer to get AI feedback on the experience and skills you’re presenting.'],
     ['.nav-tab[data-tab="resume"]', 'Build a résumé', 'Choose a template, preview your résumé, and print or save it as a PDF.'],
     ['.nav-tab[data-tab="portfolio"]', 'Publish your portfolio', 'Show your projects, experience, and certifications on a public page. You can preview designs before signing in to publish.'],
+    ['.nav-tab[data-tab="projects"]', 'Choose a project worth shipping', 'Browse project briefs by specialty, save the ones you like, and copy a CV bullet when you ship. Roadmaps and certificates are in the same menu.'],
     ['.nav-tab[data-tab="assistant"]', 'Talk through your next move', 'Ask the Career Assistant for help with questions about your job search or next steps.'],
     ['#openLauncher', 'Get anywhere faster', 'Open Quick actions to jump to tools and saved companies. On a keyboard, press Ctrl+K or Command+K. Replay this tour anytime from the ? help button.'],
   ];
