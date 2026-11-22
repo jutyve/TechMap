@@ -9,6 +9,7 @@
     saved: actionIcon('<path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1.1 5.9-5.3-2.9-5.3 2.9 1.1-5.9-4.3-4.1 5.9-.8z"/>'),
     insights: actionIcon('<path d="M3.5 20.5h17"/><path d="M6.5 20.5v-6.2M11.4 20.5V7.8M16.3 20.5v-9.1M21 20.5V4.5"/>'),
     studio: actionIcon('<path d="M7 2.8h6.4L19 8.4v12a1.4 1.4 0 0 1-1.4 1.4H7a1.4 1.4 0 0 1-1.4-1.4V4.2A1.4 1.4 0 0 1 7 2.8Z"/><path d="M13.2 2.9v5.6H19"/><path d="M9 13.4h6M9 17h3.6"/>'),
+    projects: actionIcon('<path d="m12 3 8.5 4.8L12 12.6 3.5 7.8Z"/><path d="m4 12 8 4.5 8-4.5"/><path d="m4 16.2 8 4.5 8-4.5"/>'),
     analyzer: actionIcon('<circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1.6v2.4M12 20v2.4M1.6 12h2.4M20 12h2.4"/>'),
     assistant: actionIcon('<path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.4v3.2M17 5h3.2"/>'),
     help: actionIcon('<circle cx="12" cy="12" r="8.6"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1.1.9-1.1 1.7v.3"/><path d="M12 17.2h.01"/>'),
@@ -56,6 +57,12 @@
       "Build and publish your own portfolio website",
       ACTION_ICONS.studio,
       () => nav("portfolio"),
+    ],
+    [
+      "Portfolio projects",
+      "Find a project worth shipping — and a CV bullet to match",
+      ACTION_ICONS.projects,
+      () => nav("projects"),
     ],
     [
       "Resume analyzer",

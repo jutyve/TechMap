@@ -757,11 +757,37 @@
   el('portfolioSignIn').addEventListener('click', handoffDraft);
   el('portfolioAccountSettings').addEventListener('click', handoffDraft);
 
+  /* Called by the Projects tab: drop one idea into the project editor.
+     Returns true, "duplicate" or "full" so the caller can explain what
+     happened. Nothing is saved or published until the user does it. */
+  function addProjectIdea(idea) {
+    if (!idea || !String(idea.title || '').trim()) return false;
+    const list = lists.projects.list;
+    if (list.children.length >= 12) return 'full';
+    const title = String(idea.title).trim();
+    const duplicate = [...list.querySelectorAll('[data-field="title"]')]
+      .some(input => input.value.trim().toLowerCase() === title.toLowerCase());
+    if (duplicate) return 'duplicate';
+    addEntry('projects', {
+      title: title.slice(0, 140),
+      subtitle: String(idea.subtitle || '').slice(0, 140),
+      period: String(idea.period || '').slice(0, 140),
+      url: '',
+      description: String(idea.description || '').slice(0, 2400),
+    }, false);
+    updateSyncButtons();
+    queuePreview();
+    const entry = list.lastElementChild;
+    if (entry) entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return true;
+  }
+
   window.techmapPortfolio = {
     ensureReady: initialize,
     refreshSyncCard,
     buildFromResume,
     syncFromResume,
+    addProjectIdea,
     async openFromResume() {
       await initialize();
       const mapped = refreshSyncCard();

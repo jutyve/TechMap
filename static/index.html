@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css?v=1.9.4" />
 <link rel="stylesheet" href="css/certificates.css?v=1" />
 <link rel="stylesheet" href="css/roadmaps.css?v=3" />
+<link rel="stylesheet" href="css/projects.css?v=1" />
 <link rel="stylesheet" href="css/company-map.css?v=3" />
 </head>
 <body>
@@ -44,6 +45,7 @@
       <button class="nav-tab" data-tab="assistant"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M11.4 3.4 13 8.6l5.2 1.6-5.2 1.6-1.6 5.2-1.6-5.2L4.6 10.2l5.2-1.6z"/><path d="M18.6 3.2v3.4M16.9 4.9h3.4M6.6 16.4v2.4M5.4 17.6h2.4"/></svg></span> Career assistant <span class="ai-pill">AI</span></button>
       <button class="nav-tab" data-tab="certificates"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 13.2 7.4 22l4.6-2.4L16.6 22 15 13.2"/></svg></span> Certificates</button>
       <button class="nav-tab" data-tab="roadmaps"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v14a2 2 0 0 0 2 2h12"/><path d="M6 14l4-4 3 3 5-6"/><circle cx="6" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="13" cy="13" r="1.6"/><circle cx="18" cy="7" r="1.6"/></svg></span> Roadmaps</button>
+      <button class="nav-tab" data-tab="projects"><span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8.5 4.8L12 12.6 3.5 7.8Z"/><path d="m4 12 8 4.5 8-4.5"/><path d="m4 16.2 8 4.5 8-4.5"/></svg></span> Projects</button>
     </div>
   </div>
   <div class="sidebar-bottom">
@@ -480,6 +482,72 @@
     <div class="roadmap-phases" id="roadmapPhases"></div>
   </section>
 
+  <!-- PROJECTS TAB -->
+  <section id="projects" class="tab-panel">
+    <div class="panel-header">
+      <div class="eyebrow">Career tools / Projects</div>
+      <h1>Portfolio projects that get you hired</h1>
+      <p>A library of shippable project briefs across 13 specialties. Each idea comes with scope, features, steps, a suggested stack and a CV bullet you can adapt. Start with a weekend build and work up.</p>
+    </div>
+
+    <div class="project-summary">
+      <div class="project-summary-copy">
+        <span class="project-summary-kicker">One shipped project beats ten tutorials</span>
+        <p>Save a few briefs, mark what you are building and what you shipped. Progress is kept on this device, and follows you when you sign in.</p>
+        <button type="button" class="mini-btn primary" id="projectQuickWin">Show me weekend builds <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="project-stats" aria-label="Your project progress">
+        <div><strong id="projectTotal">0</strong><span>project ideas</span></div>
+        <div><strong id="projectSavedCount">0</strong><span>saved</span></div>
+        <div><strong id="projectShippedCount">0</strong><span>shipped</span></div>
+      </div>
+    </div>
+
+    <div class="projects-toolbar">
+      <div class="search-box project-search">
+        <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.6"/><path d="m16 16 4.6 4.6"/></svg></span>
+        <input type="search" id="projectSearch" placeholder="Search ideas, stacks or skills…" aria-label="Search project ideas" />
+      </div>
+      <select id="projectLevel" aria-label="Filter by difficulty">
+        <option value="all">Any difficulty</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+      <select id="projectTime" aria-label="Filter by time">
+        <option value="all">Any time commitment</option>
+        <option value="weekend">A weekend</option>
+        <option value="sprint">1–2 weeks</option>
+        <option value="month">3–4 weeks</option>
+        <option value="deep">2+ months</option>
+      </select>
+      <select id="projectSort" aria-label="Sort project ideas">
+        <option value="recommended">Recommended</option>
+        <option value="quickest">Quickest wins</option>
+        <option value="easiest">Easiest first</option>
+        <option value="az">Title: A–Z</option>
+      </select>
+      <button type="button" class="mini-btn" id="projectSurprise">Surprise me</button>
+      <label class="switch project-saved-toggle" title="Only show projects you saved, are building or shipped">
+        <input type="checkbox" id="projectSavedOnly" />
+        <span class="switch-track"></span>
+        <span class="switch-text">Saved only</span>
+      </label>
+    </div>
+
+    <div class="chip-row project-chips" id="projectChips" role="tablist" aria-label="Filter projects by specialty"></div>
+
+    <div class="project-status" id="projectStatus" role="status" aria-live="polite"></div>
+
+    <div class="project-grid" id="projectGrid"></div>
+
+    <div class="empty-state project-empty hidden" id="projectEmpty">
+      <div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8.5 4.8L12 12.6 3.5 7.8Z"/><path d="m4 12 8 4.5 8-4.5"/><path d="m4 16.2 8 4.5 8-4.5"/></svg></div>
+      <p id="projectEmptyText">No project ideas match these filters.</p>
+      <button type="button" class="mini-btn" id="projectReset">Clear filters</button>
+    </div>
+  </section>
+
   <!-- CERTIFICATES TAB -->
   <section id="certificates" class="tab-panel">
     <div class="panel-header">
@@ -627,21 +695,29 @@
     <div class="tour-actions"><button id="tourSkip" type="button" class="mini-btn">Skip tour</button><button id="tourBack" type="button" class="mini-btn">Back</button><button id="tourNext" type="button" class="mini-btn primary">Next</button></div>
   </div>
 </dialog>
+<dialog id="projectDialog" class="project-dialog" aria-labelledby="projectDialogTitle">
+  <button type="button" class="dialog-close" id="projectDialogClose" aria-label="Close project brief">✕</button>
+  <div class="project-dialog-inner">
+    <div id="projectDialogBody"></div>
+  </div>
+</dialog>
 <div id="toast" class="toast" role="status"></div>
 
 
 
 <script src="vendor/animejs/anime.min.js?v=3.2.2"></script>
-<script src="js/features/app.js?v=24"></script>
+<script src="js/features/app.js?v=25"></script>
 <script src="js/features/certificates.js?v=1"></script>
 <script src="js/features/roadmaps.js?v=3"></script>
+<script src="js/core/projects-data.js?v=1"></script>
+<script src="js/features/projects.js?v=1"></script>
 <script src="js/features/photos.js?v=1"></script>
-<script src="js/features/auth.js?v=19"></script>
-<script src="js/features/workspace.js?v=19"></script>
-<script src="js/features/quick-actions.js?v=21"></script>
+<script src="js/features/auth.js?v=20"></script>
+<script src="js/features/workspace.js?v=20"></script>
+<script src="js/features/quick-actions.js?v=22"></script>
 <script src="js/features/studio.js?v=19"></script>
-<script src="js/features/portfolio.js?v=4"></script>
-<script src="js/features/tour.js?v=3"></script>
+<script src="js/features/portfolio.js?v=5"></script>
+<script src="js/features/tour.js?v=4"></script>
 <script src="js/features/language-ui.js?v=1"></script>
 <script src="js/core/map-locations.js?v=1"></script>
 <script src="js/features/company-location.js?v=1"></script>

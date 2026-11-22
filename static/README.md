@@ -26,15 +26,21 @@ static/
 │   │                       responsive rules (overrides base)
 │   ├── studio.css          Resume Studio UI, the four resume documents and
 │   │                       print rules (overrides both)
+│   ├── projects.css        Project library grid, filters and brief dialog
 │   └── auth.css            Login/account page + the sidebar account widget
 │                           (loaded last on index.html, after base on login.html)
 ├── js/
+│   ├── core/               Shared boot/data scripts (loaded before features)
+│   │   └── projects-data.js  Curated project-idea library (static data)
 │   └── features/           Loaded at the end of <body>, in this order
 │       ├── app.js          Directory data, favorites, detail panel,
 │       │                   analyzer, cover-letter/Apply flows, dashboard, chat
 │       ├── auth.js         Account widget + sync of the saved localStorage
 │       │                   keys to /api/me/state when signed in (index only)
 │       ├── auth-page.js    Sign-in / registration / reset forms (login.html only)
+│       ├── projects.js     Project library: specialty/level/time filters,
+│       │                   saved/building/shipped state, briefs and hand-off
+│       │                   to Portfolio Studio / Resume Studio
 │       ├── workspace.js    Shell behaviour: help, filters,
 │       │                   grid/list views, comparison, private notes
 │       ├── quick-actions.js  Ctrl/Cmd + K launcher
@@ -64,6 +70,9 @@ is what a recruiter sees in the printed or exported file on any machine.
   (`state`, `buildResumeHtml`, helpers); `features/auth.js` loads right
   after it so its localStorage sync hook is installed before the remaining
   features save anything. Don't reorder these tags casually.
+- **Project ideas are data, not markup.** `js/core/projects-data.js` exposes
+  `window.techmapProjectIdeas`; `js/features/projects.js` renders it. Add or
+  edit an idea there (keep IDs unique) and the tab, filters and counts update.
 - **Cache-busting:** every asset tag in `index.html` and `login.html` carries a `?v=N` query.
   Bump `N` (same value everywhere) whenever an asset's URL or contents change
   in a release.

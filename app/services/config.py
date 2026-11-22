@@ -91,6 +91,7 @@ SYNCED_STATE_KEYS = {
     "techmap_resume_origin",
     "techmap_resume_photo",
     "techmap_layout",
+    "techmap_projects",
 }
 # The processed Studio photo is a data URL of up to ~800 KB; allow headroom.
 MAX_STATE_VALUE_BYTES = 2 * 1024 * 1024
