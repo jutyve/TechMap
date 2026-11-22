@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css?v=1.9.4" />
 <link rel="stylesheet" href="css/certificates.css?v=1" />
 <link rel="stylesheet" href="css/roadmaps.css?v=3" />
-<link rel="stylesheet" href="css/projects.css?v=1" />
+<link rel="stylesheet" href="css/projects.css?v=2" />
 <link rel="stylesheet" href="css/company-map.css?v=3" />
 </head>
 <body>
@@ -493,13 +493,20 @@
     <div class="project-summary">
       <div class="project-summary-copy">
         <span class="project-summary-kicker">One shipped project beats ten tutorials</span>
-        <p>Save a few briefs, mark what you are building and what you shipped. Progress is kept on this device, and follows you when you sign in.</p>
+        <p>Save a few ideas, mark what you are building and what you shipped. Progress is kept on this device, and follows you when you sign in.</p>
         <button type="button" class="mini-btn primary" id="projectQuickWin">Show me weekend builds <span aria-hidden="true">↗</span></button>
       </div>
-      <div class="project-stats" aria-label="Your project progress">
+      <div class="project-stats" aria-label="What is in the project library">
         <div><strong id="projectTotal">0</strong><span>project ideas</span></div>
-        <div><strong id="projectSavedCount">0</strong><span>saved</span></div>
-        <div><strong id="projectShippedCount">0</strong><span>shipped</span></div>
+        <div><strong id="projectBeginnerCount">0</strong><span>beginner-friendly</span></div>
+        <div><strong id="projectWeekendCount">0</strong><span>weekend builds</span></div>
+      </div>
+      <div class="project-list-progress" aria-label="Your project list">
+        <span class="project-list-label">Your list</span>
+        <span><strong id="projectSavedCount">0</strong> saved</span>
+        <span><strong id="projectBuildingCount">0</strong> building</span>
+        <span><strong id="projectShippedCount">0</strong> shipped</span>
+        <button type="button" class="link-btn" id="projectViewList">View my list</button>
       </div>
     </div>
 
@@ -528,10 +535,10 @@
         <option value="az">Title: A–Z</option>
       </select>
       <button type="button" class="mini-btn" id="projectSurprise">Surprise me</button>
-      <label class="switch project-saved-toggle" title="Only show projects you saved, are building or shipped">
+      <label class="switch project-saved-toggle" title="Only show ideas in your list: saved, building or shipped">
         <input type="checkbox" id="projectSavedOnly" />
         <span class="switch-track"></span>
-        <span class="switch-text">Saved only</span>
+        <span class="switch-text">My list only</span>
       </label>
     </div>
 
@@ -710,7 +717,7 @@
 <script src="js/features/certificates.js?v=1"></script>
 <script src="js/features/roadmaps.js?v=3"></script>
 <script src="js/core/projects-data.js?v=1"></script>
-<script src="js/features/projects.js?v=1"></script>
+<script src="js/features/projects.js?v=2"></script>
 <script src="js/features/photos.js?v=1"></script>
 <script src="js/features/auth.js?v=20"></script>
 <script src="js/features/workspace.js?v=20"></script>

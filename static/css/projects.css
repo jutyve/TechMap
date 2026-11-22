@@ -72,6 +72,36 @@
   text-transform: uppercase;
 }
 
+.project-list-progress {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line-2);
+  color: var(--ink-3);
+  font-size: 12.5px;
+}
+.project-list-label {
+  color: var(--ink-4);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.project-list-progress strong {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+.project-list-progress .link-btn {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
 /* ---- Toolbar ------------------------------------------------------------ */
 .projects-toolbar {
   display: flex;
@@ -701,6 +731,9 @@
   }
   .project-stats strong {
     font-size: 22px;
+  }
+  .project-list-progress .link-btn {
+    margin-left: 0;
   }
   .project-search {
     max-width: none;

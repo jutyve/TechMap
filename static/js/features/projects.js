@@ -97,16 +97,16 @@
     }
   }
 
-  function trackedCount() {
-    return PROJECTS.reduce((total, p) => total + (progress[p.id] ? 1 : 0), 0);
-  }
-
-  function shippedCount() {
-    return PROJECTS.reduce((total, p) => total + (progress[p.id] === "shipped" ? 1 : 0), 0);
-  }
-
-  function buildingCount() {
-    return PROJECTS.reduce((total, p) => total + (progress[p.id] === "building" ? 1 : 0), 0);
+  function statusCounts() {
+    const counts = { saved: 0, building: 0, shipped: 0, inList: 0 };
+    for (const p of PROJECTS) {
+      const value = progress[p.id];
+      if (value === "saved" || value === "building" || value === "shipped") {
+        counts[value] += 1;
+        counts.inList += 1;
+      }
+    }
+    return counts;
   }
 
   const searchIndex = new Map(
@@ -202,14 +202,14 @@
       </div>
       <div class="project-stack">${stack}</div>
       <div class="project-card-foot">
-        <button type="button" class="project-save${status ? " is-saved" : ""}" data-save="${escapeHtml(p.id)}" aria-pressed="${status ? "true" : "false"}" aria-label="${status ? "Remove from your saved projects" : "Save this project"}">${ICON_BOOKMARK}<span>${status ? "Saved" : "Save"}</span></button>
+        <button type="button" class="project-save${status ? " is-saved" : ""}" data-save="${escapeHtml(p.id)}" aria-pressed="${status ? "true" : "false"}" aria-label="${status ? "Remove from your list" : "Save to your list"}">${ICON_BOOKMARK}<span>${status ? escapeHtml(STATUS[status].label) : "Save"}</span></button>
         <button type="button" class="project-open" data-open="${escapeHtml(p.id)}">View brief <span aria-hidden="true">↗</span></button>
       </div>
     </article>`;
   }
 
   function chipHtml(sp, count, active) {
-    return `<button type="button" class="chip${active ? " active" : ""}" data-specialty="${escapeHtml(sp.id)}" role="tab" aria-selected="${active}">
+    return `<button type="button" class="chip${active ? " active" : ""}" data-specialty="${escapeHtml(sp.id)}" role="tab" aria-selected="${active}" title="${count} project ideas in ${escapeHtml(sp.label)}" aria-label="${escapeHtml(sp.label)}: ${count} project ideas">
       <span>${escapeHtml(sp.short)}</span><span class="chip-count">${count}</span>
     </button>`;
   }
@@ -219,7 +219,7 @@
     if (!wrap) return;
     const counts = {};
     for (const p of PROJECTS) counts[p.specialty] = (counts[p.specialty] || 0) + 1;
-    const all = `<button type="button" class="chip${specialty === "all" ? " active" : ""}" data-specialty="all" role="tab" aria-selected="${specialty === "all"}">
+    const all = `<button type="button" class="chip${specialty === "all" ? " active" : ""}" data-specialty="all" role="tab" aria-selected="${specialty === "all"}" title="All ${PROJECTS.length} project ideas" aria-label="All specialties: ${PROJECTS.length} project ideas">
       <span>All specialties</span><span class="chip-count">${PROJECTS.length}</span>
     </button>`;
     wrap.innerHTML = all + SPECIALTIES.filter((sp) => counts[sp.id]).map((sp) => chipHtml(sp, counts[sp.id], specialty === sp.id)).join("");
@@ -240,24 +240,32 @@
   }
 
   function updateStats() {
-    const total = $("#projectTotal");
-    const saved = $("#projectSavedCount");
-    const shipped = $("#projectShippedCount");
-    if (total) total.textContent = String(PROJECTS.length);
-    if (saved) saved.textContent = String(trackedCount());
-    if (shipped) shipped.textContent = String(shippedCount());
+    const counts = statusCounts();
+    const setText = (selector, value) => {
+      const node = $(selector);
+      if (node) node.textContent = String(value);
+    };
+    setText("#projectTotal", PROJECTS.length);
+    setText("#projectBeginnerCount", PROJECTS.filter((p) => p.level === "beginner").length);
+    setText("#projectWeekendCount", PROJECTS.filter((p) => p.effort === "weekend").length);
+    setText("#projectSavedCount", counts.saved);
+    setText("#projectBuildingCount", counts.building);
+    setText("#projectShippedCount", counts.shipped);
   }
 
   function updateStatusLine(items) {
     const status = $("#projectStatus");
     if (!status) return;
-    const tracked = trackedCount();
-    const building = buildingCount();
+    const isEverything = items.length === PROJECTS.length;
+    const beginnerInView = items.filter((p) => p.level === "beginner").length;
+    const inListView = items.filter((p) => progress[p.id]).length;
     const parts = [
-      `<strong>${items.length}</strong> of ${PROJECTS.length} briefs shown`,
-      `<strong>${PROJECTS.filter((p) => p.level === "beginner").length}</strong> beginner-friendly`,
+      isEverything
+        ? `Showing all <strong>${PROJECTS.length}</strong> project ideas`
+        : `Showing <strong>${items.length}</strong> of ${PROJECTS.length} project ideas`,
     ];
-    if (tracked) parts.push(`<strong>${tracked}</strong> saved${building ? ` · <strong>${building}</strong> building` : ""}`);
+    if (!isEverything) parts.push(`<strong>${beginnerInView}</strong> of these are beginner-friendly`);
+    if (inListView) parts.push(`<strong>${inListView}</strong> in your list`);
     status.innerHTML = parts.join(" · ");
   }
 
@@ -273,7 +281,7 @@
       const untouched = !query && specialty === "all" && level === "all" && time === "all";
       emptyText.textContent =
         savedOnly && untouched
-          ? "You have not saved a project yet. Choose a brief and use Save to build your shortlist."
+          ? "Your list is empty. Save an idea, or mark one Building or Shipped, and it will appear here."
           : "No project ideas match these filters. Try a different specialty, difficulty or search.";
     }
     updateStatusLine(items);
@@ -322,10 +330,10 @@
     if (!ideaById(id)) return;
     if (progress[id]) {
       delete progress[id];
-      toast("Removed from your projects");
+      toast("Removed from your list");
     } else {
       progress[id] = "saved";
-      toast("Saved — find it under Saved only");
+      toast("Saved to your list — use My list only to find it");
     }
     writeState();
     updateStats();
@@ -551,6 +559,27 @@
         render();
       });
     }
+    const viewList = $("#projectViewList");
+    if (viewList) {
+      viewList.addEventListener("click", () => {
+        query = "";
+        specialty = "all";
+        level = "all";
+        time = "all";
+        sort = "recommended";
+        savedOnly = true;
+        if (search) search.value = "";
+        if (levelSelect) levelSelect.value = "all";
+        if (timeSelect) timeSelect.value = "all";
+        if (sortSelect) sortSelect.value = "recommended";
+        if (savedToggle) savedToggle.checked = true;
+        buildChips();
+        render();
+        const total = statusCounts().inList;
+        toast(total ? `${total} project idea${total === 1 ? "" : "s"} in your list` : "Your list is empty — save an idea first");
+        $("#projectGrid")?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+      });
+    }
     const surprise = $("#projectSurprise");
     if (surprise) {
       surprise.addEventListener("click", () => {
@@ -578,7 +607,7 @@
         if (savedToggle) savedToggle.checked = false;
         buildChips();
         render();
-        $("#projectGrid")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        $("#projectGrid")?.scrollIntoView?.({ behavior: "smooth", block: "start" });
       });
     }
     const reset = $("#projectReset");
