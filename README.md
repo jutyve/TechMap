@@ -260,10 +260,12 @@ saving. Changes to portfolio-specific photos go live only when you publish.
 ### Verify office coordinates and enable map layers
 
 The Company map offers **Street**, **Satellite**, and **Hybrid** base layers and
-supports panning and street-level zoom. Street uses OpenStreetMap tiles;
+supports panning and street-level zoom. Street uses the Esri World Street Map;
 Satellite and Hybrid use Esri World Imagery, with Esri reference labels on top
-for Hybrid. No Google key is needed for these base maps, and the visitor’s
-choice is remembered in the browser. The original
+for Hybrid. All three are served by Esri rather than the public
+OpenStreetMap tile servers, so they do not depend on OSM tile access. No
+Google key is needed for these base maps, and the visitor’s choice is
+remembered in the browser. The original
 `morocco_tech_companies_clean.csv` remains the only directory source. If you
 later verify office locations, you can add a `coordonates` column with decimal
 **latitude, longitude** to that file. Only verified positions should go there.

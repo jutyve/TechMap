@@ -10,15 +10,15 @@
   const home = { center: [30.4, -8.8], zoom: 5 };
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const LAYER_KEY = 'techmap_map_layer';
-  const OSM_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const ESRI_STREET_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}';
   const ESRI_IMAGERY_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
   const ESRI_LABEL_TILES = 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}';
-  const OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors';
+  const ESRI_STREET_ATTRIBUTION = 'Tiles &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener noreferrer">Esri</a> &mdash; Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, &copy; OpenStreetMap contributors, and the GIS User Community';
   const ESRI_ATTRIBUTION = 'Tiles &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener noreferrer">Esri</a> &mdash; Source: Esri, Vantor, Earthstar Geographics, and the GIS User Community';
   const ESRI_LABEL_ATTRIBUTION = 'Labels &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener noreferrer">Esri</a>, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community';
   const LAYER_BUILDERS = {
     street: () => ({
-      base: L.tileLayer(OSM_TILES, { maxZoom: 19, attribution: OSM_ATTRIBUTION }),
+      base: L.tileLayer(ESRI_STREET_TILES, { maxZoom: 19, attribution: ESRI_STREET_ATTRIBUTION }),
     }),
     satellite: () => ({
       base: L.tileLayer(ESRI_IMAGERY_TILES, { maxZoom: 19, attribution: ESRI_ATTRIBUTION }),

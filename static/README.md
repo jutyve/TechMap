@@ -100,9 +100,10 @@ writing direction rather than the visitor’s workspace preference.
 
 The Company map loads the full, lightweight directory from `/api/companies/map`.
 `company-map.js` renders switchable **Street**, **Satellite**, and **Hybrid**
-base layers through the locally bundled Leaflet library. Street uses
-OpenStreetMap; Satellite and Hybrid use Esri World Imagery, with Esri
-boundaries-and-places labels added for Hybrid. City markers link to the city
+base layers through the locally bundled Leaflet library. Street uses the Esri
+World Street Map; Satellite and Hybrid use Esri World Imagery, with Esri
+boundaries-and-places labels added for Hybrid. The tiles come from Esri, not
+the public OpenStreetMap tile servers. City markers link to the city
 directory; office markers are shown only for verified CSV coordinates.
 Directions open separately in Google Maps. The layer choice is saved in
 `localStorage` (`techmap_map_layer`). Base map tiles need a browser internet
