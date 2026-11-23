@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<script src="js/core/locales.js?v=7"></script>
+<script src="js/core/locales.js?v=8"></script>
 <script src="js/core/language.js?v=1"></script>
 <script src="js/core/appearance.js?v=1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="css/certificates.css?v=1" />
 <link rel="stylesheet" href="css/roadmaps.css?v=3" />
 <link rel="stylesheet" href="css/projects.css?v=2" />
-<link rel="stylesheet" href="css/company-map.css?v=3" />
+<link rel="stylesheet" href="css/company-map.css?v=4" />
 </head>
 <body>
 
@@ -422,13 +422,21 @@
     <header class="map-intro">
       <div class="eyebrow">The company atlas</div>
       <h1 id="mapTitle">Morocco’s tech map</h1>
-      <p>Explore streets and neighborhoods. Pick a city to browse its companies.</p>
+      <p>Explore streets, satellite imagery and neighborhoods. Pick a city to browse its companies.</p>
     </header>
     <div class="atlas-layout">
       <section class="atlas-map" aria-label="Map of Morocco">
-        <div class="atlas-map-toolbar"><span><i></i> City directory</span><button id="atlasReset" type="button" class="mini-btn">Reset map view</button></div>
-        <div id="atlasStreetMap" class="atlas-viewport" dir="ltr" aria-label="Interactive street map"></div>
-        <p id="atlasTileStatus" class="atlas-tile-status hidden" role="status">Street tiles could not load. Check your connection and try again.</p>
+        <div class="atlas-map-toolbar">
+          <span><i></i> City directory</span>
+          <div class="atlas-layer-switch" role="group" aria-label="Map layers">
+            <button type="button" class="atlas-layer-btn" data-map-layer="street" aria-pressed="true">Street</button>
+            <button type="button" class="atlas-layer-btn" data-map-layer="satellite" aria-pressed="false">Satellite</button>
+            <button type="button" class="atlas-layer-btn" data-map-layer="hybrid" aria-pressed="false">Hybrid</button>
+          </div>
+          <button id="atlasReset" type="button" class="mini-btn">Reset map view</button>
+        </div>
+        <div id="atlasStreetMap" class="atlas-viewport" dir="ltr" aria-label="Interactive company map"></div>
+        <p id="atlasTileStatus" class="atlas-tile-status hidden" role="status">Map tiles could not load. Check your connection and try again.</p>
       </section>
       <aside class="atlas-sidebar" aria-label="Explore companies on the map">
         <label for="atlasCity">Choose a city</label>
@@ -729,7 +737,7 @@
 <script src="js/core/map-locations.js?v=1"></script>
 <script src="js/features/company-location.js?v=1"></script>
 <script src="vendor/leaflet/leaflet.js?v=1.9.4"></script>
-<script src="js/features/company-map.js?v=3"></script>
+<script src="js/features/company-map.js?v=4"></script>
 <script src="js/features/appearance-ui.js?v=1"></script>
 </body>
 </html>

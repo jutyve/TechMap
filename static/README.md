@@ -99,10 +99,14 @@ writing direction rather than the visitor’s workspace preference.
 ## Company map and appearance
 
 The Company map loads the full, lightweight directory from `/api/companies/map`.
-`company-map.js` renders OpenStreetMap street tiles through the locally bundled
-Leaflet library. City markers link to the city directory; office markers are
-shown only for verified CSV coordinates. Directions open separately in Google
-Maps. Street tiles need a browser internet connection.
+`company-map.js` renders switchable **Street**, **Satellite**, and **Hybrid**
+base layers through the locally bundled Leaflet library. Street uses
+OpenStreetMap; Satellite and Hybrid use Esri World Imagery, with Esri
+boundaries-and-places labels added for Hybrid. City markers link to the city
+directory; office markers are shown only for verified CSV coordinates.
+Directions open separately in Google Maps. The layer choice is saved in
+`localStorage` (`techmap_map_layer`). Base map tiles need a browser internet
+connection but do not need a Google Maps key.
 
 `js/core/appearance.js` applies the saved appearance before paint. Light mode
 is the default; the workspace and sign-in page share the optional dark theme.
