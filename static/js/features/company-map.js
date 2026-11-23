@@ -9,7 +9,31 @@
   const pins = el('atlasPins');
   const home = { center: [30.4, -8.8], zoom: 5 };
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  let map, cityMarkers, officeMarkers;
+  const LAYER_KEY = 'techmap_map_layer';
+  const ESRI_STREET_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}';
+  const ESRI_IMAGERY_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+  const ESRI_LABEL_TILES = 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}';
+  const ESRI_STREET_ATTRIBUTION = 'Tiles &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener noreferrer">Esri</a> &mdash; Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, &copy; OpenStreetMap contributors, and the GIS User Community';
+  const ESRI_ATTRIBUTION = 'Tiles &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener noreferrer">Esri</a> &mdash; Source: Esri, Vantor, Earthstar Geographics, and the GIS User Community';
+  const ESRI_LABEL_ATTRIBUTION = 'Labels &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener noreferrer">Esri</a>, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community';
+  const LAYER_BUILDERS = {
+    street: () => ({
+      base: L.tileLayer(ESRI_STREET_TILES, { maxZoom: 19, attribution: ESRI_STREET_ATTRIBUTION }),
+    }),
+    satellite: () => ({
+      base: L.tileLayer(ESRI_IMAGERY_TILES, { maxZoom: 19, attribution: ESRI_ATTRIBUTION }),
+    }),
+    hybrid: () => ({
+      base: L.tileLayer(ESRI_IMAGERY_TILES, { maxZoom: 19, attribution: ESRI_ATTRIBUTION }),
+      labels: L.tileLayer(ESRI_LABEL_TILES, {
+        maxZoom: 19,
+        pane: 'overlayPane',
+        attribution: ESRI_LABEL_ATTRIBUTION,
+      }),
+    }),
+  };
+  let map, cityMarkers, officeMarkers, activeBaseLayer, activeLabelLayer, activeLayerName;
+  let preferredLayer = readSavedLayer();
   const pinIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
   let activeCity, selectedCompany, loading = false, loaded = false;
 
@@ -19,23 +43,54 @@
     return node;
   };
 
+  function readSavedLayer() {
+    try {
+      const saved = localStorage.getItem(LAYER_KEY);
+      return LAYER_BUILDERS[saved] ? saved : 'street';
+    } catch {
+      return 'street';
+    }
+  }
+
+  function setTileError(visible) {
+    el('atlasTileStatus').classList.toggle('hidden', !visible);
+  }
+
   function setMapView(center, zoom) {
     map.setView(center, zoom, { animate: !reducedMotion.matches });
   }
 
-  function initStreetMap() {
+  function setMapLayer(kind) {
+    const next = LAYER_BUILDERS[kind] ? kind : 'street';
+    preferredLayer = next;
+    try { localStorage.setItem(LAYER_KEY, next); } catch { /* Storage is optional. */ }
+    document.querySelectorAll('[data-map-layer]').forEach(button => {
+      const active = button.dataset.mapLayer === next;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    if (!map || activeLayerName === next) return;
+    activeLayerName = next;
+    if (activeBaseLayer) map.removeLayer(activeBaseLayer);
+    if (activeLabelLayer) map.removeLayer(activeLabelLayer);
+    setTileError(false);
+    const layers = LAYER_BUILDERS[next]();
+    activeBaseLayer = layers.base;
+    activeLabelLayer = layers.labels || null;
+    activeBaseLayer.on('tileerror', () => setTileError(true));
+    activeBaseLayer.on('tileload', () => setTileError(false));
+    activeBaseLayer.addTo(map);
+    activeLabelLayer?.addTo(map);
+  }
+
+  function initMap() {
     if (map) return;
     map = L.map('atlasStreetMap', { scrollWheelZoom: false, minZoom: 3, maxZoom: 19,
       zoomAnimation: !reducedMotion.matches, fadeAnimation: !reducedMotion.matches });
-    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-    }).addTo(map);
-    tiles.on('tileerror', () => el('atlasTileStatus').classList.remove('hidden'));
-    tiles.on('tileload', () => el('atlasTileStatus').classList.add('hidden'));
     cityMarkers = L.layerGroup().addTo(map);
     officeMarkers = L.layerGroup().addTo(map);
     map.setView(home.center, home.zoom);
+    setMapLayer(preferredLayer);
   }
 
   function insight(company) {
@@ -142,7 +197,7 @@
   }
 
   async function load() {
-    requestAnimationFrame(() => { initStreetMap(); map.invalidateSize({ pan: false }); });
+    requestAnimationFrame(() => { initMap(); map.invalidateSize({ pan: false }); });
     if (loading || loaded) return;
     loading = true;
     status.textContent = t('Loading company locations…');
@@ -151,7 +206,7 @@
       const response = await fetch('/api/companies/map');
       if (!response.ok) throw new Error('Map request failed');
       const { items } = await response.json();
-      initStreetMap();
+      initMap();
       for (const company of items) {
         const key = normalize(company.city) || '_';
         if (!groups.has(key)) groups.set(key, { key, name: company.city || t('City not listed'), center: cityCenter(company.city), items: [] });
@@ -170,12 +225,16 @@
     } finally { loading = false; }
   }
 
+  document.querySelectorAll('[data-map-layer]').forEach(button => {
+    button.addEventListener('click', () => setMapLayer(button.dataset.mapLayer));
+  });
   document.querySelectorAll('[data-tab="company-map"]').forEach(tab => tab.addEventListener('click', load));
   cityPicker.addEventListener('change', () => selectCity(groups.get(cityPicker.value)));
   search.addEventListener('input', renderPins);
   el('atlasRetry').onclick = load;
   el('atlasReset').onclick = () => {
     setMapView(home.center, home.zoom);
-    map.eachLayer(layer => { if (layer instanceof L.TileLayer) layer.redraw(); });
+    activeBaseLayer?.redraw();
+    activeLabelLayer?.redraw();
   };
 })();
